@@ -1,0 +1,299 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\ProductBrand;
+use App\Models\Product;
+use App\Models\Location;
+use App\Models\LocationProduct;
+use App\Models\Stock;
+use App\Models\ProductVariance;
+use App\Models\Supplier;
+use App\Models\StockDamage;
+use App\Models\StockCount;
+use App\Models\ProductCategory;
+use App\Models\ProductUnit;
+use App\Models\EfrisSetting;
+use Gate;
+use App\Http\Controllers\Helper\Efris\ProductController;
+use App\Http\Controllers\Helper\Efris\KeysController;
+use Symfony\Component\HttpFoundation\Response;
+
+class ProductsController extends Controller
+{
+    public function index(){
+        $brands = ProductBrand::all();
+        $products = Product::with(['supplier','productcategory','stocks'=>function($q){
+            $q->where('amount','>',0);
+        }])->get();
+        $locations = Location::all();
+        $suppliers = Supplier::all();
+        $categories = ProductCategory::all();
+        $units = ProductUnit::all();
+        return view('admin.products.index',compact('brands','products','locations','suppliers','categories','units'));
+    }
+
+    public function viewedit(){
+        $brands = ProductBrand::all();
+        $product = Product::with('locationproducts','variances')->find(request()->product);
+        $locations = Location::all();
+        $suppliers = Supplier::all();
+        $categories = ProductCategory::all();
+        $units = ProductUnit::all();
+        return view('admin.products.edit',compact('brands','product','locations','suppliers','categories','units'));
+    }
+    public function viewaddcount(){
+        $brands = ProductBrand::all();
+        $product = Product::with('locationproducts')->find(request()->product);
+        $locations = Location::all();
+        return view('admin.products.addcount',compact('brands','product','locations')); 
+    }
+    public function store(){
+        //dd(request()->all());
+         $locations = request()->locations;
+         $quantities = request()->quantities;
+
+         $vnames = request()->vname;
+         $vquantities = request()->vquantities;
+         $vprices = request()->vprices;
+       $product =  Product::create([
+            'name'=>request()->name,
+            'brand_id'=>request()->brandname,
+            'code'=>request()->code,
+            'stock'=>request()->stock,
+            'price'=>request()->price,
+            'category'=>request()->categorycode,
+            'efriscategoryname'=>request()->efriscategoryname,
+            'unit'=>request()->unit,
+            'cost'=>request()->cost,
+            'suppvat'=>request()->cost*0.18,
+            'supplier_id'=>request()->supplier,
+            'product_category_id'=>request()->productcategory,  
+        ]);
+        // foreach($locations as $key=> $a){
+        //     $location = intVal($locations[$key]);
+        //     $quantity = intVal($quantities[$key]);
+        //     LocationProduct::create([
+        //         'location_id'=>$location,
+        //         'product_id'=>$product->id,
+        //         'quantity'=>$quantity,
+        //     ]);
+        // }
+        // foreach($vnames as $key=> $a){
+        //     ProductVariance::create([
+        //         'name'=>$vnames[$key],
+        //         'price'=>$vprices[$key],
+        //         'quantity'=>$vquantities[$key],
+        //         'product_id'=>$product->id,
+        //     ]);
+        // }
+        return redirect()->back()->with('success', 'Product has been saved successfully'); 
+       // return back();
+    }
+    public function editProduct(){
+      // dd(request()->all());
+      
+      $vnames = request()->vname;
+      $vquantities = request()->vquantities;
+      $vprices = request()->vprices;
+
+        Product::find(request()->productid)->update([
+            'name'=>request()->productname,
+            'brand_id'=>request()->productbrandname,
+            'code'=>request()->productcode,
+            'stock'=>request()->productstock,
+            'price'=>request()->productprice,
+            'category'=>request()->categorycode,
+            'efriscategoryname'=>request()->efriscategoryname,
+            'unit'=>request()->productunit,
+            'supplier_id'=>request()->productsupplier,
+            'product_category_id'=>request()->productcategory
+            //'location_id'=>request()->locationid,
+            // 'cost'=>request()->cost,
+            // 'suppvat'=>request()->cost*0.18,
+            
+        ]);
+       
+
+        // foreach($vnames as $key=> $a){
+        //     ProductVariance::create([
+        //         'name'=>$vnames[$key],
+        //         'price'=>$vprices[$key],
+        //         'quantity'=>$vquantities[$key],
+        //         'product_id'=>$product->id,
+        //     ]);
+        // }
+
+        return redirect()->back()->with('success', 'Product has been edited'); 
+        //return back();
+    }
+    public function productDetails(){
+        dd(request()->all());
+        $product = Product::find(request()->product);
+        return response()->json(['product'=>$product]);
+    }
+
+    public function storecount(){
+       //dd(request()->all());
+        $locations = request()->locations;
+        $quantities = request()->quantities;
+        $product = request()->productid;
+        $date = request()->period;
+        $damagetypes = request()->damagetype;
+        $damagevalues = request()->damagevalues;
+        // Stock::create([
+        //     'period'=>$date,
+        //     'product_id'=>$product,
+        //     'amount'=>request()->amount,
+        // ]);
+       foreach($locations as $key=> $a){
+           $location = intVal($locations[$key]);
+           $quantity = intVal($quantities[$key]);
+           LocationProduct::create([
+               'location_id'=>$location,
+               'product_id'=>$product,
+               'quantity'=>$quantity,
+               'countdate'=>$date,
+           ]);
+       }
+
+       foreach($damagetypes  as $key=> $a){
+       StockDamage::create([
+        'product_id'=>$product,
+        'count'=>$damagevalues[$key],
+        'date'=>$date,
+        'comment'=>request()->comment,
+        'type'=>$damagetypes[$key]
+       ]);
+    }
+       StockCount::create([
+        'product_id'=>$product,
+        'count'=>request()->amount,
+        'date'=>$date,
+        'comment'=>request()->comment,
+    ]);
+       
+       return redirect()->back()->with('message', 'Stock Count has been saved successfully!');
+       //return back();
+   }
+
+   public function viewbatches(){
+    $product = Product::with('stocks')->find(request()->product);
+    //dd($product);
+    return view('admin.products.batches',compact('product'));
+   }
+
+   public function deletebatch(Stock $stock){
+    abort_if(Gate::denies('delete_batch'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+    $stock->delete();
+    return back();
+   }
+   public function productcost(){
+    $product = Product::with('stocks')->find(request()->product);
+    return view('admin.products.cost',compact('product'));
+   }
+   public function saveproductcost(){
+    //dd(request()->all());
+    $costs = request()->costs;
+    $stocks = request()->stocks;
+    foreach($stocks as $key => $a){
+        $stock = Stock::find($stocks[$key]);
+        $stock->update([
+            'cost'=>$costs[$key],
+        ]);
+    }
+    return redirect()->back()->with('success', 'Stock Costs have been saved successfully!');  
+   }
+   public function savebatch(){
+    //dd(request()->all());
+    $batches = request()->stocks;
+    $amounts = request()->amount;
+    $sellingprices = request()->selling;
+    foreach($batches as $key => $a){
+        Stock::find($batches[$key])->update([
+                'amount'=>$amounts[$key],
+                'sellingprice'=>$sellingprices[$key],
+        ]);
+    }
+    return redirect()->back()->with('success', 'Product batch has been saved.'); 
+   }
+
+   public function addbatchesview(){
+    $id = request()->product;
+    $product = Product::find($id);
+    return view('admin.products.addbatch',compact('product'));
+   }
+   public function saveaddbatch(){
+    $item = Product::find(request()->product);
+    $supplier = Supplier::find($item->supplier_id);
+        $dealerefris = EfrisSetting::find(1);
+        $keypath = $dealerefris->keypath;
+        $keypwd = $dealerefris->keypwd;
+        $tin = $dealerefris->tin;
+        $deviceno = $dealerefris->deviceno;
+        $privatek = (new KeysController)->getPrivateKey($keypath,$keypwd);
+        //$aeskey = (new KeysController)->getAesKey($tin,$deviceno,$privatek);
+        $aeskey = $dealerefris->aeskey;
+        $quantity = request()->stocks;
+       // $aeskey = (new KeysController)->getAesKey($tin,$deviceno,$privatek);
+
+       //$efris = (new ProductController)->addproductStock($item,$aeskey,$privatek,$tin,$deviceno,$quantity);
+       $efris = (new ProductController)->restockProduct($item,$aeskey,$privatek,$tin,$deviceno,$quantity,$supplier);
+       $returncode = $efris->message['returnStateInfo']['returnCode'];
+       if($returncode === "00"){
+        Stock::create([
+            'product_id'=>request()->product,
+            'amount'=>request()->stocks,
+            'sellingprice'=>request()->prices,
+            'batch'=>request()->invoices,
+            'cost'=>request()->cost,
+            'receivedate'=>request()->receivedate,
+            'expirydate'=>request()->expiry,
+        ]);
+        return redirect()->back()->with('message', 'Product stock has been saved in EFRIS and Batch added successfuly.');
+        //return redirect()->back()->with('success', 'Product stock has been saved in EFRIS and Batch added successfuly.');
+       }else{
+        return redirect()->back()->with('errors', 'Error try again.');
+        //return \Redirect::back()->withErrors(['msg' => 'Error try again']);
+       } 
+    
+    
+   }
+
+   public function editlocationview(){
+    $product = Product::with('locationproducts','variances')->find(request()->product);
+    $locations = Location::all();
+    return view('admin.products.editlocation',compact('product','locations',));
+   }
+   public function saveeditlocation(){
+    //dd(request()->all());
+    $locations = request()->locations;
+    $quantities = request()->quantities;
+    foreach($locations as $key=> $a){
+        if($quantities[$key]){
+            $locate = LocationProduct::where(['location_id'=>$locations[$key],'product_id'=>request()->productid])->first();
+            if($locate){
+                $locate->update([
+                    'quantity'=> intVal($quantities[$key]),
+                ]);
+            }else{
+                LocationProduct::create([
+                    'location_id'=>intVal($locations[$key]),
+                    'product_id'=>$product->id,
+                    'quantity'=>intVal($quantities[$key]),
+                ]);
+            }
+
+        } 
+        return redirect()->back()->with('message', 'Product locations edited successfuly');
+    }
+   }
+
+   public function delete(){
+    $product = Product::find(request()->product);
+    $product->delete();
+    return redirect()->back();
+   }
+}
