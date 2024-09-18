@@ -3,16 +3,30 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.edit') }} {{ trans('cruds.customer.title_singular') }}
+        {{ trans('global.create') }} {{ trans('cruds.customer.title_singular') }}
     </div>
 
     <div class="card-body">
         <form method="POST" action="{{ route("admin.customers.update", [$customer->id]) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
-            <div class="form-group">
+            <div class="form-group col-md-12">
+                <label for="routeSelect">Distributor</label>
+                <select class="form-control" name="dealer" id="dealerSelect"  placeholder="Select dealer">
+                    <option selected value="">Select distributor</option>
+                    @foreach($dealers as $dealer)
+                    <option value="{{ $dealer->id }}" {{ $customer->dealer_id == $dealer->id ? 'selected' : '' }}>{{ $dealer->tradename }}</option>
+                    @endforeach
+
+
+
+                </select>
+            </div>
+            <div class="row">
+            <div class="form-group col-md-6">
                 <label for="fullname">{{ trans('cruds.customer.fields.fullname') }}</label>
-                <input class="form-control {{ $errors->has('fullname') ? 'is-invalid' : '' }}" type="text" name="fullname" id="fullname" value="{{ old('fullname', $customer->fullname) }}">
+                <input class="form-control {{ $errors->has('fullname') ? 'is-invalid' : '' }}" type="text" name="fullname"
+                id="fullname"  value="{{ $customer->tradename }}">
                 @if($errors->has('fullname'))
                     <div class="invalid-feedback">
                         {{ $errors->first('fullname') }}
@@ -20,9 +34,10 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.customer.fields.fullname_helper') }}</span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label for="phone">{{ trans('cruds.customer.fields.phone') }}</label>
-                <input class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" type="text" name="phone" id="phone" value="{{ old('phone', $customer->phone) }}">
+                <input class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" type="text" name="phone" id="phone"
+                 value="{{ $customer->phone }}">
                 @if($errors->has('phone'))
                     <div class="invalid-feedback">
                         {{ $errors->first('phone') }}
@@ -30,9 +45,13 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.customer.fields.phone_helper') }}</span>
             </div>
-            <div class="form-group">
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
                 <label for="email">{{ trans('cruds.customer.fields.email') }}</label>
-                <input class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" type="text" name="email" id="email" value="{{ old('email', $customer->email) }}">
+                <input class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" type="text" name="email" id="email"
+                value="{{ $customer->email }}">
                 @if($errors->has('email'))
                     <div class="invalid-feedback">
                         {{ $errors->first('email') }}
@@ -40,9 +59,10 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.customer.fields.email_helper') }}</span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label for="address">{{ trans('cruds.customer.fields.address') }}</label>
-                <input class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }}" type="text" name="address" id="address" value="{{ old('address', $customer->address) }}">
+                <input class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }}" type="text" name="address" id="address"
+                value="{{ $customer->address }}">
                 @if($errors->has('address'))
                     <div class="invalid-feedback">
                         {{ $errors->first('address') }}
@@ -50,27 +70,104 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.customer.fields.address_helper') }}</span>
             </div>
-            <div class="form-group">
-                <label for="username">{{ trans('cruds.customer.fields.username') }}</label>
-                <input class="form-control {{ $errors->has('username') ? 'is-invalid' : '' }}" type="text" name="username" id="username" value="{{ old('username', $customer->username) }}">
-                @if($errors->has('username'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('username') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.customer.fields.username_helper') }}</span>
+        </div>
+
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="username">Contact Person</label>
+                <input class="form-control" type="text" name="contactperson" id="contactperson" value="{{ $customer->contactperson }}">
             </div>
-            <div class="form-group">
-                <label for="image">{{ trans('cruds.customer.fields.image') }}</label>
-                <div class="needsclick dropzone {{ $errors->has('image') ? 'is-invalid' : '' }}" id="image-dropzone">
-                </div>
-                @if($errors->has('image'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('image') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.customer.fields.image_helper') }}</span>
+            <div class="form-group col-md-6">
+                <label for="username">Telephone Number</label>
+                <input class="form-control" type="text" name="telephoneno" id="telephoneno" value="{{ $customer->telephoneno }}">
             </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="username">Area</label>
+                <input class="form-control" type="text" name="area" id="area" value="{{ $customer->area }}">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="username">City</label>
+                <input class="form-control" type="text" name="city" id="city" value="{{ $customer->city }}">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="username">Country</label>
+                <input class="form-control" type="text" name="country" id="country" value="{{ $customer->country }}">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="routeSelect">Route</label>
+                <select class="form-control" id="routeSelect" aria-label="Select Route">
+
+
+                </select>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="routeSelect">Customer Category</label>
+                <select class="form-control" name="custcategory" aria-label="Select Route">
+                    <option selected>Select Category</option>
+                    <option value="wholesale" {{ $customer->custcategory == 'wholesale' ? 'selected' : '' }}>Whole Sale</option>
+                    <option value="retail" {{ $customer->custcategory == 'retail' ? 'selected' : '' }}>Retail</option>
+                    <option value="supermarket" {{ $customer->custcategory == 'supermarket' ? 'selected' : '' }}>Supermarket</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="routeSelect">Classification</label>
+                <select class="form-control" name="classification" aria-label="Select Route">
+                    <option selected>Select classification</option>
+                    <option value="A" {{ $customer->classification == 'A' ? 'selected' : '' }}>A</option>
+                    <option value="B" {{ $customer->classification == 'B' ? 'selected' : '' }}>B</option>
+                    <option value="C" {{ $customer->classification == 'C' ? 'selected' : '' }}>C</option>
+                    <option value="D" {{ $customer->classification == 'D' ? 'selected' : '' }}>D</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="routeSelect">Number of Cash Registers</label>
+                <select class="form-control" name="cashregisters" aria-label="Select Route">
+                    <option selected>Select Number</option>
+                    <option {{ $customer->cashregisters == 1 || $customer->registers == "1" ? 'selected' : '' }} value="1">1</option>
+                    <option value="2" {{ $customer->registers == 2 || $customer->registers == "2" ? 'selected' : '' }}>2</option>
+                    <option value="3" {{ $customer->registers == 3 || $customer->registers == "3" ? 'selected' : '' }}>3</option>
+                    <option value=">3" {{ $customer->registers == ">3" ? 'selected' : '' }}>>3</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="routeSelect">Select Footfall</label>
+                <select class="form-control" name="footfall" aria-label="Select Route">
+                    <option selected>Select Footfall</option>
+                    <option value=">300" {{ $customer->dailyfootfall == ">300" ? 'selected' : '' }}>>300</option>
+                    <option value="200-300" {{ $customer->dailyfootfall == "200-300" ? 'selected' : '' }}>200-300</option>
+                    <option value="100-200" {{ $customer->dailyfootfall == "100-200" ? 'selected' : '' }}>100-200</option>
+                    <option value="<100" {{ $customer->dailyfootfall == "<100" ? 'selected' : '' }}>100</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="routeSelect">Product Range</label>
+                <select class="form-control" name="productrange" aria-label="Select Route">
+                    <option selected>Select product range</option>
+                    <option value=">200" {{ $customer->product_range == ">200" ? 'selected' : '' }}>>200</option>
+                    <option value="100-200" {{ $customer->product_range == "100-200" ? 'selected' : '' }}>100-200</option>
+                    <option value="50-100" {{ $customer->product_range == "50-100" ? 'selected' : '' }}>50-100</option>
+                    <option value="<50" {{ $customer->product_range == "<50" ? 'selected' : '' }}> < 50 </option>
+                </select>
+            </div>
+
+        </div>
+
+
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
@@ -86,57 +183,48 @@
 
 @section('scripts')
 <script>
-    Dropzone.options.imageDropzone = {
-    url: '{{ route('admin.customers.storeMedia') }}',
-    maxFilesize: 2, // MB
-    acceptedFiles: '.jpeg,.jpg,.png,.gif',
-    maxFiles: 1,
-    addRemoveLinks: true,
-    headers: {
-      'X-CSRF-TOKEN': "{{ csrf_token() }}"
-    },
-    params: {
-      size: 2,
-      width: 4096,
-      height: 4096
-    },
-    success: function (file, response) {
-      $('form').find('input[name="image"]').remove()
-      $('form').append('<input type="hidden" name="image" value="' + response.name + '">')
-    },
-    removedfile: function (file) {
-      file.previewElement.remove()
-      if (file.status !== 'error') {
-        $('form').find('input[name="image"]').remove()
-        this.options.maxFiles = this.options.maxFiles + 1
-      }
-    },
-    init: function () {
-@if(isset($customer) && $customer->image)
-      var file = {!! json_encode($customer->image) !!}
-          this.options.addedfile.call(this, file)
-      this.options.thumbnail.call(this, file, file.preview)
-      file.previewElement.classList.add('dz-complete')
-      $('form').append('<input type="hidden" name="image" value="' + file.file_name + '">')
-      this.options.maxFiles = this.options.maxFiles - 1
-@endif
-    },
-    error: function (file, response) {
-        if ($.type(response) === 'string') {
-            var message = response //dropzone sends it's own error messages in string
-        } else {
-            var message = response.errors.file
-        }
-        file.previewElement.classList.add('dz-error')
-        _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
-        _results = []
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            node = _ref[_i]
-            _results.push(node.textContent = message)
+const dealerRoutes = {
+    1: [ { id: 1, name: 'Route A' }, { id: 2, name: 'Route B' } ], // Dealer 1
+    2: [ { id: 3, name: 'Route C' }, { id: 4, name: 'Route D' } ], // Dealer 2
+    3: [ { id: 5, name: 'Route E' }, { id: 6, name: 'Route F' } ]  // Dealer 3
+    // Add more dealers and their routes as needed
+};
+
+// Event listener for dealer selection change
+document.getElementById('dealerSelect').addEventListener('change', function() {
+    const dealerId = this.value;
+    const routeSelect = document.getElementById('routeSelect');
+
+    // Clear existing options
+    routeSelect.innerHTML = '<option selected value="">Select Route</option>';
+
+    if (dealerId) {
+            $.ajax({
+                url: '{{ route('admin.customer.routesget') }}',
+                type: 'POST',
+                data: {
+                    dealer_id: dealerId,
+                    _token: '{{ csrf_token() }}' // CSRF protection
+                },
+                success: function(routes) {
+                    routes.forEach(function(route) {
+                        const option = $('<option></option>').val(route.id).text(route.name);
+                        routeSelect.append(option);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching routes:', error,xhr);
+                }
+            });
         }
 
-        return _results
-    }
-}
+
+});
 </script>
 @endsection
+
+
+
+
+
+

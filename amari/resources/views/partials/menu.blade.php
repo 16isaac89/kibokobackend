@@ -70,7 +70,7 @@
 
 
 
-                    <!-- @can('customer_access')
+                    @can('customer_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.customers.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/customers") || request()->is("admin/customers/*") ? "c-active" : "" }}">
                                 <i class="fa-fw fas fa-user-plus c-sidebar-nav-icon">
@@ -79,7 +79,7 @@
                                 {{ trans('cruds.customer.title') }}
                             </a>
                         </li>
-                    @endcan -->
+                    @endcan
                     @can('audit_log_access')
                         <li class="c-sidebar-nav-item">
                             <a href="{{ route("admin.audit-logs.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/audit-logs") || request()->is("admin/audit-logs/*") ? "c-active" : "" }}">

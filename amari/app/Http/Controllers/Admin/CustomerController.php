@@ -9,6 +9,8 @@ use App\Http\Requests\MassDestroyCustomerRequest;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
+use App\Models\Dealer;
+use App\Models\Route;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -32,56 +34,62 @@ class CustomerController extends Controller
     public function create()
     {
         abort_if(Gate::denies('customer_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return view('admin.customers.create');
+        $dealers = Dealer::all();
+        return view('admin.customers.create', compact('dealers'));
     }
 
-    public function store(StoreCustomerRequest $request)
+    public function store(Request $request)
     {
 
+//dd($request->all());
         $customer = Customer::create([
-            "password" => Hash::make($request->password),
-            "fullname" => $request->fullname,
             "phone" => $request->phone,
              "email" => $request->email,
              "address" => $request->address,
-             "username" => $request->username,
+        'contact_person'=>$request->contactperson,
+        'telno'=>$request->telephoneno,
+        'area'=>$request->area,
+        'city'=>$request->city,
+        'country'=>$request->country,
+        'classification'=>$request->classification,
+        'registers'=>$request->cashregisters,
+        'footfall'=>$request->footfall,
+        'product_range'=>$request->productrange,
+		'custcategory'=>$request->custcategory,
+        'dealer_id'=>$request->dealer,
         ]);
-
-        if ($request->input('image', false)) {
-            $customer->addMedia(storage_path('tmp/uploads/' . basename($request->input('image'))))->toMediaCollection('image');
-        }
-
-        if ($media = $request->input('ck-media', false)) {
-            Media::whereIn('id', $media)->update(['model_id' => $customer->id]);
-        }
-
-        return redirect()->route('admin.customers.index');
+        return redirect()->back()->with('message', 'Customer created successfully.');
     }
 
     public function edit(Customer $customer)
     {
         abort_if(Gate::denies('customer_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return view('admin.customers.edit', compact('customer'));
+        $dealers = Dealer::all();
+       // dd($customer);
+        return view('admin.customers.edit', compact('customer','dealers'));
     }
 
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-        $customer->update($request->all());
+        $customer ->update([
+            "phone" => $request->phone,
+             "email" => $request->email,
+             "address" => $request->address,
+        'contact_person'=>$request->contactperson,
+        'telno'=>$request->telephoneno,
+        'area'=>$request->area,
+        'city'=>$request->city,
+        'country'=>$request->country,
+        'classification'=>$request->classification,
+        'registers'=>$request->cashregisters,
+        'footfall'=>$request->footfall,
+        'product_range'=>$request->productrange,
+		'custcategory'=>$request->custcategory,
+        'dealer_id'=>$request->dealer,
+        ]);
+        return redirect()->back()->with('message', 'Customer updated successfully.');
 
-        if ($request->input('image', false)) {
-            if (!$customer->image || $request->input('image') !== $customer->image->file_name) {
-                if ($customer->image) {
-                    $customer->image->delete();
-                }
-                $customer->addMedia(storage_path('tmp/uploads/' . basename($request->input('image'))))->toMediaCollection('image');
-            }
-        } elseif ($customer->image) {
-            $customer->image->delete();
-        }
 
-        return redirect()->route('admin.customers.index');
     }
 
     public function show(Customer $customer)
@@ -127,5 +135,14 @@ class CustomerController extends Controller
         return response()->json(['customer'=>$customer]);
     }
 
-   
+    public function getRoutes(Request $request)
+{
+    $dealerId = $request->input('dealer_id');
+    // Assuming you have a Route model and a relationship defined
+    $routes = Route::where('dealer_id', $dealerId)->get();
+
+    return response()->json($routes);
+}
+
+
 }

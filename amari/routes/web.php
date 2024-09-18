@@ -64,6 +64,7 @@ Route::get('/admin/get/key','EfrisSetupController@getkey')->name('get.efriskey')
     Route::post('customers/ckmedia', 'CustomerController@storeCKEditorImages')->name('customers.storeCKEditorImages');
     Route::post('customers/parse-csv-import', 'CustomerController@parseCsvImport')->name('customers.parseCsvImport');
     Route::post('customers/process-csv-import', 'CustomerController@processCsvImport')->name('customers.processCsvImport');
+    Route::post('/customer/routes/get', 'CustomerController@getRoutes')->name('customer.routesget');
     Route::resource('customers', 'CustomerController');
 
     // Audit Logs

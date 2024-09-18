@@ -9,7 +9,20 @@
     <div class="card-body">
         <form method="POST" action="{{ route("admin.customers.store") }}" enctype="multipart/form-data">
             @csrf
-            <div class="form-group">
+            <div class="form-group col-md-12">
+                <label for="routeSelect">Distributor</label>
+                <select class="form-control" name="dealer" id="dealerSelect"  placeholder="Select dealer">
+                    <option selected value="">Select distributor</option>
+                    @foreach($dealers as $dealer)
+                    <option value="{{ $dealer->id }}">{{ $dealer->tradename }}</option>
+                    @endforeach
+
+
+
+                </select>
+            </div>
+            <div class="row">
+            <div class="form-group col-md-6">
                 <label for="fullname">{{ trans('cruds.customer.fields.fullname') }}</label>
                 <input class="form-control {{ $errors->has('fullname') ? 'is-invalid' : '' }}" type="text" name="fullname" id="fullname" value="{{ old('fullname', '') }}">
                 @if($errors->has('fullname'))
@@ -19,7 +32,7 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.customer.fields.fullname_helper') }}</span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label for="phone">{{ trans('cruds.customer.fields.phone') }}</label>
                 <input class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" type="text" name="phone" id="phone" value="{{ old('phone', '') }}">
                 @if($errors->has('phone'))
@@ -29,7 +42,10 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.customer.fields.phone_helper') }}</span>
             </div>
-            <div class="form-group">
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
                 <label for="email">{{ trans('cruds.customer.fields.email') }}</label>
                 <input class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" type="text" name="email" id="email" value="{{ old('email', '') }}">
                 @if($errors->has('email'))
@@ -39,7 +55,7 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.customer.fields.email_helper') }}</span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label for="address">{{ trans('cruds.customer.fields.address') }}</label>
                 <input class="form-control {{ $errors->has('address') ? 'is-invalid' : '' }}" type="text" name="address" id="address" value="{{ old('address', '') }}">
                 @if($errors->has('address'))
@@ -49,37 +65,104 @@
                 @endif
                 <span class="help-block">{{ trans('cruds.customer.fields.address_helper') }}</span>
             </div>
-            <div class="form-group">
-                <label for="username">{{ trans('cruds.customer.fields.username') }}</label>
-                <input class="form-control {{ $errors->has('username') ? 'is-invalid' : '' }}" type="text" name="username" id="username" value="{{ old('username', '') }}">
-                @if($errors->has('username'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('username') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.customer.fields.username_helper') }}</span>
+        </div>
+
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="username">Contact Person</label>
+                <input class="form-control" type="text" name="contactperson" id="contactperson" value="{{ old('contactperson', '') }}">
             </div>
-            <div class="form-group">
-                <label for="image">{{ trans('cruds.customer.fields.image') }}</label>
-                <div class="needsclick dropzone {{ $errors->has('image') ? 'is-invalid' : '' }}" id="image-dropzone">
-                </div>
-                @if($errors->has('image'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('image') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.customer.fields.image_helper') }}</span>
+            <div class="form-group col-md-6">
+                <label for="username">Telephone Number</label>
+                <input class="form-control" type="text" name="telephoneno" id="telephoneno" value="{{ old('telephoneno', '') }}">
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" type="text" name="password" id="password" value="{{ old('password', '') }}">
-                @if($errors->has('password'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('password') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.customer.fields.username_helper') }}</span>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="username">Area</label>
+                <input class="form-control" type="text" name="area" id="area" value="{{ old('area', '') }}">
             </div>
+            <div class="form-group col-md-6">
+                <label for="username">City</label>
+                <input class="form-control" type="text" name="city" id="city" value="{{ old('city', '') }}">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="username">Country</label>
+                <input class="form-control" type="text" name="country" id="country" value="{{ old('country', '') }}">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="routeSelect">Route</label>
+                <select class="form-control" id="routeSelect" aria-label="Select Route">
+
+
+                </select>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="routeSelect">Customer Category</label>
+                <select class="form-control" name="custcategory" aria-label="Select Route">
+                    <option selected>Select Category</option>
+                    <option value="wholesale">Whole Sale</option>
+                    <option value="retail">Retail</option>
+                    <option value="supermarket">Supermarket</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="routeSelect">Classification</label>
+                <select class="form-control" name="classification" aria-label="Select Route">
+                    <option selected>Select classification</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">C</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="routeSelect">Number of Cash Registers</label>
+                <select class="form-control" name="cashregisters" aria-label="Select Route">
+                    <option selected>Select Number</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value=">3">>3</option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="routeSelect">Select Footfall</label>
+                <select class="form-control" name="footfall" aria-label="Select Route">
+                    <option selected>Select Footfall</option>
+                    <option value=">300">>300</option>
+                    <option value="200-300">200-300</option>
+                    <option value="100-200">100-200</option>
+                    <option value="<100">100</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="routeSelect">Product Range</label>
+                <select class="form-control" name="productrange" aria-label="Select Route">
+                    <option selected>Select product range</option>
+                    <option value=">200">>200</option>
+                    <option value="100-200">100-200</option>
+                    <option value="50-100">50-100</option>
+                    <option value="<50">50</option>
+                </select>
+            </div>
+
+        </div>
+
+
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
@@ -95,57 +178,42 @@
 
 @section('scripts')
 <script>
-    Dropzone.options.imageDropzone = {
-    url: '{{ route('admin.customers.storeMedia') }}',
-    maxFilesize: 2, // MB
-    acceptedFiles: '.jpeg,.jpg,.png,.gif',
-    maxFiles: 1,
-    addRemoveLinks: true,
-    headers: {
-      'X-CSRF-TOKEN': "{{ csrf_token() }}"
-    },
-    params: {
-      size: 2,
-      width: 4096,
-      height: 4096
-    },
-    success: function (file, response) {
-      $('form').find('input[name="image"]').remove()
-      $('form').append('<input type="hidden" name="image" value="' + response.name + '">')
-    },
-    removedfile: function (file) {
-      file.previewElement.remove()
-      if (file.status !== 'error') {
-        $('form').find('input[name="image"]').remove()
-        this.options.maxFiles = this.options.maxFiles + 1
-      }
-    },
-    init: function () {
-@if(isset($customer) && $customer->image)
-      var file = {!! json_encode($customer->image) !!}
-          this.options.addedfile.call(this, file)
-      this.options.thumbnail.call(this, file, file.preview)
-      file.previewElement.classList.add('dz-complete')
-      $('form').append('<input type="hidden" name="image" value="' + file.file_name + '">')
-      this.options.maxFiles = this.options.maxFiles - 1
-@endif
-    },
-    error: function (file, response) {
-        if ($.type(response) === 'string') {
-            var message = response //dropzone sends it's own error messages in string
-        } else {
-            var message = response.errors.file
-        }
-        file.previewElement.classList.add('dz-error')
-        _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
-        _results = []
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            node = _ref[_i]
-            _results.push(node.textContent = message)
+const dealerRoutes = {
+    1: [ { id: 1, name: 'Route A' }, { id: 2, name: 'Route B' } ], // Dealer 1
+    2: [ { id: 3, name: 'Route C' }, { id: 4, name: 'Route D' } ], // Dealer 2
+    3: [ { id: 5, name: 'Route E' }, { id: 6, name: 'Route F' } ]  // Dealer 3
+    // Add more dealers and their routes as needed
+};
+
+// Event listener for dealer selection change
+document.getElementById('dealerSelect').addEventListener('change', function() {
+    const dealerId = this.value;
+    const routeSelect = document.getElementById('routeSelect');
+
+    // Clear existing options
+    routeSelect.innerHTML = '<option selected value="">Select Route</option>';
+
+    if (dealerId) {
+            $.ajax({
+                url: '{{ route('admin.customer.routesget') }}',
+                type: 'POST',
+                data: {
+                    dealer_id: dealerId,
+                    _token: '{{ csrf_token() }}' // CSRF protection
+                },
+                success: function(routes) {
+                    routes.forEach(function(route) {
+                        const option = $('<option></option>').val(route.id).text(route.name);
+                        routeSelect.append(option);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching routes:', error,xhr);
+                }
+            });
         }
 
-        return _results
-    }
-}
+
+});
 </script>
 @endsection

@@ -20,57 +20,43 @@
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-Customer">
+            <table class="table table-bordered table-striped table-hover datatable datatable-Customer">
                 <thead>
                     <tr>
-                        <th width="10">
-
-                        </th>
-                        <th>
-                            {{ trans('cruds.customer.fields.id') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.customer.fields.phone') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.customer.fields.email') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.customer.fields.username') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.customer.fields.image') }}
-                        </th>
-                        <th>
-                            &nbsp;
-                        </th>
+                        <th width="10"></th>
+                        <th>{{ trans('cruds.customer.fields.id') }}</th>
+                        <th>Telephone No</th>
+                        <th>{{ trans('cruds.customer.fields.phone') }}</th>
+                        <th>{{ trans('cruds.customer.fields.email') }}</th>
+                        <th>Area</th>
+                        <th>City</th>
+                        <th>Country</th>
+                        <th>Classifications</th>
+                        <th>Cash Registers</th>
+                        <th>Daily Footfall</th>
+                        <th>Product Range</th>
+                        <th>Contact Person</th>
+                        <th>Customer Category</th>
+                        <th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($customers as $key => $customer)
                         <tr data-entry-id="{{ $customer->id }}">
-                            <td>
-
-                            </td>
-                            <td>
-                                {{ $customer->id ?? '' }}
-                            </td>
-                            <td>
-                                {{ $customer->phone ?? '' }}
-                            </td>
-                            <td>
-                                {{ $customer->email ?? '' }}
-                            </td>
-                            <td>
-                                {{ $customer->username ?? '' }}
-                            </td>
-                            <td>
-                                @if($customer->image)
-                                    <a href="{{ $customer->image->getUrl() }}" target="_blank" style="display: inline-block">
-                                        <img src="{{ $customer->image->getUrl('thumb') }}">
-                                    </a>
-                                @endif
-                            </td>
+                            <td></td>
+                            <td>{{ $customer->id ?? '' }}</td>
+                            <td>{{ $customer->telephoneno ?? '' }}</td>
+                            <td>{{ $customer->phone ?? '' }}</td>
+                            <td>{{ $customer->email ?? '' }}</td>
+                            <td>{{ $customer->area ?? '' }}</td>
+                            <td>{{ $customer->city ?? '' }}</td>
+                            <td>{{ $customer->country ?? '' }}</td>
+                            <td>{{ $customer->classification ?? '' }}</td>
+                            <td>{{ $customer->cashregisters ?? '' }}</td>
+                            <td>{{ $customer->dailyfootfall ?? '' }}</td>
+                            <td>{{ $customer->productrange ?? '' }}</td>
+                            <td>{{ $customer->contact_person ?? '' }}</td>
+                            <td>{{ $customer->custcategory ?? '' }}</td>
                             <td>
                                 @can('customer_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.customers.show', $customer->id) }}">
@@ -91,14 +77,13 @@
                                         <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                                     </form>
                                 @endcan
-
                             </td>
-
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
+
     </div>
 </div>
 
@@ -150,7 +135,7 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-  
+
 })
 
 </script>
