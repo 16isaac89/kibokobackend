@@ -62,35 +62,13 @@
     </div>
   </div>
 
-  <div class="row" style="margin:10px;">
   <div class="col-6">
-      <input type="text" name="email" class="form-control" placeholder="e.g Store email address">
-    </div>
-    <div class="col-6">
-        <select class="form-control" name="sub_type">
-            <option>Subscription Type</option>
-              <option value="1">Monthly</option>
-             <option value="2">Yearly</option>
-            </select>
-      </div>
-</div>
-<div class="row">
-<div class="col-6">
-  <select class="form-control" name="business_type">
-      <option>Select Type of Business</option>
-        <option value="1">Shop</option>
-       <option value="2">Distributor</option>
-      </select>
-</div>
-</div>
-<div class="row" style="margin:10px;">
-    <div class="col-6">
-        <input type="text" name="startdate" class="form-control date" placeholder="Start Date">
-      </div>
-      <div class="col-6">
-        <input type="text" name="enddate" class="form-control date" placeholder="End Date">
-      </div>
-</div>
+    <input type="text" name="code" class="form-control" placeholder="Dealer code">
+  </div>
+
+
+
+
 
 
   <button type="submit" class="btn btn-primary">Submit</button>

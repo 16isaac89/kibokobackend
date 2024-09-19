@@ -55,6 +55,7 @@ class Customer extends Authenticatable implements HasMedia
         'footfall',
         'product_range',
 		'custcategory',
+        'dealer_code',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -69,6 +70,9 @@ class Customer extends Authenticatable implements HasMedia
     }
     public function dealer(){
         return $this->belongsTo(Dealer::class, 'dealer_id');
+    }
+    public function distributor(){
+        return $this->belongsTo(Dealer::class, 'dealer_code');
     }
     public function requests(){
         return $this->hasMany(StockRequest::class,'customer_id','identification');

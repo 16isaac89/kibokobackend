@@ -41,10 +41,7 @@ class DealersController extends Controller
             'privatekey'=> $privatekeypath,
             'keypwd'=>request()->keypwd,
             'email'=>request()->email,
-            'start_date'=>request()->start_date,
-            'end_date'=>request()->edn_date,
-            'sub_type'=>request()->sub_type,
-            'type_of_business'=>request()->business_type,
+            'code'=>request()->code,
         ]);
 Branch::create([
     'name'=>request()->branch,
@@ -101,9 +98,7 @@ Branch::create([
     public function show(Dealer $dealer){
         // $subscriptions = $dealer->dealersubs;
         // $lates =  = $dealer->dealersubslat;
-        $dealer->load(['dealersubs'=>function($query){
-            $query->with('subscription')->get();
-        },'dealersubslat']);
+        $dealer->load('dealerclients');
 //d($dealer);
 
         return view('admin.dealers.show',compact('dealer'));

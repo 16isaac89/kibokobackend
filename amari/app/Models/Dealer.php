@@ -32,10 +32,9 @@ class Dealer extends Model
         'deleted_at',
         "branch",
         "aeskey",
-        'start_date',
-        'end_date',
-        'sub_type',
-        'tried',
+        "code",
+
+
         'type_of_business'
     ];
 public function branches(){
@@ -53,10 +52,16 @@ public function dealersubslat(){
     return $this->hasMany(DealerSubscription::class,'dealer_id','id')->latest();
 
 }
+public function dealerclients(){
+
+    return $this->hasMany(Customer::class,'dealer_code','code');
+
+}
 public function users(){
 
     return $this->hasMany(DealerUser::class);
 
 }
+
 
 }

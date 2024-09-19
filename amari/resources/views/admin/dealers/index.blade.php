@@ -52,18 +52,7 @@
                         <th>
                             Efris Enabled
                         </th>
-                        <th>
-                            Sub Type
-                        </th>
-                        <th>
-                            Start Date
-                        </th>
-                        <th>
-                            End Date
-                        </th>
-                        <th>
-                            B'ss Type
-                        </th>
+
                         <th>
                             Action
                         </th>
@@ -105,19 +94,7 @@
                                 <span class="badge badge-warning">Inactive</span>
                                 @endif
                             </td>
-                            <td>{{ $dealer->sub_type === 1 ?'Monthly':'Yearly' }}</td>
-                            <td> {{ $dealer->end_date ?? '' }}</td>
 
-                            <td>
-                                {{ $dealer->start_date ?? '' }}
-                           </td>
-                           <td>
-                            @if($dealer->type_of_business == 1)
-                            <span class="badge badge-success">Shop</span>
-                            @else
-                            <span class="badge badge-warning">Distributor</span>
-                            @endif
-                        </td>
                             <td>
                                 @can('dealer_edit')
                                     <a data-id="{{$dealer->id}}" data-start="{{$dealer->start_date}}"
@@ -165,7 +142,7 @@
     order: [[ 1, 'desc' ]],
     pageLength: 100,
   });
-  let table = $('.datatable-products:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  let table = $('.datatable-dealers:not(.ajaxTable)').DataTable({ buttons: dtButtons })
   $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e){
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
