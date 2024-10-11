@@ -28,6 +28,7 @@ class CustomersController extends Controller
         $day = request()->day;
 		$customer = request()->id;
         $routes = Route::with('customers')->where('dealer_id',request()->dealer)->get();
+        $route = Route::find(request()->route);
 		if($customer){
 			$client = Customer::find($customer);
 			$client->update([
@@ -57,6 +58,7 @@ class CustomersController extends Controller
 				'custcategory'=>request()->custcategory,
                 'latitude'=>request()->lat,
         		'longitude'=>request()->long,
+                'route_code'=>$route->code,
 
 			]);
 
@@ -90,6 +92,7 @@ class CustomersController extends Controller
 				'custcategory'=>request()->custcategory,
                 'latitude'=>request()->lat,
         		'longitude'=>request()->long,
+                'route_code'=>$route->code,
 
             ]
             );

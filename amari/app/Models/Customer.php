@@ -56,6 +56,7 @@ class Customer extends Authenticatable implements HasMedia
         'productrange',
 		'custcategory',
         'dealer_code',
+        'route_code',
 		'latitude',
 		'longitude',
         'created_at',
