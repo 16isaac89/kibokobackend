@@ -67,6 +67,10 @@ Route::get('/admin/get/key','EfrisSetupController@getkey')->name('get.efriskey')
     Route::post('/customer/routes/get', 'CustomerController@getRoutes')->name('customer.routesget');
     Route::resource('customers', 'CustomerController');
 
+    //Routes
+    Route::post('routes/parse-csv-import', 'RoutesController@parseCsvImport')->name('routes.parseCsvImport');
+    Route::post('routes/process-csv-import', 'RoutesController@processCsvImport')->name('routes.processCsvImport');
+    Route::resource('routes', 'RoutesController');
     // Audit Logs
     Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
 

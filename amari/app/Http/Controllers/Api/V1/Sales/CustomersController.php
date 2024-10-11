@@ -11,7 +11,7 @@ use App\Models\RepRoute;
 use App\Models\RoutePlanList;
 use App\Models\Performance;
 
-class CustomerController extends Controller
+class CustomersController extends Controller
 {
     public function getRoutes(){
         $routes = Route::with('customers')->where('dealer_id',request()->dealer)->get();

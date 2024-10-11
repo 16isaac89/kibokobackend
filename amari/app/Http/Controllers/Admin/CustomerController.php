@@ -1,198 +1,148 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Sales;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Route;
-use App\Models\CustomerCategory;
+use App\Http\Controllers\Traits\CsvImportTrait;
+use App\Http\Controllers\Traits\MediaUploadingTrait;
+use App\Http\Requests\MassDestroyCustomerRequest;
+use App\Http\Requests\StoreCustomerRequest;
+use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
-use App\Models\RepRoute;
-use App\Models\RoutePlanList;
-use App\Models\Performance;
+use App\Models\Dealer;
+use App\Models\Route;
+use Gate;
+use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Symfony\Component\HttpFoundation\Response;
+use Hash;
 
 class CustomerController extends Controller
 {
-    public function getRoutes(){
-        $routes = Route::with('customers')->where('dealer_id',request()->dealer)->get();
-       //$routes = RepRoute::with('route')->where('dealer_user_id',request()->user)->get();
-        return response()->json(['routes'=>$routes]);
+    use MediaUploadingTrait;
+    use CsvImportTrait;
+
+    public function index()
+    {
+        abort_if(Gate::denies('customer_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $customers = Customer::with(['media'])->get();
+
+        return view('admin.customers.index', compact('customers'));
     }
-    public function getCategories(){
-        $categories = CustomerCategory::all();
-        return response()->json(['categories'=>$categories]);
+
+    public function create()
+    {
+        abort_if(Gate::denies('customer_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $dealers = Dealer::all();
+        return view('admin.customers.create', compact('dealers'));
     }
-	public function kibokostore(){
-		  $id = request()->userid;
-        $week = request()->week;
-        $day = request()->day;
-		$customer = request()->id;
-		 $routes = Route::with('customers')->where('dealer_id',request()->dealer)->get();
 
-		if($customer){
-			$client = Customer::find(request()->id);
-			$client->update([
-			'name'=>request()->name,
-                'phone'=>request()->phone,
-                'category_id'=>request()->category,
-                'route_id'=>request()->route,
-                'dealer_id'=>request()->dealer,
-                'status'=>1,
+    public function store(Request $request)
+    {
 
-                //'tin'=>request()->tin,
-                'efrisstatus'=>request()->registered,
-                'address'=>request()->address,
-                //'buyertypecode'=>request()->buyertypecode,
-                'branch_id'=>1,
-				'email'=>request()->email,
-                'buyerType'=>1,
-				'contact_person'=>request()->contactperson,
-				'telno'=>request()->telephoneno,
-				'area'=>request()->area,
-				'city'=>request()->city,
-				'country'=>request()->country,
-				'classification'=>request()->classification,
-				'cashregisters'=>request()->cashregisters,
-				'dailyfootfall'=>request()->dailyfootfall,
-				'productrange'=>request()->productrange,
-				'custcategory'=>request()->custcategory,
-				'latitude'=>request()->lat,
-        		'longitude'=>request()->long,
+//dd($request->all());
+        $customer = Customer::create([
+            "phone" => $request->phone,
+             "email" => $request->email,
+             "address" => $request->address,
+        'contact_person'=>$request->contactperson,
+        'telno'=>$request->telephoneno,
+        'area'=>$request->area,
+        'city'=>$request->city,
+        'country'=>$request->country,
+        'classification'=>$request->classification,
+        'registers'=>$request->cashregisters,
+        'footfall'=>$request->footfall,
+        'product_range'=>$request->productrange,
+		'custcategory'=>$request->custcategory,
+        'dealer_id'=>$request->dealer,
+        ]);
+        return redirect()->back()->with('message', 'Customer created successfully.');
+    }
 
-			]);
-			return response()->json(['message'=>'Customer updated successfully','customers'=>[],'routes'=>$routes]);
-		}else{
-       $customer =  Customer::create(
-            [
-                'name'=>request()->name,
-                'phone'=>request()->phone,
-                'category_id'=>request()->category,
-                'route_id'=>request()->route,
-                'dealer_id'=>request()->dealer,
-                'status'=>1,
-                'identification'=> uniqid(),
-                //'tin'=>request()->tin,
-                'efrisstatus'=>request()->registered,
-                'address'=>request()->address,
-                //'buyertypecode'=>request()->buyertypecode,
-                'branch_id'=>1,
-				'email'=>request()->email,
-                'buyerType'=>1,
-				'contact_person'=>request()->contactperson,
-				'telno'=>request()->telephoneno,
-				'area'=>request()->area,
-				'city'=>request()->city,
-				'country'=>request()->country,
-				'classification'=>request()->classification,
-				'cashregisters'=>request()->cashregisters,
-				'dailyfootfall'=>request()->dailyfootfall,
-				'productrange'=>request()->productrange,
-				'custcategory'=>request()->custcategory,
-				'latitude'=>request()->lat,
-        		'longitude'=>request()->long,
+    public function edit(Customer $customer)
+    {
+        abort_if(Gate::denies('customer_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $dealers = Dealer::all();
+       // dd($customer);
+        return view('admin.customers.edit', compact('customer','dealers'));
+    }
 
-            ]
-            );
+    public function update(UpdateCustomerRequest $request, Customer $customer)
+    {
+        $customer ->update([
+            "phone" => $request->phone,
+             "email" => $request->email,
+             "address" => $request->address,
+        'contact_person'=>$request->contactperson,
+        'telno'=>$request->telephoneno,
+        'area'=>$request->area,
+        'city'=>$request->city,
+        'country'=>$request->country,
+        'classification'=>$request->classification,
+        'registers'=>$request->cashregisters,
+        'footfall'=>$request->footfall,
+        'product_range'=>$request->productrange,
+		'custcategory'=>$request->custcategory,
+        'dealer_id'=>$request->dealer,
+        ]);
+        return redirect()->back()->with('message', 'Customer updated successfully.');
 
-            RoutePlanList::create([
-                'customer_id'=>$customer->identification,
-                'name'=>$customer->name,
-                'routename'=>$customer->route->name,
-                'route_id'=>request()->route,
-                'dealer_user_id'=>$id,
-                'dealer_id'=>request()->dealer,
-                'week'=>1,
-                'day'=>1,
-            ]);
-
-            $customers="";
-       $custs = RoutePlanList::with(['customer','route'])->where(['dealer_user_id'=>$id,'week'=>$week,'day'=>$day])->get();
-        if($custs){
-            $customers = $custs;
-        }else{
-            $customers = array();
-        }
-        Performance::create([
-            'user'=>request()->userid,
-            'points'=>1,
-            'pointtype'=>'createcustomer',
-          ]);
-
-            return response()->json(['message'=>'Customer saved','customers'=>$customers,'routes'=>$routes]);
-		}
-	}
-    public function store(){
-        $id = request()->id;
-        $week = request()->week;
-        $day = request()->day;
-
-       $customer =  Customer::create(
-            [
-                'name'=>request()->name,
-                'phone'=>request()->phone,
-                'category_id'=>request()->category,
-                'route_id'=>request()->route,
-                'dealer_id'=>request()->dealer,
-                'status'=>1,
-                'identification'=> uniqid(),
-                'tin'=>request()->tin,
-                'efrisstatus'=>request()->registered,
-                'address'=>request()->address,
-                //'buyertypecode'=>request()->buyertypecode,
-                'branch_id'=>request()->branch,
-                'buyerType'=>request()->buyertypecode,
-            ]
-            );
-
-            RoutePlanList::create([
-                'customer_id'=>$customer->identification,
-                'name'=>$customer->name,
-                'routename'=>$customer->route->name,
-                'route_id'=>request()->route,
-                'dealer_user_id'=>$id,
-                'dealer_id'=>request()->dealer,
-                'week'=>request()->week,
-                'day'=>request()->day,
-            ]);
-
-            $customers="";
-       $custs = RoutePlanList::with(['customer','route'])->where(['dealer_user_id'=>$id,'week'=>$week,'day'=>$day])->get();
-        if($custs){
-            $customers = $custs;
-        }else{
-            $customers = array();
-        }
-        Performance::create([
-            'user'=>request()->userid,
-            'points'=>1,
-            'pointtype'=>'createcustomer',
-          ]);
-
-            return response()->json(['message'=>'Customer saved','customers'=>$customers]);
 
     }
-    public function storesaved(){
-        Customer::create(
-            [
-                'name'=>request()->name,
-                'phone'=>request()->phone,
-                'category_id'=>request()->category,
-                'route_id'=>request()->route,
-                'dealer_id'=>request()->dealer,
-                'status'=>1,
-                'identification'=>request()->id,
-                'tin'=>request()->tin,
-                'efrisstatus'=>request()->efrisstatus,
-                'address'=>request()->address,
-                'buyertypecode'=>request()->buyertypecode,
-                'branch_id'=>request()->branch
-            ]
-            );
-            Performance::create([
-                'user'=>request()->userid,
-                'points'=>1,
-                'pointtype'=>'createcustomer',
-              ]);
-    return response()->json(['message'=>1]);
+
+    public function show(Customer $customer)
+    {
+        abort_if(Gate::denies('customer_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $customer->load('customerBookings', 'customerCustomerPayments', 'customerCustomerWallets', 'customerInvoices');
+
+        return view('admin.customers.show', compact('customer'));
     }
+
+    public function destroy(Customer $customer)
+    {
+        abort_if(Gate::denies('customer_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $customer->delete();
+
+        return back();
+    }
+
+    public function massDestroy(MassDestroyCustomerRequest $request)
+    {
+        Customer::whereIn('id', request('ids'))->delete();
+
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function storeCKEditorImages(Request $request)
+    {
+        abort_if(Gate::denies('customer_create') && Gate::denies('customer_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $model         = new Customer();
+        $model->id     = $request->input('crud_id', 0);
+        $model->exists = true;
+        $media         = $model->addMediaFromRequest('upload')->toMediaCollection('ck-media');
+
+        return response()->json(['id' => $media->id, 'url' => $media->getUrl()], Response::HTTP_CREATED);
+    }
+
+    public function saveCustomer(Request $request){
+        Customer::create($request->all());
+        $customer = Customer::get();
+        return response()->json(['customer'=>$customer]);
+    }
+
+    public function getRoutes(Request $request)
+{
+    $dealerId = $request->input('dealer_id');
+    // Assuming you have a Route model and a relationship defined
+    $routes = Route::where('dealer_id', $dealerId)->get();
+
+    return response()->json($routes);
+}
+
+
 }

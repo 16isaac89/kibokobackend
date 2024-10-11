@@ -505,6 +505,16 @@
             </a>
         </li>
     @endcan
+    @can('routes_access')
+    <li class="c-sidebar-nav-item">
+        <a href="{{ route("admin.routes.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/routes") || request()->is("admin/routes/*") ? "c-active" : "" }}">
+            <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
+
+            </i>
+            Routes
+        </a>
+    </li>
+@endcan
     <li class="c-sidebar-nav-item">
         <a href="{{ route("admin.settings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/settings") || request()->is("admin/settings/*") ? "c-active" : "" }}">
             <i class="fa-fw fas fa-industry c-sidebar-nav-icon">

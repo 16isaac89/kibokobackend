@@ -21,6 +21,8 @@ class Route extends Model
         'name',
         'dealer_id',
         'branch_id',
+        'dealer_code',
+        'code',
         'created_at',
         'updated_at',
         'deleted_at',

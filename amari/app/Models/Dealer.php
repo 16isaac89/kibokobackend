@@ -33,8 +33,6 @@ class Dealer extends Model
         "branch",
         "aeskey",
         "code",
-
-
         'type_of_business'
     ];
 public function branches(){
