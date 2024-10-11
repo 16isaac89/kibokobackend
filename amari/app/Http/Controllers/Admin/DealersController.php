@@ -13,9 +13,11 @@ use App\Models\Branch;
 use App\Models\DealerRole;
 use App\Models\Subscription;
 use App\Models\Setting;
+use App\Http\Controllers\Traits\CsvImportTrait;
 
 class DealersController extends Controller
 {
+    use CsvImportTrait;
     public function index(){
         $dealers = Dealer::all();
         return view('admin.dealers.index',compact('dealers'));

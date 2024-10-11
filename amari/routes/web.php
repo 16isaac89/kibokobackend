@@ -104,6 +104,8 @@ Route::get('/admin/get/key','EfrisSetupController@getkey')->name('get.efriskey')
     Route::get('product/details','ProductsController@productDetails')->name('product.details');
     Route::resource('products','ProductsController');
     //Dealers
+    Route::post('dealers/parse-csv-import', 'DealersController@parseCsvImport')->name('dealers.parseCsvImport');
+    Route::post('dealers/process-csv-import', 'DealersController@processCsvImport')->name('dealers.processCsvImport');
     Route::post('dealer/target/add','DealersController@dealerTarget')->name('dealer.target');
     Route::post('dealer/edit','DealersController@editDealer')->name('edit.dealer');
     Route::get('efris/get/taxpayer','DealersController@getDealer')->name('efris.dealer');
