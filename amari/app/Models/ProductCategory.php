@@ -26,7 +26,8 @@ class ProductCategory extends Model
         'updated_at',
         'deleted_at',
     ];
+
     public function products(){
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class, 'product_category','code');
     }
 }

@@ -28,7 +28,7 @@ protected $appends = [
         'created_at',
         'updated_at',
         'deleted_at',
-        'product_category_id',
+        'product_category',
         'tax_id',
         'efriscategorycode'
     ];
@@ -36,16 +36,16 @@ protected $appends = [
    public function brand(){
     return $this->belongsTo(ProductBrand::class, 'brand_id','code');
    }
+   public function tax(){
+    return $this->belongsTo(Tax::class, 'tax_id','id');
+   }
 
    public function efrisproduct(){
     return $this->hasOne(EfrisProduct::class,'product_id');
 }
 
-
-
-
 public function category(){
-    return $this->belongsTo(ProductCategory::class, 'product_category_id','code');
+    return $this->belongsTo(ProductCategory::class, 'product_category','code');
 }
 
 public function getProductTaxAttribute(){

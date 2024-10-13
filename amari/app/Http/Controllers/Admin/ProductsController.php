@@ -20,16 +20,19 @@ use Gate;
 use App\Http\Controllers\Helper\Efris\ProductController;
 use App\Http\Controllers\Helper\Efris\KeysController;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Controllers\Traits\CsvImportTrait;
+use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
 {
+    use CsvImportTrait;
     public function index(){
+
         $brands = ProductBrand::all();
         $categories = ProductCategory::all();
-        $units = ProductUnit::all();
-        $products = Product::with(['category','unit','brand'])->get();
+        $products = Product::with(['category','brand','tax'])->get();
 
-        return view('admin.products.index',compact('brands','products','categories','units'));
+        return view('admin.products.index',compact('brands','products','categories'));
     }
 
     public function viewedit(){

@@ -23,7 +23,7 @@
     </style>
 @endsection
 @section('content')
-@include('admin.products.modals.add',['brands'=>$brands,'categories'=>$categories,'units'=>$units])
+@include('admin.products.modals.add',['brands'=>$brands,'categories'=>$categories])
 @include('admin.products.modals.edit',['brands'=>$brands])
 @include('admin.products.modals.stock')
 @include('admin.products.modals.opening')
@@ -33,7 +33,13 @@
             <a class="btn btn-success" data-toggle="modal" data-target="#addproduct">
                 {{ trans('global.add') }} Product
             </a>
+            <button class="btn btn-warning" data-toggle="modal" data-target="#csvImportModal">
+                {{ trans('global.app_csvImport') }}
+            </button>
+            @include('csvImport.modal', ['model' => 'Product', 'route' => 'admin.products.parseCsvImport'])
         </div>
+
+
     </div>
 @endcan
 <div class="card">
@@ -61,6 +67,7 @@
                         <th width="10">
 
                         </th>
+
                         <th>
                             {{ trans('cruds.role.fields.id') }}
                         </th>
@@ -77,11 +84,12 @@
                             Brand
                         </th>
                         <th>
-                            Unit
-                        </th>
-                        <th>
                             Tax
                         </th>
+                        <th>
+                            Unit
+                        </th>
+
                         <th>
                             Action
                         </th>
@@ -94,7 +102,9 @@
                             <td>
 
                             </td>
-
+                            <td>
+                                {{ $product->id ?? '' }}
+                            </td>
                             <td>
                                 {{ $product->name ?? '' }}
                             </td>
@@ -111,10 +121,8 @@
                                 {{ $product->tax->name ?? '' }}
                             </td>
                             <td>
-                                {{ $product->unit->name ?? '' }}
+                                {{ $product->unit ?? '' }}
                             </td>
-
-
                             <td>
 
                                 <div class="dropdown">

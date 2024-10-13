@@ -88,6 +88,9 @@ Route::get('/admin/get/key','EfrisSetupController@getkey')->name('get.efriskey')
     Route::resource('brands','ProductBrandController');
 
     //products
+    Route::post('products/parse-csv-import', 'ProductsController@parseCsvImport')->name('products.parseCsvImport');
+    Route::post('products/process-csv-import', 'ProductsController@processCsvImport')->name('products.processCsvImport');
+
     Route::get('product/cost/view','ProductsController@productcost')->name('product.cost');
     Route::post('product/save/cost','ProductsController@saveproductcost')->name('save.cost');
     Route::post('product/save/batch','ProductsController@savebatch')->name('save.batch');

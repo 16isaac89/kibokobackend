@@ -42,14 +42,14 @@
 
 <div class="row" style="margin:10px;">
 
-    <div class="col-4">
+    {{-- <div class="col-4">
     <select class="form-control form-control-lg" style="width:200px" required name="unit">
           <option value="">Select product unit </option>
           @foreach($units as $unit)
           <option value="{{$unit->shortname}}">{{$unit->name}}</option>
         @endforeach
         </select>
-    </div>
+    </div> --}}
 
     <div class="col-4">
       <input type="text" name="categorycode" required class="form-control" placeholder="Product Efris Category Code ">
