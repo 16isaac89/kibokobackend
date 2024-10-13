@@ -49,7 +49,7 @@ class StockController extends Controller
     //         $customers = array();
     //     }
     $customers = Customer::where('dealer_code',request()->dealer)->get();
-        return response()->json(['customers'=>$customers,'d'=>$custs]);
+        return response()->json(['customers'=>$customers]);
     }
 
     public function getproducts(){
