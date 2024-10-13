@@ -23,7 +23,7 @@ protected $appends = [
         'name',
         'brand_id',
         'code',
-        'unit_id',
+        'unit',
         "sync",
         'created_at',
         'updated_at',
@@ -36,9 +36,7 @@ protected $appends = [
    public function brand(){
     return $this->belongsTo(ProductBrand::class, 'brand_id','code');
    }
-   public function unit(){
-    return $this->belongsTo(ProductUnit::class, 'unit_id','id');
-   }
+
    public function efrisproduct(){
     return $this->hasOne(EfrisProduct::class,'product_id');
 }
