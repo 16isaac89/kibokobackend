@@ -108,6 +108,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Sales'], 
     Route::post('/get/routes','CustomersController@getRoutes');
     Route::get('/get/customercategories','CustomersController@getCategories');
     Route::post('/send/customer','CustomersController@store');
+    Route::post('/send/kibokocustomer','CustomersController@kibokostore');
     Route::post('/send/saved/customer','CustomersController@storesaved');
     Route::post('/save/order','OrderController@store');
     //Route::post('/save/order','OrderController@saveinvoice');

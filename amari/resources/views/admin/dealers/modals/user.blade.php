@@ -24,23 +24,23 @@
       <input type="text" name="password" id="password" class="form-control" placeholder="Password">
     </div>
     <div class="col-6">
-      <select class="form-control form-control-lg" id="userstatus" name="userstatus">
+      <select class="form-control form-control-lg" required id="userstatus" name="userstatus">
         <Label>Set active/inactive</label>
-      <option>Active</option>
+      <option value="">Active</option>
         <option value="1">Yes</option>
        <option value="0">No</option>
       </select>
     </div>
   </div>
   <input type="hidden" id="iddealer" name="iddealer">
-  
-  
+
+
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-       
+
       </div>
     </div>
   </div>

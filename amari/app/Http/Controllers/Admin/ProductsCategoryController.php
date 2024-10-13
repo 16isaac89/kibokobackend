@@ -15,7 +15,8 @@ class ProductsCategoryController extends Controller
     }
     public function store(){
         ProductCategory::create([
-            'name'=>request()->name
+            'name'=>request()->name,
+            'code'=>request()->code
         ]);
         return back();
     }
@@ -24,8 +25,9 @@ class ProductsCategoryController extends Controller
         $category = ProductCategory::find(request()->catid);
         $category->update([
             'name'=>request()->catname,
+            'code'=>request()->code
         ]);
-        return back();
+        return back()->with('message', 'Category updated successfully.');
     }
     public function delete(){
         $category = ProductCategory::find(request()->category);

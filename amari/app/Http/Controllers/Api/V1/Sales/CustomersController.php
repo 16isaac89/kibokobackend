@@ -22,15 +22,16 @@ class CustomersController extends Controller
         $categories = CustomerCategory::all();
         return response()->json(['categories'=>$categories]);
     }
-	public function kibokostore(){
+	public function kibokostore(Request $request){
 		  $id = request()->userid;
         $week = request()->week;
         $day = request()->day;
 		$customer = request()->id;
         $routes = Route::with('customers')->where('dealer_id',request()->dealer)->get();
         $route = Route::find(request()->route);
-		if($customer){
 			$client = Customer::find($customer);
+		if($client){
+
 			$client->update([
 			'name'=>request()->name,
                 'phone'=>request()->phone,
@@ -58,9 +59,18 @@ class CustomersController extends Controller
 				'custcategory'=>request()->custcategory,
                 'latitude'=>request()->lat,
         		'longitude'=>request()->long,
+				'subdimagelat'=>request()->subdimagelat,
+				'subdimagelong'=>request()->subdimagelong,
                 'route_code'=>$route->code,
+				'customertype'=>request()->customertype,
+				'customercheckin'=>request()->customercheckin,
+				'customercheckout'=>request()->customercheckout,
+
 
 			]);
+            if (request()->subdimage) {
+                $customer->addMedia(request()->file('subdimage'))->toMediaCollection('location_image','public_uploads');
+            }
 
 			return response()->json(['message'=>'Customer updated successfully','customers'=>[],'routes'=>$routes]);
 		}else{
@@ -93,35 +103,70 @@ class CustomersController extends Controller
                 'latitude'=>request()->lat,
         		'longitude'=>request()->long,
                 'route_code'=>$route->code,
+				'customertype'=>request()->customertype,
+				'customercheckin'=>request()->customercheckin,
+				'customercheckout'=>request()->customercheckout,
+				'subdimagelat'=>request()->subdimagelat,
+				'subdimagelong'=>request()->subdimagelong,
 
             ]
             );
+		//	$file = $customer->locationimage;
+        // Check if an image is uploaded and save the file
+     //  if ($request->base64image) {
+        // Get the base64 string
+      //  $base64Image = $request->base64image;
 
-            RoutePlanList::create([
-                'customer_id'=>$customer->identification,
-                'name'=>$customer->name,
-                'routename'=>$customer->route->name,
-                'route_id'=>request()->route,
-                'dealer_user_id'=>$id,
-                'dealer_id'=>request()->dealer,
-                'week'=>1,
-                'day'=>1,
-            ]);
+        // Remove "data:image/png;base64," part (if it exists)
+     //   $base64Image = preg_replace('#^data:image/\w+;base64,#i', '', $base64Image);
 
-            $customers="";
-       $custs = RoutePlanList::with(['customer','route'])->where(['dealer_user_id'=>$id,'week'=>$week,'day'=>$day])->get();
-        if($custs){
-            $customers = $custs;
-        }else{
-            $customers = array();
+        // Decode the base64 string
+     //   $imageData = base64_decode($base64Image);
+
+        // Generate a unique file name
+    //    $imageName = uniqid() . '.png';
+
+    //   $filePath = "uploads/{$imageName}";
+    //    \Storage::disk('public_uploads')->put($filePath, $imageData);
+
+        // Get the full URL of the uploaded image
+    //    $imageUrl = \Storage::url($filePath);
+	//	   $customer->locationimage = $filePath;
+	//	   $customer->save();
+
+  //  }
+
+
+
+			if (request()->subdimage) {
+            $customer->addMedia(request()->file('subdimage'))->toMediaCollection('location_image','public_uploads');
         }
-        Performance::create([
-            'user'=>request()->userid,
-            'points'=>1,
-            'pointtype'=>'createcustomer',
-          ]);
 
-            return response()->json(['message'=>'Customer saved','customers'=>$customers,'routes'=>$routes]);
+            //RoutePlanList::create([
+           //     'customer_id'=>$customer->identification,
+           //     'name'=>$customer->name,
+           //     'routename'=>$customer->route->name,
+           //     'route_id'=>request()->route,
+          //      'dealer_user_id'=>$id,
+          //      'dealer_id'=>request()->dealer,
+         //       'week'=>1,
+         //       'day'=>1,
+         //   ]);
+
+           // $customers="";
+      // $custs = RoutePlanList::with(['customer','route'])->where(['dealer_user_id'=>$id,'week'=>$week,'day'=>$day])->get();
+      //  if($custs){
+       //     $customers = $custs;
+       // }else{
+      //      $customers = array();
+      //  }
+      //  Performance::create([
+       //     'user'=>request()->userid,
+        //    'points'=>1,
+         //   'pointtype'=>'createcustomer',
+       //   ]);
+
+            return response()->json(['message'=>'Customer saved','customers'=>[],'routes'=>$routes]);
 		}
 	}
     public function store(){

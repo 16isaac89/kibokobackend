@@ -18,7 +18,7 @@ class LoginController extends Controller
 {
     public $successStatus = 200;
     public function Login(Request $request){
-        $customer = DealerUser::where(['phone'=>$request->username,'status'=>1])->first();
+        $customer = DealerUser::where(['username'=>$request->username,'status'=>1])->first();
 //return response()->json(['a'=>request()->all()]);
     if($customer){
         if (!Hash::check($request->password, $customer->password)) {
@@ -30,7 +30,8 @@ class LoginController extends Controller
         $customeracc = DealerUser::with('dealer')->find($customer->id);
         SalesPersonLogin::create([
             'user_id'=>$customeracc->id,
-            'login_time'=>Carbon::now()->format('H:i:s'),   
+            'login_time'=>Carbon::now()->format('H:i:s'),
+            'date'=>date('Y-m-d'),
         ]);
         return response()->json(['customer'=>$customeracc,'Success'=>$success,'status'=>'1'], $this->successStatus);
     }else{
@@ -52,8 +53,8 @@ public function logout(){
 		]);
 		return response()->json(['message'=>'You did not log out previously.'], 200);
 	}
-    
-   
+
+
 }
 
 

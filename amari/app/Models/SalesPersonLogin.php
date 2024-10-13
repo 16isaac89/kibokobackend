@@ -24,7 +24,6 @@ class SalesPersonLogin extends Model
         'login_time',
         'logout_time',
         'date',
-       
         'created_at',
         'updated_at',
         'deleted_at',
@@ -32,5 +31,5 @@ class SalesPersonLogin extends Model
     public function dealeruser(){
         return $this->belongsTo(DealerUser::class,'user_id');
     }
-    
+
 }

@@ -21,7 +21,9 @@ class Customer extends Authenticatable implements HasMedia
 
     public $table = 'customers';
 
-
+protected $appends = [
+        'location_image'
+    ];
 
     protected $dates = [
         'created_at',
@@ -59,20 +61,38 @@ class Customer extends Authenticatable implements HasMedia
         'route_code',
 		'latitude',
 		'longitude',
+		'customertype',
+		'customercheckin',
+		'customercheckout',
+		'userid',
+		'subdimagelat',
+		'subdimagelong',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
 
+	public function getLocationImageAttribute()
+    {
+        $file = $this->getMedia('location_image')->last();
+        if ($file) {
+            $file->url       = $file->getUrl();
+            $file->thumbnail = $file->getUrl('thumb');
+            $file->preview   = $file->getUrl('preview');
+        }
+
+        return $file;
+    }
+
     public function route(){
-        return $this->belongsTo(Route::class, 'route_id');
+        return $this->belongsTo(Route::class, 'route_code');
     }
 
     public function category(){
         return $this->belongsTo(CustomerCategory::class, 'category_id');
     }
     public function dealer(){
-        return $this->belongsTo(Dealer::class, 'dealer_id');
+        return $this->belongsTo(Dealer::class, 'dealer_code');
     }
     public function distributor(){
         return $this->belongsTo(Dealer::class, 'dealer_code');
