@@ -42,12 +42,12 @@
                     @if($stockreqs->status === 2 || $stockreqs->status === 3)
                     <td>{{$record->appqty}}</td>
                     @else
-                   <select class="custom-select" name="batches[]" >
+                   {{-- <select class="custom-select" name="batches[]" >
                         <option selected value="0">Select batch to dispatch</option>
                         @foreach($record->product->stocks as $stock)
                         <option value="{{$stock->id}}">{{$stock->expirydate}} {{$stock->amount}} {{$stock->sellingprice}}</option>
                         @endforeach
-                   </select>
+                   </select> --}}
                    @endif
                    </td>
                    <td>
