@@ -14,6 +14,7 @@ use App\Models\ProductBrand;
 use App\Models\SkuTarget;
 use App\Models\Van;
 use App\Models\Performance;
+use App\Models\Customer;
 
 
 class StockController extends Controller
