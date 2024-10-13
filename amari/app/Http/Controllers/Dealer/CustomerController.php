@@ -13,10 +13,11 @@ class CustomerController extends Controller
 {
     public function index(){
         if(\Auth::guard('dealer')->check()){
-        $dealer = Auth::guard('dealer')->user()->dealer_id;
-        $customers = Customer::where('dealer_id',$dealer)->get();
+        $dealer = Auth::guard('dealer')->user()->dealer;
+
+        $customers = Customer::with('route')->where('dealer_code',$dealer->code)->get();
         $categories = CustomerCategory::all();
-        $routes = Route::where('dealer_id',$dealer)->get();
+        $routes = Route::where('dealer_code',$dealer->code)->get();
         return view('dealer.customer.index',compact('customers','categories','routes'));
         }else{
             return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');

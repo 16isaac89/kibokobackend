@@ -85,7 +85,7 @@ protected $appends = [
     }
 
     public function route(){
-        return $this->belongsTo(Route::class, 'route_code');
+        return $this->belongsTo(Route::class, 'route_code','code');
     }
 
     public function category(){

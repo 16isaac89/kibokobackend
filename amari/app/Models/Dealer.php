@@ -60,6 +60,11 @@ public function users(){
     return $this->hasMany(DealerUser::class);
 
 }
+public function routes(){
+
+    return $this->hasMany(Route::class,'dealer_code','code');
+
+}
 
 
 }

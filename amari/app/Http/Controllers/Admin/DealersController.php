@@ -100,8 +100,12 @@ Branch::create([
     public function show(Dealer $dealer){
         // $subscriptions = $dealer->dealersubs;
         // $lates =  = $dealer->dealersubslat;
-        $dealer->load('dealerclients');
-//d($dealer);
+        $dealer->load(['dealerclients'=>function($query){
+            $query->with('route');
+        },'routes'=>function($query){
+            $query->with('customers');
+        },'users']);
+//dd($dealer->dealerclients[0]);
 
         return view('admin.dealers.show',compact('dealer'));
 

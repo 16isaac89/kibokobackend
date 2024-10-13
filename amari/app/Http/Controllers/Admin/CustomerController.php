@@ -26,7 +26,7 @@ class CustomerController extends Controller
     {
         abort_if(Gate::denies('customer_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $customers = Customer::with(['media'])->get();
+        $customers = Customer::with(['media','route'])->get();
 
         return view('admin.customers.index', compact('customers'));
     }

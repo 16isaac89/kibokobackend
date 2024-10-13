@@ -26,17 +26,13 @@ use App\Models\Dealer;
 use App\Models\Tax;
 
 class DealerProductController extends Controller
-{ 
+{
     public function index(){
         if(\Auth::guard('dealer')->check()){
-        $dealer  = Auth::guard('dealer')->user()->dealer_id;
-        $branches = Branch::where('dealer_id',$dealer)->get();
-        $units = ProductUnit::where('dealer_id',$dealer)->get();
-        //$products = DealerProduct::with('sync')->where('dealer_id',$dealer)->get();
-        $products = Product::with(['efrissync','supplier','productcategory','stocks'=>function($q){
-            $q->where('amount','>',0);
-        }])->where('dealer_id',$dealer)->get();
-        return view('dealer.products.index',compact('products','branches','units'));
+        $dealer  = Auth::guard('dealer')->user()->dealer->code;
+
+        $products = Product::with(['category','brand','tax'])->get();
+        return view('dealer.products.index',compact('products'));
     }else{
         return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
     }

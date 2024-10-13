@@ -29,7 +29,7 @@ class Route extends Model
     ];
 
     public function dealer(){
-        return $this->belongsTo(Dealer::class, 'dealer_id');
+        return $this->belongsTo(Dealer::class, 'dealer_code','code');
     }
     public function routeplans(){
         return $this->hasMany(RoutePlan::class, 'route_id');
@@ -39,7 +39,7 @@ class Route extends Model
         return $this->hasMany(Sale::class, 'route_id');
     }
     public function customers(){
-        return $this->hasMany(Customer::class, 'route_id');
+        return $this->hasMany(Customer::class, 'route_code','code');
     }
     public function routesalers(){
         return $this->hasOneThrough(DealerUser::class, Sale::class);

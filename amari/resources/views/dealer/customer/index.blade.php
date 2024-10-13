@@ -24,30 +24,20 @@
               <th class="wd-15p">Category</th>
               <th class="wd-20p">Address</th>
               <th class="wd-20p">Phone Number</th>
-              <th class="wd-15p">Tin</th>
               <th class="wd-10p">Route</th>
-              <th class="wd-10p">Credit Limit</th>
-              <th class="wd-25p">Status</th>
+              <th class="wd-10p">Classification</th>
             </tr>
           </thead>
           <tbody>
             @foreach ($customers as $customer)
             <tr>
               <td>{{$customer->name ?? ''}}</td>
-              <td>{{$customer->category?->name  ?? ''}}</td>
+              <td>{{$customer->custcategory  ?? ''}}</td>
               <td>{{$customer->address ?? ''}}</td>
               <td>{{$customer->phone ?? ''}}</td>
-              <td>{{$customer->tin ?? ''}}</td>
               <td>{{$customer->route?->name ?? ''}}</td>
-              <td>{{$customer->credit ?? ''}}</td>
-              <td>
-                @if ($customer->status === 1)
-                <span class="badge badge-success">Active</span>
-                @else
-                <span class="badge badge-warning">Inactive</span>
-                @endif
+              <td>{{$customer->classification ?? ''}}</td>
 
-              </td>
             </tr>
 
             @endforeach

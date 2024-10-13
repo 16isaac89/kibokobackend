@@ -68,12 +68,6 @@
               <span>Products</span>
             </a>
             <ul class="nav-sub">
-
-                <li class="nav-item"><a href="{{route('productunits.index')}}" class="nav-link">Units</a></li>
-                <li class="nav-item"><a href="{{route('dealertaxes.index')}}" class="nav-link">Tax</a></li>
-                <li class="nav-item"><a href="{{route('dealersuppliers.index')}}" class="nav-link">Product Suppliers</a></li>
-                <li class="nav-item"><a href="{{route('dealerbrands.index')}}" class="nav-link">Product Brands</a></li>
-                <li class="nav-item"><a href="{{route('dealercategories.index')}}" class="nav-link">Product Categories</a></li>
               <li class="nav-item"><a href="{{route('products.index')}}" class="nav-link">Catalog</a></li>
             </ul>
           </li><!-- nav-item -->

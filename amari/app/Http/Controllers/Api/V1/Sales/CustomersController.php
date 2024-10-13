@@ -28,6 +28,7 @@ class CustomersController extends Controller
         $day = request()->day;
 		$customer = request()->id;
         $routes = Route::with('customers')->where('dealer_id',request()->dealer)->get();
+        $dealer = Dealer::find(request()->dealer);
         $route = Route::find(request()->route);
 			$client = Customer::find($customer);
 		if($client){
@@ -65,6 +66,7 @@ class CustomersController extends Controller
 				'customertype'=>request()->customertype,
 				'customercheckin'=>request()->customercheckin,
 				'customercheckout'=>request()->customercheckout,
+                'dealer_code'=>$dealer->code,
 
 
 			]);
@@ -81,6 +83,7 @@ class CustomersController extends Controller
                 'category_id'=>request()->category,
                 'route_id'=>request()->route,
                 'dealer_id'=>request()->dealer,
+                'dealer_code'=>$dealer->code,
                 'status'=>1,
                 'identification'=> uniqid(),
                 //'tin'=>request()->tin,

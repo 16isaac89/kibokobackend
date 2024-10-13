@@ -30,7 +30,7 @@ class StockController extends Controller
         return response()->json(['dispatchid'=>$dispatched ? $dispatched->id:null,'dispatchstock'=>$dispatched ? $dispatched->dispatchproducts : null ]);
     }
     public function getBrands(){
-        $brands = ProductBrand::where('dealer_id',request()->dealer)->get();
+        $brands = ProductBrand::all();
         return response()->json(['brands'=>$brands]);
     }
 
@@ -67,7 +67,7 @@ class StockController extends Controller
     }
     public function getvan(){
         $van = Van::find(request()->id)->name;
-        
+
         return response()->json(['van'=>$van]);
     }
 }
