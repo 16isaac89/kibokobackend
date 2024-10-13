@@ -49,9 +49,9 @@
                         <th>
                             Status
                         </th>
-                        <th>
+                        {{-- <th>
                            Van
-                        </th>
+                        </th> --}}
                         <th>
                             Initiator
                         </th>
@@ -77,11 +77,11 @@
                    @elseif($record->status === 3)
                    <span class="badge badge-pill badge-danger">Rejected</span>
                    @endif
-                    <td>
+                    {{-- <td>
                         {{$record->van->name}}
-                    </td>
+                    </td> --}}
                     <td>
-                    {{$record->saler->phone}}
+                    {{$record->saler->username}}
 </td>
 <td>
 @if($record->requesttype === 1)
