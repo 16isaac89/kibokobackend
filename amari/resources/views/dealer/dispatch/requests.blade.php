@@ -12,22 +12,22 @@
             @csrf
             <div class="row" style="margin:10px;">
 
-            <div class="col-4">
+            {{-- <div class="col-4"> --}}
 			{{-- <label class="mr-sm-2" for="inlineFormCustomSelect">Van</label> --}}
-			<select class="custom-select mr-sm-2" name="van">
+			{{-- <select class="custom-select mr-sm-2" name="van">
 			  <option selected>Choose van.</option>
 			  @foreach ($vans as $van)
 			  <option value="{{$van->id}}">{{$van->name}} {{$van->reg_id}}</option>
 			  @endforeach
 			</select>
-</div>
+</div> --}}
 <div class="col-4">
 <select class="custom-select mr-sm-2" aria-label="Default select example" name="status">
   <option selected>Select Status</option>
   <option value="1">Pending</option>
   <option value="2">Approved</option>
   <option value="3">Rejected</option>
-</select>  
+</select>
 </div>
 <div class="col-4">
             <button type="submit" class="btn btn-success">Search</button>
@@ -42,7 +42,7 @@
                         <th width="10">
 
                         </th>
-                       
+
                         <th>
                             Date
                         </th>
@@ -64,7 +64,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                   
+
                  @foreach($records as $record)
                     <tr>
                     <th scope="row">1</th>
@@ -101,13 +101,13 @@
                         </a>
 </td>
                     </tr>
-                  @endforeach 
-                   
-                   
+                  @endforeach
+
+
                 </tbody>
             </table>
             </div>
-        </div>        
+        </div>
         </div>
     </div>
 </div>
@@ -148,5 +148,5 @@
             })
 })
     </script>
-    
+
 @endsection

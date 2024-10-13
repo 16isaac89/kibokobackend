@@ -34,7 +34,7 @@ class StockRequestsController extends Controller
             $query->with(['product'=>function($q){
                 $q->with('stocks');
             }]);
-       },'saler','van'])->where(['status'=>request()->status,'van_id'=>request()->van])->get();
+       },'saler','van'])->where(['status'=>request()->status])->get();
         $vans = Van::where('dealer_id',$dealer)->get();
         return view('dealer.dispatch.requests',compact('vans','records'));
     }else{
