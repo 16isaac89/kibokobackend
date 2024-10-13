@@ -23,7 +23,7 @@
     </style>
 @endsection
 @section('content')
-@include('admin.products.modals.add',['brands'=>$brands,'locations'=>$locations,'suppliers'=>$suppliers,'categories'=>$categories,'units'=>$units])
+@include('admin.products.modals.add',['brands'=>$brands,'categories'=>$categories,'units'=>$units])
 @include('admin.products.modals.edit',['brands'=>$brands])
 @include('admin.products.modals.stock')
 @include('admin.products.modals.opening')
