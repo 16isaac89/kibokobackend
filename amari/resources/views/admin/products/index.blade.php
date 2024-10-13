@@ -65,37 +65,27 @@
                             {{ trans('cruds.role.fields.id') }}
                         </th>
                         <th>
-                            Supplier
+                            Name
+                        </th>
+                        <th>
+                            Code
+                         </th>
+                         <th>
+                            Category
                         </th>
                         <th>
                             Brand
                         </th>
                         <th>
-                            Category
-                        </th>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                           Code
-                        </th>
-                        <th>
-                            Stock
-                        </th>
-                      
-                        <th>
                             Unit
                         </th>
                         <th>
-                            Selling Price (UGX)
+                            Tax
                         </th>
-                        <!-- <th>
-                            Efris Sync
-                        </th> -->
                         <th>
                             Action
                         </th>
-                       
+
                     </tr>
                 </thead>
                 <tbody>
@@ -104,63 +94,29 @@
                             <td>
 
                             </td>
-                            
+
                             <td>
-                                {{ $product->id ?? '' }}
+                                {{ $product->name ?? '' }}
                             </td>
                             <td>
-                                {{ $product->supplier->name ?? '' }}
+                                {{ $product->code ?? '' }}
+                            </td>
+                            <td>
+                                {{ $product->category->name ?? '' }}
                             </td>
                             <td>
                                 {{ $product->brand->name ?? '' }}
                             </td>
                             <td>
-                                {{ $product->productcategory->name ?? '' }}
+                                {{ $product->tax->name ?? '' }}
+                            </td>
+                            <td>
+                                {{ $product->unit->name ?? '' }}
                             </td>
 
+
                             <td>
-                                {{ $product->name ?? '' }}
-                            </td>
-                             <td>
-                                {{ $product->code ?? '' }}
-                            </td>
-                             <td>
-                                <ul>
-                                @foreach($product->stocks as $stock)
-                                <li>
-                                {{ \Carbon\Carbon::parse($stock->expirydate)->format('j F, Y') }} ({{$stock->amount}})
-                                </li>
-                                @endforeach
-                                </ul>
-                                <!-- {{ $product->stock ?? '' }} -->
-                            </td>
-                            
-                            <td>
-                                {{ $product->unit ?? '' }}
-                            </td>
-                             <td>
-                             <ul>
-                                @foreach($product->stocks as $stock)
-                                <li>
-                                {{ \Carbon\Carbon::parse($stock->expirydate)->format('j F, Y') }} ({{$stock->sellingprice}})
-                                </li>
-                                @endforeach
-                                </ul>
-                               
-                            </td>
-                            <!-- <td>
-                                @if($product->sync === 0)
-                                <span class="badge badge-pill badge-warning">Not Synced</span>
-                                @else
-                                <span class="badge badge-pill badge-success">Synced</span>
-                                @endif
-                            </td> -->
-                            <td>
-                                <!-- @can('product_edit')
-                                    <a data-id="{{$product->id}}" data-location="{{$product->location_id}}" data-unit="{{$product->unit}}" data-brand="{{$product->brand_id}}" data-code="{{$product->code}}" data-stock="{{$product->stock}}" data-price="{{$product->price}}" data-name="{{$product->name}}" class="btn btn-xs btn-info" data-toggle="modal" data-target="#editproduct">
-                                        {{ trans('global.edit') }}
-                                    </a>
-                                @endcan -->
+
                                 <div class="dropdown">
                                         <button style="padding:14px 16px;background-color:blue;color:#000;background-color: cyan;opacity: 1;border-radius:25px;">Actions</button>
                                         <div class="dropdown-content">
@@ -169,44 +125,17 @@
                                         {{ trans('global.edit') }}
                                     </a>
                                 @endcan
-                                @can('product_count')
-                                    <a href="{{route('admin.product.addcount',['product'=>$product->id])}}" class="btn btn-primary">
-                                        ADD COUNT
-                                    </a>
-                                @endcan
-                                @can('product_batch')
-                                    <a href="{{route('admin.product.batches',['product'=>$product->id])}}" class="btn btn-info">
-                                        Batches
-                                    </a>
-                                @endcan
-                                @can('addproduct_batch')
-                                    <a href="{{route('admin.product.addbatches',['product'=>$product->id])}}" class="btn btn-warning">
-                                        ADD Batches
-                                    </a>
-                                @endcan
 
-                                @can('edit_product_location')
-                                    <a href="{{route('admin.product.vieweditlocation',['product'=>$product->id])}}" class="btn btn-success">
-                                        Edit Location
-                                    </a>
-                                @endcan
+
                                 @can('product_delete')
                                     <a href="{{route('admin.product.delete',['product'=>$product->id])}}" class="btn btn-danger">
                                         Delete
                                     </a>
                                 @endcan
-                                @can('edit_product_cost')
-                                    <a href="{{route('admin.product.cost',['product'=>$product->id])}}" class="btn btn-warning">
-                                        Cost Price
-                                    </a>
-                                @endcan
 
 
-                                <!-- @can('product_edit')
-                                    <a data-id="{{$product->id}}" data-name="{{$product->name}}" class="btn btn-xs btn-success" data-toggle="modal" data-target="#stockproduct">
-                                        Stock
-                                    </a>
-                                @endcan -->
+
+
                                 @if($product->sync === 0)
                                 @can('product_edit')
                                     <a class="btn btn-xs btn-warning" href="{{route('admin.sync.product',['product'=>$product->id])}}">
@@ -214,19 +143,13 @@
                                     </a>
                                 @endcan
                                 @endif
-                                @if($product->openingstock === 0)
-                                @can('product_edit')
-                                    <a class="btn btn-xs btn-primary" data-id="{{$product->id}}" data-name="{{$product->name}}" data-toggle="modal" data-target="#openingstock">
-                                        Opening Stock
-                                    </a>
-                                @endcan 
-                                 @endif 
-</div>
-</div>
-                                
 
-        
-                                
+</div>
+</div>
+
+
+
+
 
 
 
@@ -261,19 +184,19 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-  
+
 })
 
 </script>
 <script>
 $('#editproduct').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
- 
-  var id = button.data('id'); 
-  var code = button.data('code'); 
-  var stock = button.data('stock'); 
-  var name = button.data('name'); 
-  var price = button.data('price'); 
+
+  var id = button.data('id');
+  var code = button.data('code');
+  var stock = button.data('stock');
+  var name = button.data('name');
+  var price = button.data('price');
   var brand = button.data('brand')
   var location = button.data('location')
   var unit = button.data('unit')
@@ -306,8 +229,8 @@ $('#searchresults').html(data);
 <script>
 $('#stockproduct').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
-  var id = button.data('id'); 
-  var name = button.data('name'); 
+  var id = button.data('id');
+  var name = button.data('name');
   document.getElementById('stockid').value=id
   document.getElementById('pname').innerHTML = name
 })
@@ -315,8 +238,8 @@ $('#stockproduct').on('show.bs.modal', function (event) {
 <script>
 $('#openingstock').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
-  var id = button.data('id'); 
-  var name = button.data('name'); 
+  var id = button.data('id');
+  var name = button.data('name');
   document.getElementById('openingstockid').value=id
   document.getElementById('opname').innerHTML = name
 })

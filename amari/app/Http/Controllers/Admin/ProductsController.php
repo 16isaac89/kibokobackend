@@ -25,14 +25,11 @@ class ProductsController extends Controller
 {
     public function index(){
         $brands = ProductBrand::all();
-        $products = Product::with(['supplier','productcategory','stocks'=>function($q){
-            $q->where('amount','>',0);
-        }])->get();
-        $locations = Location::all();
-        $suppliers = Supplier::all();
         $categories = ProductCategory::all();
         $units = ProductUnit::all();
-        return view('admin.products.index',compact('brands','products','locations','suppliers','categories','units'));
+        $products = Product::with(['category','unit','brand'])->get();
+
+        return view('admin.products.index',compact('brands','products','categories','units'));
     }
 
     public function viewedit(){
@@ -48,7 +45,7 @@ class ProductsController extends Controller
         $brands = ProductBrand::all();
         $product = Product::with('locationproducts')->find(request()->product);
         $locations = Location::all();
-        return view('admin.products.addcount',compact('brands','product','locations')); 
+        return view('admin.products.addcount',compact('brands','product','locations'));
     }
     public function store(){
         //dd(request()->all());
@@ -70,7 +67,7 @@ class ProductsController extends Controller
             'cost'=>request()->cost,
             'suppvat'=>request()->cost*0.18,
             'supplier_id'=>request()->supplier,
-            'product_category_id'=>request()->productcategory,  
+            'product_category_id'=>request()->productcategory,
         ]);
         // foreach($locations as $key=> $a){
         //     $location = intVal($locations[$key]);
@@ -89,12 +86,12 @@ class ProductsController extends Controller
         //         'product_id'=>$product->id,
         //     ]);
         // }
-        return redirect()->back()->with('success', 'Product has been saved successfully'); 
+        return redirect()->back()->with('success', 'Product has been saved successfully');
        // return back();
     }
     public function editProduct(){
       // dd(request()->all());
-      
+
       $vnames = request()->vname;
       $vquantities = request()->vquantities;
       $vprices = request()->vprices;
@@ -113,9 +110,9 @@ class ProductsController extends Controller
             //'location_id'=>request()->locationid,
             // 'cost'=>request()->cost,
             // 'suppvat'=>request()->cost*0.18,
-            
+
         ]);
-       
+
 
         // foreach($vnames as $key=> $a){
         //     ProductVariance::create([
@@ -126,7 +123,7 @@ class ProductsController extends Controller
         //     ]);
         // }
 
-        return redirect()->back()->with('success', 'Product has been edited'); 
+        return redirect()->back()->with('success', 'Product has been edited');
         //return back();
     }
     public function productDetails(){
@@ -174,7 +171,7 @@ class ProductsController extends Controller
         'date'=>$date,
         'comment'=>request()->comment,
     ]);
-       
+
        return redirect()->back()->with('message', 'Stock Count has been saved successfully!');
        //return back();
    }
@@ -204,7 +201,7 @@ class ProductsController extends Controller
             'cost'=>$costs[$key],
         ]);
     }
-    return redirect()->back()->with('success', 'Stock Costs have been saved successfully!');  
+    return redirect()->back()->with('success', 'Stock Costs have been saved successfully!');
    }
    public function savebatch(){
     //dd(request()->all());
@@ -217,7 +214,7 @@ class ProductsController extends Controller
                 'sellingprice'=>$sellingprices[$key],
         ]);
     }
-    return redirect()->back()->with('success', 'Product batch has been saved.'); 
+    return redirect()->back()->with('success', 'Product batch has been saved.');
    }
 
    public function addbatchesview(){
@@ -257,9 +254,9 @@ class ProductsController extends Controller
        }else{
         return redirect()->back()->with('errors', 'Error try again.');
         //return \Redirect::back()->withErrors(['msg' => 'Error try again']);
-       } 
-    
-    
+       }
+
+
    }
 
    public function editlocationview(){
@@ -286,7 +283,7 @@ class ProductsController extends Controller
                 ]);
             }
 
-        } 
+        }
         return redirect()->back()->with('message', 'Product locations edited successfuly');
     }
    }
