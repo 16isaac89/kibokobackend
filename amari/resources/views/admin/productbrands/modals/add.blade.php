@@ -15,13 +15,17 @@
     <label for="exampleInputEmail1">Brand Name</label>
     <input type="text" required name="name" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Enter brand Name">
   </div>
-  
+  <div class="form-group">
+    <label for="exampleInputEmail1">Code</label>
+    <input type="text" required name="code" class="form-control" id="code" aria-describedby="emailHelp" placeholder="Enter unique brand code">
+  </div>
+
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
- 
+
       </div>
     </div>
   </div>

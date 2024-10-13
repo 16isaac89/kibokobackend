@@ -16,14 +16,16 @@ class ProductBrandController extends Controller
    public function store(){
     $brands = ProductBrand::create([
         'name'=>request()->name,
+        'code'=>request()->code
     ]);
     return back();
    }
    public function editBrand(){
     ProductBrand::find(request()->brandid)->update([
         'name'=>request()->brandname,
+        'code'=>request()->code
     ]);
-    return back();
+    return redirect()->back()->with('success', 'Brand updated successfully.');
    }
    public function brandProducts(){
     $products = Product::where('brand_id',request()->brand)->get();
