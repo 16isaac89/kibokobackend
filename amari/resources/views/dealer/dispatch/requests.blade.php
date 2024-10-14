@@ -59,6 +59,12 @@
                             Type
                         </th>
                         <th>
+                            Customer
+                        </th>
+                        <th>
+                            Route
+                        </th>
+                        <th>
                             View
                         </th>
                     </tr>
@@ -93,6 +99,7 @@
 @endif
 </td>
 <td>
+<b>{{$record->customer->name}}</b>
 <!-- <a data-id="{{$record->id}}" data-items="{{$record->items}}" data-status="{{$record->status}}" data-toggle="modal" data-target="#requestitems">
                     <i class="fa fa-clone fa-2x"  aria-hidden="true"></i>
                         </a> -->
@@ -100,6 +107,7 @@
                     <i class="fa fa-clone fa-2x"  aria-hidden="true"></i>
                         </a>
 </td>
+<td><b></b>{{$record->customer->route->name}}</b></td>
                     </tr>
                   @endforeach
 
