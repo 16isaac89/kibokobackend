@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Models\RepRoute;
 use App\Models\RoutePlanList;
 use App\Models\Performance;
+use App\Models\Dealer;
 
 class CustomersController extends Controller
 {
