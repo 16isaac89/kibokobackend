@@ -23,6 +23,8 @@ $stockreq = StockRequest::create([
         'requesttype'=>request()->requesttype,
         'customer_id'=>request()->customer_id,
         'dealer_id'=>$user->dealer_id,
+        'checkin'=>request()->checkin,
+        'checkout'=>request()->checkout,
 ]);
         foreach($cart as $key=> $a){
             StockRequestProduct::create([

@@ -25,6 +25,8 @@ class StockRequest extends Model
         'status',
         'requesttype',
         'customer_id',
+        'checkin',
+        'checkout',
         'delivered',
         'created_at',
         'updated_at',

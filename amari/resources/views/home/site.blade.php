@@ -170,137 +170,7 @@
 
 
 
-    <!-- Start Our About
-    ============================================= -->
-    <div id="about" class="about-area bg-gray inc-thumb default-padding">
-        <div class="container">
-            <div class="row">
-                <!-- Start About Content -->
-                <div class="about-content">
-                    <div class="col-md-12 info">
-                        <div class="content-info">
-                            <div class="row">
-                                <div class="col-md-6 thumb-left wow slideInUp" data-wow-delay="400ms">
-                                    <img src="{{ asset('images/about.png')}}" alt="Thumb" style="height:500px;">
-                                </div>
-                                <div class="col-md-6 left-info wow fadeInLeft">
-                                    <h4>About The System</h4>
-                                    <h2>Electronic Field Management System</h2>
-                                    <p>
-                                        This system allows businesses to efficiently track inventory, monitor shipments, and coordinate the movement of goods. Field agents can use the mobile app to access real-time information, update inventory levels, and receive task assignments on the go, ensuring a seamless and responsive distribution process. This technology enhances operational efficiency, reduces errors, and improves communication between the central hub and field teams, ultimately leading to a more agile and effective distribution network.
-                                    </p>
-                                    <ul>
-                                        <li>Manage Inventory</li>
-                                        <li>Manage Vans and Field Agents.</li>
-                                        <li>Manage Sales</li>
-                                        <li>Efris Integrated for Ugandan Businesses</li>
-                                        <li>Many More Features</li>
-                                    </ul>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- End About -->
-
-            </div>
-        </div>
-    </div>
-    <!-- End Our About -->
-
-    <!-- Start Work Process
-    ============================================= -->
-    <div id="overview" class="work-pro-area default-padding">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    <div class="site-heading text-center">
-
-                        <h2> <strong>Features</strong></h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="work-pro-items">
-                        <!-- Single Iitem -->
-                        <div class="single-item wow fadeInUp">
-                            <div class="row">
-                                <div class="col-md-6 thumb">
-                                    <img src="{{ asset('front/landing/assets/img/illustrations/7.svg')}}" alt="Thumb">
-                                </div>
-                                <div class="col-md-6 info">
-                                    <h3>Optimization</h3>
-                                    <p>
-                                        In summary,EFDs empowers
-                                        distributors to streamline their operations, reduce costs, enhance customer service, and
-                                        adapt to changing market conditions. By leveraging technology to improve efficiency and
-                                        decision-making, distributors can better achieve their business goals, whether it's
-                                        increasing revenue, improving customer satisfaction, or expanding their market presence.
-                                    </p>
-                                    <ul>
-                                        <li>
-                                            <h5>Real-time Inventory Management:</h5>
-                                            The system provides distributors with up-to-the-minute visibility into their inventory levels. This helps in reducing overstock or understock situations, minimizing carrying costs, and ensuring that products are always available to meet customer demand.
-                                        </li>
-                                        <li>
-                                            <h5>Route Optimization</h5>
-                                            The DMS can optimize delivery routes, helping field agents to reach their destinations more efficiently. This reduces fuel costs, minimizes delivery times, and improves overall delivery performance.
-                                        </li>
-                                        <li>
-                                            <h5>Data Analytics</h5>
-                                            The system collects valuable data on sales, inventory, and distribution operations. Distributors can use this data for analytics and reporting, enabling them to make informed decisions, identify trends, and improve their overall business strategies.
-                                        </li>
-                                        <li>
-                                            <h5>Data Analytics</h5>
-                                            The system collects valuable data on sales, inventory, and distribution operations. Distributors can use this data for analytics and reporting, enabling them to make informed decisions, identify trends, and improve their overall business strategies.
-                                        </li>
-                                        <li>
-                                            <h5>Compliance and Reporting</h5>
-                                        systems can help distributors comply with industry regulations and reporting requirements. This reduces the risk of fines or penalties and ensures that the business operates within legal boundaries.
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Single Iitem -->
-                        <!-- Single Iitem -->
-                        {{-- <div class="single-item reverse wow fadeInUp">
-                            <div class="row">
-                                <div class="col-md-6 thumb">
-                                    <img src="{{ asset('front/landing/assets/img/illustrations/6.svg')}}" alt="Thumb">
-                                </div>
-                                <div class="col-md-6 info">
-                                    <h3>Integration</h3>
-                                    <p>
-                                        Celebrated conviction stimulated principles day. Sure fail or in said west. Right my front it wound cause fully am sorry if. She jointure goodness interest debating did outweigh. Is time from them.
-                                    </p>
-                                    <ul>
-                                        <li>
-                                            <h5>Amazingly Simple Use</h5>
-                                            Certainty arranging am smallness by conveying
-                                        </li>
-                                        <li>
-                                            <h5>Clear Documentation</h5>
-                                            Frankness pronounce daughters remainder extensive
-                                        </li>
-                                        <li>
-                                            <h5>Flexible user interface</h5>
-                                            Outward general passage another as it. Very his are come man walk one next. Delighted prevailed supported
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div> --}}
-                        <!-- End Single Iitem -->
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Work Process -->
 
 
 
@@ -614,20 +484,20 @@
                         <div class="f-item twitter-widget">
                             <h4>Contact Info</h4>
                             <p>
-                                 Possible offering at contempt mr distance stronger an. Attachment excellence announcing
+                                 Powered By Exq
                             </p>
                             <div class="address">
                                 <ul>
                                     <li>
                                         <div class="info">
                                             <h5>Email:</h5>
-                                            <span>support@validtheme.com</span>
+                                            <span></span>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="info">
                                             <h5>Phone:</h5>
-                                            <span>+44-20-7328-4499</span>
+                                            <span></span>
                                         </div>
                                     </li>
                                 </ul>
