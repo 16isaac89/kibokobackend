@@ -72,7 +72,7 @@ class CustomersController extends Controller
 
 			]);
             if (request()->subdimage) {
-                $customer->addMedia(request()->file('subdimage'))->toMediaCollection('location_image','public_uploads');
+                $client->addMedia(request()->file('subdimage'))->toMediaCollection('location_image','public_uploads');
             }
 
 			return response()->json(['message'=>'Customer updated successfully','customers'=>[],'routes'=>$routes]);
