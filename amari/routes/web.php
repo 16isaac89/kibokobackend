@@ -51,6 +51,9 @@ Route::get('/admin/get/key','EfrisSetupController@getkey')->name('get.efriskey')
     Route::post('users/ckmedia', 'UsersController@storeCKEditorImages')->name('users.storeCKEditorImages');
     Route::resource('users', 'UsersController');
 
+    //Presale Orders
+    Route::get('/presaleorders/index', 'PresaleOrdersController@index')->name('presaleorders.index');
+    Route::get('/presaleorders/search', 'PresaleOrdersController@search')->name('presaleorders.search');
 
     // Map
     Route::delete('maps/destroy', 'MapController@massDestroy')->name('maps.massDestroy');

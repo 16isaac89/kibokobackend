@@ -8,18 +8,21 @@ use App\Models\StockRequest;
 use App\Models\StockRequestProduct;
 use App\Models\Sale;
 use App\Models\Performance;
+use App\Models\DealerUser;
 
 class StockRequestController extends Controller
 {
     public function store(){
         $cart = request()->cart;
+        $user = DealerUser::find(request()->salerid);
 $stockreq = StockRequest::create([
     'van_id'=>request()->van,
         'dealer_user_id'=>request()->salerid,
         'total'=>request()->total,
         'status'=>1,
         'requesttype'=>request()->requesttype,
-        'customer_id'=>request()->customer_id
+        'customer_id'=>request()->customer_id,
+        'dealer_id'=>$user->dealer_id,
 ]);
         foreach($cart as $key=> $a){
             StockRequestProduct::create([

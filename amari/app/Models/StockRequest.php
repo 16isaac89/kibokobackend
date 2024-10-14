@@ -20,6 +20,7 @@ class StockRequest extends Model
     protected $fillable = [
         'van_id',
         'dealer_user_id',
+        'dealer_id',
         'total',
         'status',
         'requesttype',
@@ -29,7 +30,7 @@ class StockRequest extends Model
         'updated_at',
         'deleted_at',
     ];
-   
+
     public function items(){
         return $this->hasMany(StockRequestProduct::class);
     }
@@ -40,6 +41,9 @@ class StockRequest extends Model
         return $this->belongsTo(DealerUser::class,'dealer_user_id');
     }
     public function customer(){
-        return $this->belongsTo(Customer::class,'customer_id','identification');
+        return $this->belongsTo(Customer::class,'customer_id','id');
+    }
+    public function dealer(){
+        return $this->belongsTo(Dealer::class,'dealer_id','id');
     }
 }

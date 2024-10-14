@@ -65,6 +65,11 @@ public function routes(){
     return $this->hasMany(Route::class,'dealer_code','code');
 
 }
+public function stockrequests(){
+
+    return $this->hasMany(StockRequest::class,'dealer_id','id');
+
+}
 
 
 }

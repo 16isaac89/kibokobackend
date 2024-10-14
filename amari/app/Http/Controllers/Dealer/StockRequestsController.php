@@ -32,7 +32,7 @@ class StockRequestsController extends Controller
             $dealer = Auth::guard('dealer')->user()->dealer_id;
         $records = StockRequest::with(['items'=>function($query){
             $query->with(['product']);
-       },'saler','van'])->where(['status'=>request()->status])->get();
+       },'saler','van'])->where(['status'=>request()->status,'dealer_id'=>$dealer])->get();
         $vans = Van::where('dealer_id',$dealer)->get();
         return view('dealer.dispatch.requests',compact('vans','records'));
     }else{

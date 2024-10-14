@@ -482,7 +482,15 @@
         </a>
     </li>
 @endcan
-    <li class="c-sidebar-nav-item">
+<li class="c-sidebar-nav-item">
+    <a href="{{ route("admin.presaleorders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/presaleorders") || request()->is("admin/presaleorders/*") ? "c-active" : "" }}">
+        <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
+
+        </i>
+        Presale Orders
+    </a>
+</li>
+    {{-- <li class="c-sidebar-nav-item">
         <a href="{{ route("admin.settings.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/settings") || request()->is("admin/settings/*") ? "c-active" : "" }}">
             <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
 
@@ -497,15 +505,15 @@
             </i>
             Subscriptions
         </a>
-    </li>
-    <li class="c-sidebar-nav-item">
+    </li> --}}
+    {{-- <li class="c-sidebar-nav-item">
         <a href="{{ route("admin.contactus.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/contactus") || request()->is("admin/contactus/*") ? "c-active" : "" }}">
             <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
 
             </i>
             Messages
         </a>
-    </li>
+    </li> --}}
 
         {{-- @can('van_access')
                         <li class="c-sidebar-nav-item">
