@@ -42,7 +42,7 @@ class StockRequestsController extends Controller
     }
     }
 public function store(){
-    dd(request()->all());
+    //dd(request()->all());
     $stockreq = StockRequest::find(request()->dispatchid);
     // $products = request()->product;
     // $quantity = request()->quantity;

@@ -21,6 +21,7 @@ class VerifyCsrfToken extends Middleware
 		'/send/booking/info',
 		'/save/token',
         '/save/order',
-        '/dealer/sync/product'
+        '/dealer/sync/product',
+        '/dealer/search/stockreqs'
     ];
 }

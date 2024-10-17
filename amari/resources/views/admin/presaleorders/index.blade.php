@@ -118,7 +118,7 @@
                             </tr>
                             <tr id="products-${order.id}" class="collapse">
                                 <td colspan="8">
-                                    <table  class="table table-sm table-bordered">
+                                    <table class="table table-sm table-bordered">
                                         <thead>
                                             <tr>
                                                 <th></th>

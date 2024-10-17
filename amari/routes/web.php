@@ -333,22 +333,13 @@ Route::post('/dealer/users/update/','DealerUserController@updateUser')->name('up
 Route::post('/dealerusers/target/history','DealerUserController@targethistory')->name('dealer.users.targetindex');
 
 Route::get('/dealerusers/home','DealerUserController@home')->name('dealer.users.index');
-Route::post('/update/product','DealerProductController@updateProduct')->name('update.dealer.product');
 
 
-Route::get('dealer/product/cost/view','DealerProductController@productcost')->name('dealer.product.cost');
-Route::post('dealer/product/save/cost','DealerProductController@saveproductcost')->name('dealer.save.cost');
-Route::post('dealer/product/save/batch','DealerProductController@savebatch')->name('dealer.save.batch');
-Route::get('dealer/product/view/batches','DealerProductController@viewbatches')->name('dealer.product.batches');
-Route::get('dealer/product/adjust/stock','DealerProductController@adjuststockbatch')->name('dealer.product.adjust');
+//dealer products
+Route::get('dealer/product-edit/{product}','DealerProductController@viewedit')->name('dealer.product.viewedit');
+Route::post('/update/product/{product}','DealerProductController@updateProduct')->name('update.dealer.product');
+Route::post('/dealer/product/store','DealerProductController@store')->name('store.dealer.product');
 
-Route::post('dealer/product/edit/batch','DealerProductController@editbatch')->name('dealer.edit.batch');
-Route::post('dealer/product/adjust/batch','DealerProductController@adjustbatch')->name('dealer.edit.batch');
-
-Route::get('dealer/product/delete/batch/{stock}','DealerProductController@deletebatch')->name('dealer.product.deletebatch');
-
-Route::get('dealer/product/view/addbatches','DealerProductController@addbatchesview')->name('dealer.product.addbatches');
-Route::post('dealer/product/save/addbatches','DealerProductController@saveaddbatch')->name('dealer.product.saveaddbatch');
 
 Route::get('dealer/product/delete','DealerProductController@delete')->name('dealer.product.delete');
 
@@ -359,7 +350,7 @@ Route::post('/admin/opening/product', 'EfrisProductController@openingstock')->na
 
 Route::get('dealer/product/view/addcount','DealerProductController@viewaddcount')->name('dealer.product.addcount');
 Route::post('dealer/product/store/count','DealerProductController@storecount')->name('dealer.product.storecount');
-Route::get('dealer/product/view/edit','DealerProductController@viewedit')->name('dealer.product.viewedit');
+
 Route::post('dealer/product/edit','DealerProductController@editProduct')->name('dealer.product.edit');
 Route::get('dealer/product/details','DealerProductController@productDetails')->name('dealer.product.details');
 Route::resource('products','DealerProductController');

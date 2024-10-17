@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Models\Branch;
 use App\Models\Dealer;
 use App\Models\Tax;
+use App\Models\DealerProduct;
 
 class DealerProductController extends Controller
 {
@@ -31,51 +32,59 @@ class DealerProductController extends Controller
         if(\Auth::guard('dealer')->check()){
         $dealer  = Auth::guard('dealer')->user()->dealer->code;
 
-        $products = Product::with(['category','brand','tax'])->get();
+        $products = Product::with(['category','brand','tax','dealerproduct'=>function($query){
+            return $query->where('dealer_id',Auth::guard('dealer')->user()->dealer_id);
+        }])->get();
         return view('dealer.products.index',compact('products'));
     }else{
         return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
     }
     }
 
-    public function updateProduct(){
+    public function updateProduct(DealerProduct $product){
         if(\Auth::guard('dealer')->check()){
-        DealerProduct::find(request()->product)->update([
-            'sellingprice'=>request()->price
-        ]);
-        return back();
+      $product->update([
+          'sellingprice'=>request()->sellingprice,
+          'stock'=>request()->stock
+      ]);
+        return redirect()->back()->with('message', 'Product has been updated successfully!');
     }else{
         return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
     }
     }
-    public function create(){
+    public function create(Product $product){
         if(\Auth::guard('dealer')->check()){
-            $dealer = Auth::guard('dealer')->user()->dealer_id;
-            $taxes = Tax::where('dealer_id', \Auth::guard('dealer')->user()->dealer->id)->get();
-            $branches = Branch::where('dealer_id',Auth::guard('dealer')->user()->dealer_id)->get();
-            $brands = ProductBrand::where('dealer_id',Auth::guard('dealer')->user()->dealer_id)->get();
-            $categories = ProductCategory::where('dealer_id',Auth::guard('dealer')->user()->dealer_id)->get();
-            $suppliers = Supplier::where('dealer_id',Auth::guard('dealer')->user()->dealer_id)->get();
-            $units = ProductUnit::where('dealer_id',$dealer)->get();
-            return view('dealer.products.create',compact('categories','brands','branches','suppliers','units','taxes'));
+            $product->load(['dealerproduct'=>function(){
+                return $this->where('dealer_id',Auth::guard('dealer')->user()->dealer_id);
+            }]);
+            if($product->dealerproduct){
+                $item = $product->dealerproduct;
+                return view('dealer.products.edit',compact('categories','brands','branches','suppliers','units','taxes'));
+            }else{
+                return view('dealer.products.create',compact('categories','brands','branches','suppliers','units','taxes'));
+            }
+
         }else{
             return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
         }
     }
 
-    public function viewedit(){
+    public function viewedit(Product $product){
         if(\Auth::guard('dealer')->check()){
-        $brands = ProductBrand::all();
-        $product = Product::with('locationproducts','variances','supplier')->find(request()->product);
-        $locations = Location::all();
-        $suppliers = Supplier::all();
-        $categories = ProductCategory::all();
-        $units = ProductUnit::all();
-        $taxes = Tax::where('dealer_id', \Auth::guard('dealer')->user()->dealer->id)->get();
-        return view('dealer.products.edit',compact('brands','product','locations','suppliers','categories','units','taxes'));
-    }else{
-        return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
-    }
+            $product->load(['dealerproduct'=>function($query){
+                return $query->where('dealer_id',Auth::guard('dealer')->user()->dealer_id);
+            }]);
+
+            if($product->dealerproduct !== null){
+                $item = $product->dealerproduct;
+                return view('dealer.products.edit',compact('item','product'));
+            }else{
+                return view('dealer.products.create',compact('product'));
+            }
+
+        }else{
+            return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
+        }
     }
     public function viewaddcount(){
         if(\Auth::guard('dealer')->check()){
@@ -90,43 +99,13 @@ class DealerProductController extends Controller
 
     public function store(){
         if(\Auth::guard('dealer')->check()){
-        //dd(request()->all());
-       $product =  Product::create([
-            'name'=>request()->name,
-            'brand_id'=>request()->brandname,
-            'code'=>request()->code,
-            'stock'=>request()->stock,
-            'price'=>request()->price,
-            'category'=>request()->categorycode,
-            'efriscategorycode'=>request()->categorycode,
-            'unit'=>request()->unit,
-            //'cost'=>request()->cost,
-           // 'suppvat'=>request()->cost*0.18,
-            'supplier_id'=>request()->supplier,
-            'product_category_id'=>request()->productcategory,
+        DealerProduct::create([
+            'product_id'=>request()->productid,
+            'sellingprice'=>request()->sellingprice,
             'dealer_id'=>Auth::guard('dealer')->user()->dealer_id,
-            'branch_id'=>request()->branch_id,
-            'product_code'=>request()->productcode,
-            'tax_id'=>request()->tax
+            'stock'=>request()->stock
         ]);
-        // foreach($locations as $key=> $a){
-        //     $location = intVal($locations[$key]);
-        //     $quantity = intVal($quantities[$key]);
-        //     LocationProduct::create([
-        //         'location_id'=>$location,
-        //         'product_id'=>$product->id,
-        //         'quantity'=>$quantity,
-        //     ]);
-        // }
-        // foreach($vnames as $key=> $a){
-        //     ProductVariance::create([
-        //         'name'=>$vnames[$key],
-        //         'price'=>$vprices[$key],
-        //         'quantity'=>$vquantities[$key],
-        //         'product_id'=>$product->id,
-        //     ]);
-        // }
-        return redirect()->back()->with('success', 'Product has been saved successfully');
+        return redirect()->route('products.index')->with('success', 'Product has been added successfully!');
     }else{
         return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
     }

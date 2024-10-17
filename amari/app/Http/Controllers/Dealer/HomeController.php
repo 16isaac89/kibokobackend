@@ -17,13 +17,14 @@ class HomeController extends Controller
 {
     public function index(){
         if(\Auth::guard('dealer')->check()){
+        $dealer_code = Auth::guard('dealer')->user()->dealer->code;
         $dealer = Auth::guard('dealer')->user()->dealer_id;
         $efris = Dealer::find($dealer)->efris;
         $updatedat = Dealer::find($dealer)->updated_at;
-        $customers = Customer::where('dealer_id',$dealer)->count();
+        $customers = Customer::where('dealer_code',$dealer)->count();
         $vans = Van::where('dealer_id',$dealer)->count();
-        $routes = Route::where('dealer_id',$dealer)->count();
-
+        $routes = Route::where('dealer_code',$dealer_code)->count();
+       // dd($dealer_code);
         $latests = Sale::with('route','van','user','customer')->where('dealer_id',$dealer)->latest()->take(10)->get();
 
 

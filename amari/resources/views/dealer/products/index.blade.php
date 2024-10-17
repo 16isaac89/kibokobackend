@@ -7,32 +7,44 @@
     <div class="card pd-20 pd-sm-40">
       <div class="table-responsive">
 
-        <table id="products" class="display nowrap" width="100%">
-          <thead>
-            <tr>
-              <th >ID</th>
-              <th >Name</th>
-              <th >Code</th>
-              <th >Brand</th>
-              <th >Category</th>
-              <th >Unit</th>
+        <table id="products" class="table table-bordered table-hover nowrap" width="100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Brand</th>
+                    <th>Category</th>
+                    <th>Unit</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($products as $product)
+                <tr>
+                    <td>{{$product->id}}</td>
+                    <td>{{ $product->name ?? '' }}</td>
+                    <td>{{$product->code}}</td>
+                    <td>{{$product->brand->name ?? ''}}</td>
+                    <td>{{ $product->category?->name ?? '' }}</td>
+                    <td>{{$product->unit}}</td>
+                    <td>{{ $product->dealerproduct?->sellingprice ?? '' }}</td>
+                    <td>{{ $product->dealerproduct?->stock ?? '' }}</td>
+                    <td>
+                        <a href="{{route('dealer.product.viewedit', $product->id)}}" type="button" class="btn btn-primary">
+                            @if($product->dealerproduct)
+                            Update
+                            @else
+                            Create
+                            @endif
 
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($products as $product)
-            <tr>
-              <td>{{$product->id}}</td>
-              <td >{{ $product->name ?? '' }}</td>
-              <td>{{$product->code}}</td>
-              <td>{{$product->brand->name ?? ''}}</td>
-              <td>{{ $product->category?->name ?? '' }}</td>
-              <td>{{$product->unit}}</td>
-
-
-            </tr>
-        @endforeach
-          </tbody>
+                        </a>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
         </table>
       </div><!-- table-wrapper -->
     </div><!-- card -->
@@ -61,21 +73,21 @@
 // });
 </script>
 <script>
-   (function() {
-    $('#products').DataTable({
-        dom: 'Bfrtip',
-    buttons: [
-        'colvis',
-        'excel',
-        'print',
-        'copy', 'pdf','csv'
-    ],
-
-
-
-      });
-})();
-    </script>
+    (function() {
+     $('#products').DataTable({
+         dom: 'Bfrtip',
+         buttons: [
+             'colvis',
+             'excel',
+             'print',
+             'copy',
+             'pdf',
+             'csv'
+         ],
+         lengthMenu: [ [10, 20, 50, 100, -1], [10, 20, 50, 100, "All"] ], // Add row selector
+     });
+ })();
+ </script>
     <script>
         $('#addprice').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal

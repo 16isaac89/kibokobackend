@@ -47,6 +47,9 @@ protected $appends = [
 public function category(){
     return $this->belongsTo(ProductCategory::class, 'product_category','code');
 }
+public function dealerproduct(){
+    return $this->hasOne(DealerProduct::class, 'product_id','id');
+}
 
 public function getProductTaxAttribute(){
     return Tax::find($this->tax_id)?->value;
