@@ -36,4 +36,33 @@ class PresaleOrdersController extends Controller
         return response()->json(['orders'=>$orders]);
 
     }
+
+    public function searchByDate(Request $request)
+    {
+        $query = StockRequest::query();
+
+        if ($request->from_date && $request->to_date) {
+            $query->whereBetween('invoice_date', [$request->from_date, $request->to_date]);
+        }
+
+        $preorders = $query->get();
+
+        return view('admin.presaleorders.search', compact('preorders'));
+    }
+    public function exportPresale(Request $request, $type)
+    {
+        dd($request->all());
+        $fromDate = $request->input('from_date');
+        $toDate = $request->input('to_date');
+        switch ($type) {
+            case 'csv':
+                return Excel::download(new PreordersExport, 'preorders.csv');
+            case 'excel':
+                return Excel::download(new PreordersExport, 'preorders.xlsx');
+            case 'pdf':
+                $preorders = Preorder::all();
+                $pdf = PDF::loadView('preorders.pdf', compact('preorders'));
+                return $pdf->download('preorders.pdf');
+        }
+    }
 }

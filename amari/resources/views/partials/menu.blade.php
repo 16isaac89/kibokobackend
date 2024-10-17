@@ -482,12 +482,22 @@
         </a>
     </li>
 @endcan
+
+
 <li class="c-sidebar-nav-item">
     <a href="{{ route("admin.presaleorders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/presaleorders") || request()->is("admin/presaleorders/*") ? "c-active" : "" }}">
         <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
 
         </i>
-        Presale Orders
+        Presale Orders(By Dealer)
+    </a>
+</li>
+<li class="c-sidebar-nav-item">
+    <a href="{{ route("admin.presaleorders.searchbydateview") }}" class="c-sidebar-nav-link {{ request()->is("admin/presaleorders") || request()->is("admin/presaleorders/*") ? "c-active" : "" }}">
+        <i class="fa-fw fas fa-industry c-sidebar-nav-icon">
+
+        </i>
+        Presale Orders(By Date)
     </a>
 </li>
     {{-- <li class="c-sidebar-nav-item">
