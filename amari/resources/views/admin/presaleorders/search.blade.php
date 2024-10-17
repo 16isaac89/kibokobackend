@@ -79,8 +79,13 @@
             let toDate = document.getElementById('to_date').value;
             let type = this.getAttribute('data-type');
             let url = `{{ route('admin.presaleorders.export', '') }}/${type}?from_date=${fromDate}&to_date=${toDate}`;
+            if(fromDate == '' || toDate == '' || fromDate == null || toDate == null || fromDate == undefined || toDate == undefined){
+                alert('Please select a date range');
+                return
+            }else{
+                window.location.href = url;
+            }
 
-            window.location.href = url;
         });
     });
 </script>
