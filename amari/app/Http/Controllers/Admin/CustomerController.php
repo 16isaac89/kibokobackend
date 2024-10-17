@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Hash;
+use App\Exports\CustomersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CustomerController extends Controller
 {
@@ -144,6 +146,18 @@ class CustomerController extends Controller
 
     return response()->json($routes);
 }
+
+public function exportExcel()
+    {
+
+        return Excel::download(new CustomersExport, 'customers.xlsx'); // For Excel
+    }
+
+    public function exportCsv()
+    {
+
+        return Excel::download(new CustomersExport, 'customers.csv'); // For CSV
+    }
 
 
 }

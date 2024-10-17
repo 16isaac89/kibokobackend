@@ -2,7 +2,7 @@
 @section('content')
 @can('customer_create')
     <div style="margin-bottom: 10px;" class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-6">
             <a class="btn btn-success" href="{{ route('admin.customers.create') }}">
                 {{ trans('global.add') }} {{ trans('cruds.customer.title_singular') }}
             </a>
@@ -10,6 +10,10 @@
                 {{ trans('global.app_csvImport') }}
             </button>
             @include('csvImport.modal', ['model' => 'Customer', 'route' => 'admin.customers.parseCsvImport'])
+        </div>
+        <div class="col-lg-6">
+        <a href="{{ route('admin.customers.export.excel') }}" class="btn btn-primary">Export Excel</a>
+<a href="{{ route('admin.customers.export.csv') }}" class="btn btn-secondary">Export CSV</a>
         </div>
     </div>
 @endcan

@@ -68,6 +68,8 @@ Route::get('/admin/get/key','EfrisSetupController@getkey')->name('get.efriskey')
     Route::post('customers/parse-csv-import', 'CustomerController@parseCsvImport')->name('customers.parseCsvImport');
     Route::post('customers/process-csv-import', 'CustomerController@processCsvImport')->name('customers.processCsvImport');
     Route::post('/customer/routes/get', 'CustomerController@getRoutes')->name('customer.routesget');
+    Route::get('admin/customers/export/excel', 'CustomerController@exportExcel')->name('customers.export.excel');
+Route::get('admin/customers/export/csv', 'CustomerController@exportCsv')->name('customers.export.csv');
     Route::resource('customers', 'CustomerController');
 
     //Routes
