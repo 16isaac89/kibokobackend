@@ -56,8 +56,8 @@
                             <td>{{ $customer->dealer->tradename ?? '' }}</td>
                             <td>{{ $customer->route->name ?? '' }}</td>
 
-                            <td>{{ $customer->checkin ?? '' }}</td>
-                            <td>{{ $customer->checkout ?? '' }}</td>
+                            <td>{{ $customer->customercheckin ?? '' }}</td>
+                            <td>{{ $customer->customercheckout ?? '' }}</td>
 
                             <td>{{ $customer->telephoneno ?? '' }}</td>
                             <td>{{ $customer->phone ?? '' }}</td>
