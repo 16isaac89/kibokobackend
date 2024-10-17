@@ -437,7 +437,8 @@ Route::post('/dealer/dispatch/topup/store','DispatchController@topupstore')->nam
 
 
 Route::resource('dispatches','DispatchController');
-
+//stock requests
+Route::get('/dealer/update/requests/{request}','StockRequestsController@setDelivered')->name('dealer.request.setasdelivered');
 Route::get('/dealer/get/stockreqs','StockRequestsController@stockreqs')->name('dealer.getstock.requests');
 Route::post('/dealer/search/stockreqs','StockRequestsController@search')->name('dealer.searchstock.requests');
 Route::post('/dealer/store/stockreqs','StockRequestsController@store')->name('dealer.storestock.requests');

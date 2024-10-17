@@ -13,70 +13,37 @@
 		<div class="col" style="margin-top:10px;">
 		  </div>
           <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-dispatch" id="datatable-dispatch">
+            <table class=" table table-bordered table-striped table-hover datatable datatable-requests"
+            id="datatable-requests">
                 <thead>
                 <tr>
+                    <th></th>
       <th scope="col" style="width:100px;">Item Desc</th>
-      <th scope="col" style="width:100px;">Qty Requested</th>
-      <th scope="col" style="width:100px;">Batch</th>
-      <th scope="col" style="width:100px;">Discount</th>
-      @switch($stockreqs->status)
-              @case(2)
-              <th scope="col" style="width:100px;">Approved Quantity</th>
-                  @break
-              @case(3)
-              <th scope="col" style="width:100px;">Rejected Quantity</th>
-                  @break
-              @default
-              <th scope="col" style="width:100px;">Give</th>
-          @endswitch
-
+      <th >Qty Requested</th>
     </tr>
                 </thead>
                 <tbody>
                    @foreach($records as $record)
                    <tr>
+                    <td></td>
                    <td>{{$record->product->name ?? ''}}<input type="hidden" name="stockrequestproducts[]" value="{{$record->id}}"></td>
                    <td>{{$record->reqqty  ?? ''}}</td>
-                   <td>
-                    @if($stockreqs->status === 2 || $stockreqs->status === 3)
-                    <td>{{$record->appqty}}</td>
-                    @else
-                   {{-- <select class="custom-select" name="batches[]" >
-                        <option selected value="0">Select batch to dispatch</option>
-                        @foreach($record->product->stocks as $stock)
-                        <option value="{{$stock->id}}">{{$stock->expirydate}} {{$stock->amount}} {{$stock->sellingprice}}</option>
-                        @endforeach
-                   </select> --}}
-                   @endif
-                   </td>
-                   <td>
-                    <input type="number" name="discounts[]" value="0">
-                   </td>
-                   <td>
-                   @switch($stockreqs->status)
-              @case(2)
-              <span class="badge badge-pill badge-success">Approved</span>
-                  @break
-              @case(3)
-              <span class="badge badge-pill badge-warning">Rejected</span>
-                  @break
-              @default
-              <input type="number" name="gives[]">
-          @endswitch
-
-                  </td>
                    <tr>
                    @endforeach
                 </tbody>
             </table>
             @switch($stockreqs->status)
               @case(2)
-              <span class="badge badge-pill badge-success">Approved</span>
-                  @break
+              <a href="{{ route('dealer.request.setasdelivered', $dispatchid) }}" class="btn btn-success">
+                Set As Delivered
+              </a>
+              @break
+              @case (4)
+              <span class="badge badge-pill badge-success">Delivered</span>
+            @break
               @case(3)
               <span class="badge badge-pill badge-warning">Rejected</span>
-                  @break
+            @break
               @default
               <button type="submit" class="btn btn-success" >SAVE</button>
           @endswitch
@@ -93,6 +60,24 @@
 
 @endsection
 @section('scripts')
+<script>
+    (function() {
+        $('#datatable-requests').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'colvis',
+                'excel',
+                'print',
+                'copy', 'pdf', 'csv'
+            ],
+            responsive: true,
+            language: {
+                searchPlaceholder: 'Search...',
+                sSearch: '',
+            },
 
+        });
+    })();
+</script>
 
 @endsection

@@ -13,6 +13,10 @@ use App\Models\DispatchProducts;
 use App\Models\Dispatch;
 use App\Models\StockRequestProduct;
 use App\Models\Stock;
+use DB;
+use App\Models\SaleProduct;
+use Carbon\Carbon;
+
 
 
 class StockRequestsController extends Controller
@@ -238,5 +242,50 @@ $batch->decrement('amount',$gives[$a]);
     return view('dealer.dispatch.requests',compact('vans','records'));
 }
 }
+
+public function setDelivered(StockRequest $request){
+   // dd($request);
+    $request->load(['items'=>function($query){
+        $query->with(['product'=>function($query){
+            $query->with(['brand','dealerproduct']);
+        }]);
+    },'customer','saler','van']);
+    $salesitems = $request->items;
+    DB::beginTransaction();
+    try {
+    $sale = Sale::create([
+        'van_id'=>$request->saler->van_id,
+        'customer_id'=>$request->customer->id,
+        'dealer_user_id'=>$request->saler->id,
+        'route_id'=>$request->customer->route_code,
+        'total'=>$request->total ?? 0,
+        'latitude'=>$request->customer->latitude ?? '',
+        'longitude'=>$request->customer->longitude ?? '',
+        'datecreated'=>Carbon::now(),
+        'dealer_id'=>$request->dealer_id,
+    ]);
+    foreach($salesitems as $a => $b){
+        $item = $b;
+        $saleitem = SaleProduct::create([
+            'sale_id'=>$sale->id,
+            'product_id'=>$item->product->id,
+            'qtybefore'=>$item->reqqty,
+            'price'=>$item->product->dealerproduct->price,
+        ]);
+    }
+        $request->status = 4;
+        $request->delivered = 1;
+        $request->save();
+        DB::commit();
+return redirect()->back()->with('message','Presale Order has been set as delivered and saved to sales');
+    }catch (\Exception $e) {
+    DB::rollback();
+    dd($e);
+    }
+    // something went wrong
+}
+
+
+
 
 }

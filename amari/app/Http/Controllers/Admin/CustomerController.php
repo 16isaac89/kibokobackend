@@ -26,9 +26,10 @@ class CustomerController extends Controller
     {
         abort_if(Gate::denies('customer_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $customers = Customer::with(['media','route'])->get();
+        // Using paginate to load data in chunks instead of all at once
+    $customers = Customer::with(['media', 'route', 'dealer'])->paginate(10000);
 
-        return view('admin.customers.index', compact('customers'));
+    return view('admin.customers.index', compact('customers'));
     }
 
     public function create()

@@ -68,6 +68,8 @@ class CustomersController extends Controller
 				'customercheckin'=>request()->customercheckin,
 				'customercheckout'=>request()->customercheckout,
                 'dealer_code'=>$dealer->code,
+                'businessvalue'=>request()->businessvalue,
+                'location'=>request()->location,
 
 
 			]);
@@ -112,6 +114,8 @@ class CustomersController extends Controller
 				'customercheckout'=>request()->customercheckout,
 				'subdimagelat'=>request()->subdimagelat,
 				'subdimagelong'=>request()->subdimagelong,
+                'businessvalue'=>request()->businessvalue,
+                'location'=>request()->location,
 
             ]
             );

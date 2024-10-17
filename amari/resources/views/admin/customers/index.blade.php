@@ -24,7 +24,10 @@
                 <thead>
                     <tr>
                         <th width="10"></th>
-                        <th>{{ trans('cruds.customer.fields.id') }}</th>
+                        <th>Dealer</th>
+                        <th>Route</th>
+                        <th>CheckIN</th>
+                        <th>Checkout</th>
                         <th>Telephone No</th>
                         <th>{{ trans('cruds.customer.fields.phone') }}</th>
                         <th>{{ trans('cruds.customer.fields.email') }}</th>
@@ -37,6 +40,12 @@
                         <th>Product Range</th>
                         <th>Contact Person</th>
                         <th>Customer Category</th>
+                        <th>B'ss Value</th>
+                        <th>Location</th>
+                        <th>Lat</th>
+                        <th>Long</th>
+                        <th>IMGlat</th>
+                        <th>IMGlong</th>
                         <th>&nbsp;</th>
                     </tr>
                 </thead>
@@ -44,7 +53,12 @@
                     @foreach($customers as $key => $customer)
                         <tr data-entry-id="{{ $customer->id }}">
                             <td></td>
-                            <td>{{ $customer->id ?? '' }}</td>
+                            <td>{{ $customer->dealer->tradename ?? '' }}</td>
+                            <td>{{ $customer->route->name ?? '' }}</td>
+
+                            <td>{{ $customer->checkin ?? '' }}</td>
+                            <td>{{ $customer->checkout ?? '' }}</td>
+
                             <td>{{ $customer->telephoneno ?? '' }}</td>
                             <td>{{ $customer->phone ?? '' }}</td>
                             <td>{{ $customer->email ?? '' }}</td>
@@ -57,6 +71,13 @@
                             <td>{{ $customer->productrange ?? '' }}</td>
                             <td>{{ $customer->contact_person ?? '' }}</td>
                             <td>{{ $customer->custcategory ?? '' }}</td>
+                            <td>{{ $customer->businessvalue ?? '' }}</td>
+                            <td>{{ $customer->location ?? '' }}</td>
+
+                            <td>{{ $customer->latitude }}</td>
+                            <td>{{ $customer->longitude }}</td>
+                            <td>{{ $customer->subdimagelat }}</td>
+                            <td>{{ $customer->subdimagelong }}</td>
                             <td>
                                 @can('customer_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.customers.show', $customer->id) }}">

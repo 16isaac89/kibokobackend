@@ -67,6 +67,8 @@ protected $appends = [
 		'userid',
 		'subdimagelat',
 		'subdimagelong',
+        'businessvalue',
+        'location',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -90,7 +92,7 @@ protected $appends = [
         return $this->belongsTo(CustomerCategory::class, 'category_id');
     }
     public function dealer(){
-        return $this->belongsTo(Dealer::class, 'dealer_code');
+        return $this->belongsTo(Dealer::class, 'dealer_code','code');
     }
     public function distributor(){
         return $this->belongsTo(Dealer::class, 'dealer_code');
