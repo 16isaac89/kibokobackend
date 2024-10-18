@@ -25,14 +25,31 @@ $stockreq = StockRequest::create([
         'dealer_id'=>$user->dealer_id,
         'checkin'=>request()->checkin,
         'checkout'=>request()->checkout,
+        'route'=>request()->route,
 ]);
         foreach($cart as $key=> $a){
+            $product = Product::with()->find($a['id']);
+            $sellingprice = $a['dealerproduct']->sellingprice;
+            $quantity = $a['quantity'];
+            $net = $quantity*$sellingprice;
+            $taxes = App\Models\Tax::find($item->tax_id);
+            $tax = $taxes->value > 0 ? $taxes->value/100 : 0;
+            $taxamount = match ($taxes->value) {
+                '18' => floor(($tax*(($sellingprice*$quantity)/1.18))*100)/100,
+                '0' => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
+                '-' => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
+            };
             StockRequestProduct::create([
                 'stock_request_id'=>$stockreq->id,
                 'product_id'=>$a['id'],
                 'reqqty'=>$a['quantity'],
                 'appqty'=>0,
-                'van_id'=>request()->van
+                'van_id'=>request()->van,
+                'dealer_product_id'=>$a['dealerproduct']->id,
+                'sellingprice'=>$a['dealerproduct']->sellingprice,
+                'total'=>$a['dealerproduct']->sellingprice * $a['quantity'],
+                'vat'=>$product->vat,
+                'vat_amount'=>$taxamount
             ]);
         }
         Performance::create([

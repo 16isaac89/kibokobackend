@@ -39,15 +39,17 @@ class PresaleOrdersController extends Controller
 
     public function searchByDate(Request $request)
     {
-        $query = StockRequest::query();
+        $query = StockRequestProduct::query();
 
         if ($request->from_date && $request->to_date) {
-            $query->whereBetween('invoice_date', [$request->from_date, $request->to_date]);
+            $query->with(['product','dealer','tax','stockreqs'=>function(){
+                $query->with('dealer','van','customer');
+            }])->whereBetween('created_at', [$request->from_date, $request->to_date]);
         }
 
         $preorders = $query->get();
 
-        return view('admin.presaleorders.search', compact('preorders'));
+        return response()->json(['preorders' => $preorders]);
     }
     public function exportPresale(Request $request, $type)
     {

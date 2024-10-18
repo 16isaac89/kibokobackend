@@ -22,8 +22,10 @@ class StockRequest extends Model
         'dealer_user_id',
         'dealer_id',
         'total',
+        'route',
         'status',
         'requesttype',
+        'invoice_no',
         'customer_id',
         'checkin',
         'checkout',
@@ -38,6 +40,9 @@ class StockRequest extends Model
     }
     public function van(){
         return $this->belongsTo(Van::class);
+    }
+    public function route(){
+        return $this->belongsTo(Route::class,'route','code');
     }
     public function saler(){
         return $this->belongsTo(DealerUser::class,'dealer_user_id');

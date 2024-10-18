@@ -36,7 +36,7 @@ class Route extends Model
     }
 
     public function sales(){
-        return $this->hasMany(Sale::class, 'route_id');
+        return $this->hasMany(Sale::class, 'route','code');
     }
     public function customers(){
         return $this->hasMany(Customer::class, 'route_code','code');

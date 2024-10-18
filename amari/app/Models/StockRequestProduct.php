@@ -25,11 +25,15 @@ class StockRequestProduct extends Model
         'van_id',
         'batch_id',
         'sellingprice',
+        'dealer_product_id',
         'created_at',
         'updated_at',
         'deleted_at',
         'discount',
-        'sale_type'
+        'sale_type',
+        'vat',
+        'vat_amount',
+        'total',
     ];
 
     public function stockreqs(){
