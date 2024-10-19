@@ -39,6 +39,7 @@ $stockreq = StockRequest::create([
                 '0' => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
                 '-' => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
             };
+            $totaltax = $net+$taxamount;
             StockRequestProduct::create([
                 'stock_request_id'=>$stockreq->id,
                 'product_id'=>$a['id'],
@@ -49,7 +50,7 @@ $stockreq = StockRequest::create([
                 'sellingprice'=>$a['dealerproduct']->sellingprice,
                 'total'=>$a['dealerproduct']->sellingprice * $a['quantity'],
                 'vat'=>$product->vat,
-                'vat_amount'=>$taxamount
+                'vat_amount'=>$tax
             ]);
         }
         Performance::create([

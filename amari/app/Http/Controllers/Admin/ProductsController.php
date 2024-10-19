@@ -22,6 +22,8 @@ use App\Http\Controllers\Helper\Efris\KeysController;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Traits\CsvImportTrait;
 use Illuminate\Support\Facades\DB;
+use App\Models\Tax;
+
 
 class ProductsController extends Controller
 {
@@ -31,18 +33,17 @@ class ProductsController extends Controller
         $brands = ProductBrand::all();
         $categories = ProductCategory::all();
         $products = Product::with(['category','brand','tax'])->get();
-
-        return view('admin.products.index',compact('brands','products','categories'));
+        $taxes = Tax::all();
+        return view('admin.products.index',compact('brands','products','categories','taxes'));
     }
 
     public function viewedit(){
         $brands = ProductBrand::all();
-        $product = Product::with('locationproducts','variances')->find(request()->product);
-        $locations = Location::all();
-        $suppliers = Supplier::all();
+        $product = Product::with('category','tax','brand')->find(request()->product);
         $categories = ProductCategory::all();
+        $taxes = Tax::all();
         $units = ProductUnit::all();
-        return view('admin.products.edit',compact('brands','product','locations','suppliers','categories','units'));
+        return view('admin.products.edit',compact('brands','product','categories','units','taxes'));
     }
     public function viewaddcount(){
         $brands = ProductBrand::all();

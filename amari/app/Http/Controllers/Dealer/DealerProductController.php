@@ -447,4 +447,43 @@ class DealerProductController extends Controller
     return response()->json(['message'=>'Session expired please login again','status'=>0]);
     }
    }
+   public function bulkEdit(Request $request){
+    if(\Auth::guard('dealer')->check()){
+// dd($request->all());
+$ids = $request->query('ids');
+
+    // Convert the comma-separated string to an array of IDs
+    $idArray = explode(',', $ids);
+
+    // Search for products using the array of IDs
+    $products = Product::with(['dealerproduct'=>function($query){
+        $query->where('dealer_id',Auth::guard('dealer')->user()->dealer_id);
+    }])->whereIn('id', $idArray)->get();
+
+    // Return the edit view with the selected products
+    return view('dealer.products.edit-multiple', compact('products'));
+}else{
+    return redirect()->route("dealer.login.view")->with('message','Opps! You have entered invalid credentials');
+}
+   }
+   public function bulkEditPost(Request $request){
+    foreach($request->productids as $key=> $a){
+
+        if($request->status[$key] == 1 || $request->status[$key] == '1'){
+            $item = DealerProduct::find($request->dealerproductids[$key]);
+            $item->sellingprice = $request->sellingprices[$key];
+            $item->stock = $request->stocks[$key];
+            $item->save();
+        }else{
+            DealerProduct::create([
+                'dealer_id'=>\Auth::guard('dealer')->user()->dealer_id,
+                'product_id'=>$request->productids[$key],
+                'stock'=>$request->stocks[$key],
+                'sellingprice'=>$request->sellingprices[$key],
+            ]);
+        }
+    }
+    return redirect()->back()->with('message', 'Items have been created and updated successfully.');
+
+   }
 }

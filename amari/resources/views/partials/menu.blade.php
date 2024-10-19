@@ -146,6 +146,15 @@
                             </a>
                         </li>
                     @endcan
+                    @can('product_access')
+                    <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.taxes.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/taxes") || request()->is("admin/taxes/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-book c-sidebar-nav-icon">
+                            </i>
+                           Tax
+                        </a>
+                    </li>
+                @endcan
 
 
 

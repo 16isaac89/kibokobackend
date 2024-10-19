@@ -109,10 +109,10 @@
                         {{$order->route->name ?? ''}}
                       </td>
                       <td>
-                       {{$order->van->name}}
+                       {{$order->van?->name}}
                       </td>
                       <td class="tx-12">
-                       {{$order->customer->name ??  ''}}
+                       {{$order->customer?->name ??  ''}}
                       </td>
                       <td class="tx-12">
                         {{$order->total}}

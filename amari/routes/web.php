@@ -130,6 +130,9 @@ Route::get('admin/customers/export/csv', 'CustomerController@exportCsv')->name('
     Route::post('/dealer/subprice','DealersController@subprice')->name('dealer.subprice');
     Route::resource('dealers','DealersController');
 
+    //taxes
+    Route::resource('taxes','TaxController');
+
     //dealer subs
     Route::resource('dealersubs','DealerSubscriptionController');
     //Dispatch
@@ -344,6 +347,8 @@ Route::get('/dealerusers/home','DealerUserController@home')->name('dealer.users.
 Route::get('dealer/product-edit/{product}','DealerProductController@viewedit')->name('dealer.product.viewedit');
 Route::post('/update/product/{product}','DealerProductController@updateProduct')->name('update.dealer.product');
 Route::post('/dealer/product/store','DealerProductController@store')->name('store.dealer.product');
+Route::get('/dealer/product/bulkedit','DealerProductController@bulkEdit')->name('dealer.product.bulkEdit');
+Route::post('/dealer/product/postbulkedit','DealerProductController@bulkEditPost')->name('bulk-edit-products.dealer.products');
 
 
 Route::get('dealer/product/delete','DealerProductController@delete')->name('dealer.product.delete');

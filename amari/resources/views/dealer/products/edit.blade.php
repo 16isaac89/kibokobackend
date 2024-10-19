@@ -13,11 +13,11 @@
    <div class="row" style="margin:10px;">
     <div class="col-6">
       <label>Stock:</label>
-      <input type="text" id="stock" name="stock" value="{{$item->stock}}" class="form-control" >
+      <input type="number" id="stock" required name="stock" value="{{$item->stock}}" class="form-control" >
     </div>
     <div class="col-6">
     <label>Selling Price</label>
-      <input type="text" id="sellingprice" name="sellingprice" value="{{$item->sellingprice}}" class="form-control" >
+      <input type="number" id="sellingprice" required name="sellingprice" value="{{$item->sellingprice}}" class="form-control" >
     </div>
   </div>
   <input type="hidden" name="productid" value="{{$product->id}}" id="productid">
