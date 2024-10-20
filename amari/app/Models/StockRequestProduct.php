@@ -33,6 +33,8 @@ class StockRequestProduct extends Model
         'sale_type',
         'vat',
         'vat_amount',
+        'discount',
+        'discounttype',
         'total',
     ];
 
@@ -41,6 +43,9 @@ class StockRequestProduct extends Model
     }
     public function product(){
         return $this->belongsTo(Product::class,'product_id');
+    }
+    public function dealerproduct(){
+        return $this->belongsTo(DealerProduct::class,'dealer_product_id','id');
     }
     public function van(){
         return $this->belongsTo(Van::class,'van_id');

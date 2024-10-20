@@ -9,12 +9,15 @@ use App\Models\StockRequestProduct;
 use App\Models\Sale;
 use App\Models\Performance;
 use App\Models\DealerUser;
+use App\Models\Customer;
+use App\Models\Product;
 
 class StockRequestController extends Controller
 {
     public function store(){
         $cart = request()->cart;
         $user = DealerUser::find(request()->salerid);
+        $customer = Customer::with('route')->find(request()->customer_id);
 $stockreq = StockRequest::create([
     'van_id'=>request()->van,
         'dealer_user_id'=>request()->salerid,
@@ -25,32 +28,36 @@ $stockreq = StockRequest::create([
         'dealer_id'=>$user->dealer_id,
         'checkin'=>request()->checkin,
         'checkout'=>request()->checkout,
-        'route'=>request()->route,
+        'route'=>$customer->route->code,
 ]);
         foreach($cart as $key=> $a){
-            $product = Product::with()->find($a['id']);
-            $sellingprice = $a['dealerproduct']->sellingprice;
+            $product = Product::with('tax')->find($a['id']);
+            $sellingprice = $a['dealerproduct']['sellingprice'];
             $quantity = $a['quantity'];
             $net = $quantity*$sellingprice;
-            $taxes = App\Models\Tax::find($item->tax_id);
+            $taxes = $product->tax;
             $tax = $taxes->value > 0 ? $taxes->value/100 : 0;
             $taxamount = match ($taxes->value) {
-                '18' => floor(($tax*(($sellingprice*$quantity)/1.18))*100)/100,
+                '18' => floor(($tax*($net/1.18))*100)/100,
                 '0' => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
                 '-' => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
             };
-            $totaltax = $net+$taxamount;
+
+            $discount = $a['discounttype'] == 'fixed_value' ? $a['discounttype'] : $a['discountamt']/100;
+            $discountamount =  $a['discounttype'] == 'fixed_value' ? $a['discountamt'] : $net*$discount;
             StockRequestProduct::create([
                 'stock_request_id'=>$stockreq->id,
                 'product_id'=>$a['id'],
                 'reqqty'=>$a['quantity'],
                 'appqty'=>0,
                 'van_id'=>request()->van,
-                'dealer_product_id'=>$a['dealerproduct']->id,
-                'sellingprice'=>$a['dealerproduct']->sellingprice,
-                'total'=>$a['dealerproduct']->sellingprice * $a['quantity'],
-                'vat'=>$product->vat,
-                'vat_amount'=>$tax
+                'dealer_product_id'=>$a['dealerproduct']['id'],
+                'sellingprice'=>$sellingprice,
+                'total'=>$net,
+                'vat'=>$taxes->value,
+                'vat_amount'=>$taxamount,
+                'discount'=> $discountamount,
+                'discounttype'=>$a['discounttype']
             ]);
         }
         Performance::create([

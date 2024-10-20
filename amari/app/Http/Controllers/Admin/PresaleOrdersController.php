@@ -6,13 +6,22 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Dealer;
 use App\Models\StockRequest;
+use App\Models\StockRequestProduct;
 
 class PresaleOrdersController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $dealers = Dealer::all();
-        return view('admin.presaleorders.index', compact('dealers'));
+        $query = StockRequestProduct::query();
+
+        if ($request->from_date && $request->to_date) {
+            $query->with(['product','dealer','tax','stockreqs'=>function(){
+                $query->with('dealer','van','customer');
+            }])->whereBetween('created_at', [$request->from_date, $request->to_date]);
+        }
+
+        $preorders = $query->get();
+        return view('admin.presaleorders.index', compact('preorders'));
     }
     public function search(Request $request){
         $requesttype = $request->input('dealer');
@@ -39,15 +48,11 @@ class PresaleOrdersController extends Controller
 
     public function searchByDate(Request $request)
     {
-        $query = StockRequestProduct::query();
-
-        if ($request->from_date && $request->to_date) {
-            $query->with(['product','dealer','tax','stockreqs'=>function(){
-                $query->with('dealer','van','customer');
-            }])->whereBetween('created_at', [$request->from_date, $request->to_date]);
-        }
-
-        $preorders = $query->get();
+        $preorders = StockRequestProduct::with(['dealerproduct','product'=>function($query){
+            $query->with('brand','tax');
+        },'stockreqs'=>function($query){
+            $query->with('dealer','van','customer','customerroute');
+        }])->whereBetween('created_at', [$request->fromdate, $request->todate])->get();
 
         return response()->json(['preorders' => $preorders]);
     }

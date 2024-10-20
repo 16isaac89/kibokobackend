@@ -30,6 +30,7 @@ class StockRequest extends Model
         'checkin',
         'checkout',
         'delivered',
+
         'created_at',
         'updated_at',
         'deleted_at',
@@ -41,7 +42,7 @@ class StockRequest extends Model
     public function van(){
         return $this->belongsTo(Van::class);
     }
-    public function route(){
+    public function customerroute(){
         return $this->belongsTo(Route::class,'route','code');
     }
     public function saler(){

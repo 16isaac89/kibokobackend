@@ -103,7 +103,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Sales'], 
     //Route::get('/login/saler','Auth\LoginController@Login');
     Route::post('/get/stock','StockController@getStock');
     Route::get('/get/brands','StockController@getBrands');
-    Route::get('/get/products','StockController@getproducts');
+    Route::post('/get/products','StockController@getproducts');
     Route::post('/get/customers','StockController@getCustomers');
     Route::post('/get/routes','CustomersController@getRoutes');
     Route::get('/get/customercategories','CustomersController@getCategories');

@@ -1,173 +1,194 @@
 @extends('layouts.admin')
-
 @section('content')
-<div class="card">
-    <div class="card-header">
-        <b style="color:black;font-size:25px;">Presale Orders</b>
-        @if (\Session::has('success'))
-            <div class="alert alert-success">
-                <ul>
-                    <li>{!! \Session::get('success') !!}</li>
-                </ul>
-            </div>
-        @endif
-    </div>
-
-    <div class="card-body">
-        <div class="table-responsive">
-            <div class="container">
-                <form id="searchForm" class="form-inline mb-3">
-                    <!-- Dealers Dropdown -->
-                    <div class="form-group mr-2">
-                        <label for="dealer">Dealer</label>
-                        <select class="form-control ml-2" id="dealer" name="dealer">
-                            <option value="">Select Dealer</option>
-                            <option value="0">All</option>
-                            @foreach ($dealers as $dealer)
-                                <option value="{{ $dealer->id }}">{{ $dealer->tradename }}</option>
-                            @endforeach
-                        </select>
+    <div class="card">
+        <div class="card-header">
+            Preorder Details
+        </div>
+        <div class="card-body">
+            <!-- Search Form with From Date and To Date -->
+            <form method="GET" action="{{ route('admin.presaleorders.searchbydatepost') }}">
+                <div class="row m-5">
+                    <div class="col-md-3">
+                        <label for="from_date">From Date</label>
+                        <input type="text" name="from_date" class="form-control date" id="from_date">
                     </div>
-
-                    <!-- Status Dropdown -->
-                    <div class="form-group mr-2">
-                        <label for="status">Status</label>
-                        <select class="form-control ml-2" id="status" name="status">
-                            <option value="">Select Status</option>
-                            <option value="1">Pending</option>
-                            <option value="2">Approved</option>
-                        </select>
+                    <div class="col-md-3">
+                        <label for="to_date">To Date</label>
+                        <input type="text" name="to_date" class="form-control date" id="to_date">
                     </div>
+                    <div class="col-md-2 mt-4">
+                        <button type="button" onclick="getDetails()" class="btn btn-primary mt-2">Search</button>
+                    </div>
+                    <div class="col-md-4 text-right mt-4">
+                        <!-- Export Buttons -->
+                        <a href="#" class="btn btn-info export-btn" data-type="csv">Export CSV</a>
+                        <a href="#" class="btn btn-success export-btn" data-type="excel">Export Excel</a>
+                        <a href="#" class="btn btn-danger export-btn" data-type="pdf">Export PDF</a>
+                    </div>
+                </div>
+            </form>
 
-                    <!-- Search Button -->
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-search"></i> Search
-                    </button>
-                </form>
-
-                <!-- Placeholder for the generated table -->
-                <div id="tableContainer"></div>
+            <!-- DataTable -->
+            <div id="datatable-container">
+            {{-- <table class="table table-bordered table-striped table-hover datatable">
+                <thead>
+                    <tr>
+                        <th>Invoice No</th>
+                        <th>Invoice Date</th>
+                        <th>Customer Name</th>
+                        <th>Executive Name</th>
+                        <th>Product Code</th>
+                        <th>Item Description</th>
+                        <th>Basic Value</th>
+                        <th>VAT Value</th>
+                        <th>Total Sales</th>
+                        <th>Route</th>
+                        <th>In Time</th>
+                        <th>Out Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($preorders as $preorder)
+                        <tr>
+                            <td>{{ $preorder->invoice_no }}</td>
+                            <td>{{ $preorder->invoice_date }}</td>
+                            <td>{{ $preorder->customer_name }}</td>
+                            <td>{{ $preorder->executive_name }}</td>
+                            <td>{{ $preorder->product_code }}</td>
+                            <td>{{ $preorder->item_description }}</td>
+                            <td>{{ $preorder->basic_value }}</td>
+                            <td>{{ $preorder->vat_value }}</td>
+                            <td>{{ $preorder->total_sales }}</td>
+                            <td>{{ $preorder->route }}</td>
+                            <td>{{ $preorder->in_time }}</td>
+                            <td>{{ $preorder->out_time }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table> --}}
             </div>
         </div>
     </div>
-</div>
 @endsection
-
 @section('scripts')
-<!-- Include DataTables and Buttons JS/CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
-<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Search form submit
-        $('#searchForm').submit(function(event) {
-            event.preventDefault();
+    @parent
+    <script>
+        document.querySelectorAll('.export-btn').forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
 
-            // Send search request via AJAX
-            $.ajax({
-                url: "{{ route('admin.presaleorders.search') }}", // Adjust the route name as needed
-                type: 'GET',
-                data: {
-                    dealer: $('#dealer').val(),
-                    status: $('#status').val()
-                },
-                success: function(response) {
-                    generateAndAppendTable(response.orders);
+                let fromDate = document.getElementById('from_date').value;
+                let toDate = document.getElementById('to_date').value;
+                let type = this.getAttribute('data-type');
+                let url =
+                    `{{ route('admin.presaleorders.export', '') }}/${type}?from_date=${fromDate}&to_date=${toDate}`;
+                if (fromDate == '' || toDate == '' || fromDate == null || toDate == null || fromDate ==
+                    undefined || toDate == undefined) {
+                    alert('Please select a date range');
+                    return
+                } else {
+                    window.location.href = url;
                 }
+
             });
         });
+    </script>
+    <script>
+        function getDetails() {
+            let fromDate = document.getElementById('from_date').value;
+            let toDate = document.getElementById('to_date').value;
+            if (fromDate == '' || toDate == '' || fromDate == null || toDate == null || fromDate == undefined || toDate ==
+                undefined) {
+                alert('Please select a date range');
+                return
+            } else {
+                $.ajax({
 
-        // Function to generate the table and append it to the div
-        function generateAndAppendTable(orders) {
-            let tableHTML = `
-                <table id="ordersTable" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Order ID</th>
-                            <th>Dealer</th>
-                            <th>Customer</th>
-                            <th>Customer Category</th>
-                            <th>Route</th>
-                            <th>Status</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${orders.map(order => `
-                            <tr>
-                                <td></td>
-                                <td>${order.id}</td>
-                                <td>${order.dealer.tradename}</td>
-                                <td>${order.customer.name}</td>
-                                <td>${order.customer.custcategory}</td>
-                                <td>${order.customer.route.name}</td>
-                                <td>${order.status === 1 || order.status === "1" ? 'Pending' : 'Approved'}</td>
-                                <td>${order.created_at}</td>
-                                <td>
-                                    <button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#products-${order.id}">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr id="products-${order.id}" class="collapse">
-                                <td colspan="8">
-                                    <table class="table table-sm table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>Product ID</th>
-                                                <th>Product Name</th>
-                                                <th>Quantity</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            ${order.items.map(product => `
-                                                <tr>
-                                                    <td></td>
-                                                    <td>${product.product.id}</td>
-                                                    <td>${product.product.name}</td>
-                                                    <td>${product.reqqty}</td>
-                                                </tr>
-                                            `).join('')}
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            `;
+                    url: '{{ route('admin.presaleorders.searchbydatepost') }}',
+                    type: 'GET',
+                    data: {
+                        'fromdate': fromDate,
+                        'todate': toDate,
+                        '__token': '{{ csrf_token() }}'
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                       console.log(data)
+                       let preorders = data.preorders
+                       generateDataTable(preorders)
+                    },
+                    error: function(error) {
+                        console.log(error)
+                    }
+                });
+            }
 
-            // Append the generated table to the container div
-            $('#tableContainer').html(tableHTML);
-
-            // Initialize DataTable after the table is appended
-            $('#ordersTable').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'pageLength',   // Enable options for 5, 25, 50, 100 entries
-                    'excelHtml5',   // Export to Excel
-                    'csvHtml5',     // Export to CSV
-                    'pdfHtml5',     // Export to PDF
-                    'print'         // Print table
-                ],
-                pageLength: 5, // Set default page length
-                lengthMenu: [[5, 25, 50, 100], [5, 25, 50, 100]]
-            });
-
-            // Handle row expansion for product details
-            $('button[data-toggle="collapse"]').click(function() {
-                let target = $(this).data('target');
-                $(target).collapse('toggle');
-            });
         }
+        function generateDataTable(preorders) {
+    const table = document.createElement('table');
+    table.id = 'bootstrap-datatable';
+    table.classList.add('table', 'table-bordered', 'table-striped', 'table-hover', 'datatable');
+
+    // Generate the table header
+    const thead = document.createElement('thead');
+    thead.innerHTML = `
+        <tr>
+        <th></th>
+            <th>Invoice No</th>
+            <th>Invoice Date</th>
+            <th>Customer Name</th>
+            <th>Executive Name</th>
+            <th>Product Code</th>
+            <th>Item Description</th>
+            <th>Basic Value</th>
+            <th>VAT Value</th>
+            <th>Quantity</th>
+              <th>VAT</th>
+                <th>VAT Value</th>
+            <th>Total Sales</th>
+            <th>Route</th>
+            <th>In Time</th>
+            <th>Out Time</th>
+        </tr>
+    `;
+    table.appendChild(thead);
+
+    // Generate the table body
+    const tbody = document.createElement('tbody');
+    preorders.forEach(preorder => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+        <td></td>
+            <td>${preorder.stockreqs.id ?? ''}</td>
+            <td>${preorder.stockreqs.created_at}</td>
+            <td>${preorder.stockreqs.customer.name ?? ''}</td>
+            <td>${preorder.stockreqs.dealer.tradename}</td>
+            <td>${preorder.product.code}</td>
+            <td>${preorder.product.description ?? ''}</td>
+            <td>${preorder.sellingprice}</td>
+            <td>${preorder.product.tax.value}</td>
+              <td>${preorder.reqqty}</td>
+              <td>${preorder.vat}</td>
+              <td>${preorder.vat_amount}</td>
+            <td>${preorder.total}</td>
+            <td>${preorder.stockreqs.customerroute.name}</td>
+            <td>${preorder.stockreqs.checkin}</td>
+            <td>${preorder.stockreqs.checkin}</td>
+        `;
+        tbody.appendChild(row);
     });
-</script>
-@endsection
+    table.appendChild(tbody);
+    // document.getElementById("datatable-container").innerHTML = "";
+    // Append the table to the container
+    document.getElementById('datatable-container').appendChild(table);
+
+    // Initialize DataTables on the generated table
+    $('#bootstrap-datatable').DataTable({
+        paging: true,
+        searching: true,
+        ordering: true,
+        responsive: true
+    });
+}
+    </script>
+@endsection()
