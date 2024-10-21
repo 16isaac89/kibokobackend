@@ -30,7 +30,9 @@ protected $appends = [
         'deleted_at',
         'product_category',
         'tax_id',
-        'efriscategorycode'
+        'efriscategorycode',
+        'group',
+        'division',
     ];
 
    public function brand(){

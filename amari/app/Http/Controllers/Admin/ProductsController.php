@@ -52,7 +52,7 @@ class ProductsController extends Controller
         return view('admin.products.addcount',compact('brands','product','locations'));
     }
     public function store(){
-        //dd(request()->all());
+       // dd(request()->all());
          $locations = request()->locations;
          $quantities = request()->quantities;
 
@@ -63,15 +63,11 @@ class ProductsController extends Controller
             'name'=>request()->name,
             'brand_id'=>request()->brandname,
             'code'=>request()->code,
-            'stock'=>request()->stock,
-            'price'=>request()->price,
-            'category'=>request()->categorycode,
-            'efriscategoryname'=>request()->efriscategoryname,
             'unit'=>request()->unit,
-            'cost'=>request()->cost,
-            'suppvat'=>request()->cost*0.18,
-            'supplier_id'=>request()->supplier,
-            'product_category_id'=>request()->productcategory,
+            'division'=>request()->division,
+            'group'=>request()->group,
+            'tax_id'=>request()->tax_id,
+            "product_category"=>request()->categorycode,
         ]);
         // foreach($locations as $key=> $a){
         //     $location = intVal($locations[$key]);
@@ -90,7 +86,7 @@ class ProductsController extends Controller
         //         'product_id'=>$product->id,
         //     ]);
         // }
-        return redirect()->back()->with('success', 'Product has been saved successfully');
+        return redirect()->back()->with('message', 'Product has been saved successfully');
        // return back();
     }
     public function editProduct(){
@@ -102,19 +98,13 @@ class ProductsController extends Controller
 
         Product::find(request()->productid)->update([
             'name'=>request()->productname,
-            'brand_id'=>request()->productbrandname,
+            'brand_id'=>request()->brand_id,
             'code'=>request()->productcode,
-            'stock'=>request()->productstock,
-            'price'=>request()->productprice,
-            'category'=>request()->categorycode,
-            'efriscategoryname'=>request()->efriscategoryname,
-            'unit'=>request()->productunit,
-            'supplier_id'=>request()->productsupplier,
-            'product_category_id'=>request()->productcategory
-            //'location_id'=>request()->locationid,
-            // 'cost'=>request()->cost,
-            // 'suppvat'=>request()->cost*0.18,
-
+            'unit'=>request()->unit,
+            'division'=>request()->division,
+            'group'=>request()->group,
+            'tax_id'=>request()->tax_id,
+            "product_category"=>request()->product_category,
         ]);
 
 
@@ -127,7 +117,7 @@ class ProductsController extends Controller
         //     ]);
         // }
 
-        return redirect()->back()->with('success', 'Product has been edited');
+        return redirect()->back()->with('message', 'Product has been edited');
         //return back();
     }
     public function productDetails(){

@@ -16,29 +16,41 @@
                     <input type="text" id="productname" name="productname" value="{{$product->name}}" class="form-control" required placeholder="Enter product name">
                 </div>
                 <div class="col-md-6">
-                    <label for="productcode">Product Code:</label>
-                    <input type="text" id="productcode" name="productcode" value="{{$product->code}}" class="form-control" required placeholder="Enter product code">
+                    <label for="productcode">Product Code :</label>
+                    <input type="text" id="productcode" name="productcode" value="{{$product->code}}" class="form-control"
+                    required placeholder="Enter product code">
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="productname">Division:</label>
-                    <input type="text" id="productname" name="division" value="{{$product->division}}" class="form-control" required placeholder="Enter product name">
+                    <input type="text" id="productname" name="division" value="{{$product->division}}" class="form-control"
+                    required placeholder="Enter product division">
                 </div>
                 <div class="col-md-6">
                     <label for="productcode">Group:</label>
-                    <input type="text" id="productcode" name="group" value="{{$product->group}}" class="form-control" required placeholder="Enter product code">
+                    <input type="text" id="productcode" name="group" value="{{$product->group}}" class="form-control" required
+                    placeholder="Enter product group">
                 </div>
+            </div>
+            <div class="col-md-6">
+                <label for="productcode">Product Category:</label>
+                <select class="form-control" name="product_category" id="productunit" required>
+                    <option disabled>Select product category</option>
+                    @foreach($categories as $category)
+                        <option value="{{$category->code}}" {{ $product->product_category === $category->code ? 'selected' : '' }}>{{$category->name}}</option>
+                    @endforeach
+                </select>
             </div>
 
             <!-- Product Brand and Unit Section -->
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="productbrandname">Product Brand:</label>
-                    <select class="form-control form-control-lg" id="productbrandname" name="productbrandname" required>
-                        <option value="">Select product Brand</option>
+                    <select class="form-control" name="brand_id" id="productunit" required>
+                        <option disabled>Select product brand</option>
                         @foreach($brands as $brand)
-                            <option value="{{$brand->id}}" {{ $product->brand_id === $brand->code ? 'selected' : '' }}>{{$brand->name}}</option>
+                            <option value="{{$brand->code}}" {{ $product->brand_id === $brand->code ? 'selected' : '' }}>{{$brand->name}}</option>
                         @endforeach
                     </select>
                 </div>
