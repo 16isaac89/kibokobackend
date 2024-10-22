@@ -18,7 +18,7 @@ class PresaleOrdersController extends Controller
 
         if ($request->from_date && $request->to_date) {
             $query->with(['product','dealer','tax','stockreqs'=>function(){
-                $query->with('dealer','van','customer');
+                $query->with('dealer','van','customer','saler');
             }])->whereBetween('created_at', [$request->from_date, $request->to_date]);
         }
 

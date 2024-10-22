@@ -35,7 +35,7 @@ class DispatchController extends Controller
     if(\Auth::guard('dealer')->check()){
 	   $dealer = Auth::guard('dealer')->user()->dealer_id;
 	   $vans = Van::where('dealer_id',$dealer)->get();
-       $brands = ProductBrand::where('dealer_id',$dealer)->get();
+       $brands = ProductBrand::all();
 	   return view('dealer.dispatch.create',compact('brands','vans'));
     }else{
       return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
@@ -52,7 +52,9 @@ class DispatchController extends Controller
 	public function brandProducts(){
 		//$dealer = Auth::guard('dealer')->user()->dealer_id;
     //$products = DealerProduct::where(['brand_id'=>request()->brand,'dealer_id'=>$dealer])->get();
-    $products = Product::where(['brand_id'=>request()->brand])->get();
+    $products = Product::with(['dealerproduct'=>function($query){
+        $query->where('dealer_id',Auth::guard('dealer')->user()->dealer_id);
+    }])->where(['brand_id'=>request()->brand])->get();
     return response()->json(['products'=>$products]);
 
    }
@@ -96,14 +98,17 @@ class DispatchController extends Controller
   }
 
   foreach($products as $a => $b){
-    $product = Product::with('brand')->find($products[$a]);
-    $batch = Stock::find($batches[$a]);
+    $product = Product::with(['brand','dealerproduct'=>function($query){
+        $query->where('dealer_id',Auth::guard('dealer')->user()->dealer_id);
+    }])->find($products[$a]);
+   // $batch = Stock::find($batches[$a]);
     if($products[$a] === 'Select Product'){
       continue;
     }else{
       DispatchProducts::create([
         'dispatch_id'=>$dispatch->id,
         'product_id'=>$product->id,
+        'dealer_product_id'=>$product->dealerproduct->id,
         'name'=>$product->name,
         'dispatchedquantity'=>$units[$a],
         'price'=>$totals[$a],
@@ -111,13 +116,13 @@ class DispatchController extends Controller
         'stock'=>$units[$a],
         'sellingprice'=>$prices[$a],
         'brandname'=>$product->brand->name,
-        'batch'=>$batches[$a],
+        'batch'=>$product->dealerproduct->stock,
         'van_id'=>request()->van,
         'sale_type'=>1
        // 'dealer_product_id'=>$dealerpid->id
 
     ]);
-    $batch->decrement('amount',$units[$a]);
+    $product->dealerproduct->decrement('stock',$units[$a]);
     }
    }
    $dispatches = Dispatch::where(['type'=>'van','dealer_id'=>$dealer])->get();

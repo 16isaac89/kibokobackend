@@ -34,13 +34,13 @@ class RoutePlanList extends Model
         return $this->belongsTo(RoutePlan::class, 'routeplan_id');
     }
     public function route(){
-        return $this->belongsTo(Route::class,'route_id');
+        return $this->belongsTo(Route::class,'route_id','code');
     }
     public function customer(){
         return $this->belongsTo(Customer::class,'customer_id','identification');
     }
     public function saler(){
-        return $this->belongsTo(DealerUser::class,'dealer_user_id'); 
+        return $this->belongsTo(DealerUser::class,'dealer_user_id');
     }
-   
+
 }

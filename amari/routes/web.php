@@ -509,6 +509,9 @@ Route::get('/tax/payer/info', 'TestController@index');
 Route::resource('dealerroles','RoleController');
 Route::get('/restock/product', 'EfrisProductController@restock');
 Route::get('/applycredit/note', 'SaleController@creditdebitnote');
+//edit profile
+Route::get('/edit/profile', 'Auth\ProfileController@index')->name('user.edit.profile');
+Route::post('/edit/password', 'Auth\ProfileController@changepassword')->name('user.edit.changepassword');
 });
 
 Route::get('get/private/key', 'Helper\Efris\KeysController@getPrivateKey');

@@ -95,6 +95,7 @@
                 <tr>
                     <th>Invoice No</th>
                     <th>Invoice Date</th>
+                      <th>Sales Person</th>
                     <th>Customer Name</th>
                     <th>Executive Name</th>
                     <th>Product Code</th>
@@ -123,6 +124,7 @@
     minute: '2-digit',
     second: '2-digit'
 })}</td>
+<td>${preorder.stockreqs.saler?.username ?? ''}</td>
                     <td>${preorder.stockreqs.customer.name ?? ''}</td>
                     <td>${preorder.stockreqs.dealer.tradename}</td>
                     <td>${preorder.product.code}</td>

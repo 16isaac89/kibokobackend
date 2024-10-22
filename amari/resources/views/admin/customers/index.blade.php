@@ -28,6 +28,7 @@
                 <thead>
                     <tr>
                         <th width="10"></th>
+                        <th>Customer</th>
                         <th>Dealer</th>
                         <th>Route</th>
                         <th>CheckIN</th>
@@ -57,6 +58,7 @@
                     @foreach($customers as $key => $customer)
                         <tr data-entry-id="{{ $customer->id }}">
                             <td></td>
+                            <td>{{ $customer->name ?? '' }}</td>
                             <td>{{ $customer->dealer->tradename ?? '' }}</td>
                             <td>{{ $customer->route->name ?? '' }}</td>
 

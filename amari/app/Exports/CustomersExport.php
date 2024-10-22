@@ -13,6 +13,7 @@ class CustomersExport implements FromCollection, WithHeadings
         // Fetch customers with necessary relationships
         return Customer::with(['dealer', 'route'])->get()->map(function ($customer) {
             return [
+                $customer->name ?? '',
                 $customer->dealer->tradename ?? '',
                 $customer->route->name ?? '',
                 $customer->customercheckin ?? '',
@@ -42,7 +43,7 @@ class CustomersExport implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
-            'Dealer', 'Route', 'CheckIN', 'Checkout', 'Telephone No', 'Phone', 'Email',
+            'Name','Dealer', 'Route', 'CheckIN', 'Checkout', 'Telephone No', 'Phone', 'Email',
             'Area', 'City', 'Country', 'Classification', 'Cash Registers', 'Daily Footfall',
             'Product Range', 'Contact Person', 'Customer Category', 'B\'ss Value', 'Location',
             'Lat', 'Long', 'IMGlat', 'IMGlong'

@@ -26,12 +26,13 @@ class PreordersExport  implements FromCollection, WithHeadings
         return StockRequestProduct::with(['dealerproduct','product'=>function($query){
             $query->with('brand','tax');
         },'stockreqs'=>function($query){
-            $query->with('dealer','van','customer','customerroute');
+            $query->with('dealer','van','customer','customerroute','saler');
         }])->whereBetween('created_at', [$this->fromDate, $this->toDate])->get()
         ->map(function ($preorder) {
             return [
                 $preorder->stockreqs->id ?? '', // Invoice No
                 $preorder->stockreqs->created_at->format('Y-m-d'), // Invoice Date
+                $preorder->stockreqs->saler?->username ?? '',
                 $preorder->stockreqs->customer->name ?? '', // Customer Name
                 $preorder->stockreqs->dealer->tradename, // Executive Name
                 $preorder->product->code, // Product Code
@@ -53,6 +54,7 @@ class PreordersExport  implements FromCollection, WithHeadings
             'Invoice No',
             'Invoice Date',
             'Customer Name',
+            'Sales Person',
             'Executive Name',
             'Product Code',
             'Item Description',

@@ -27,6 +27,6 @@ class RepRoute extends Model
         'deleted_at',
     ];
     public function route(){
-        return $this->belongsTo(Route::class,'route_id');
+        return $this->belongsTo(Route::class,'route_id','code');
     }
 }

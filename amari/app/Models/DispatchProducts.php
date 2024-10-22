@@ -20,6 +20,7 @@ class DispatchProducts extends Model
     protected $fillable = [
         'dispatch_id',
         'product_id',
+        'dealer_product_id',
         'name',
         'dispatchedquantity',
         'quantity',
