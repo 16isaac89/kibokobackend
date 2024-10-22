@@ -27,7 +27,7 @@
                         <!-- Export Buttons -->
                         <a href="#" class="btn btn-info export-btn" data-type="csv">Export CSV</a>
                         <a href="#" class="btn btn-success export-btn" data-type="excel">Export Excel</a>
-                        <a href="#" class="btn btn-danger export-btn" data-type="pdf">Export PDF</a>
+                        {{-- <a href="#" class="btn btn-danger export-btn" data-type="pdf">Export PDF</a> --}}
                     </div>
                 </div>
             </form>
@@ -115,7 +115,14 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${preorder.stockreqs.id ?? ''}</td>
-                    <td>${new Date(preorder.stockreqs.created_at)}</td>
+                   <td>${new Date(preorder.stockreqs.created_at).toLocaleString('en-GB', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+})}</td>
                     <td>${preorder.stockreqs.customer.name ?? ''}</td>
                     <td>${preorder.stockreqs.dealer.tradename}</td>
                     <td>${preorder.product.code}</td>
@@ -143,5 +150,24 @@
                 responsive: true
             });
         }
+    </script>
+    <script>
+        document.querySelectorAll('.export-btn').forEach(function (button) {
+    button.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        let fromDate = document.getElementById('from_date').value;
+        let toDate = document.getElementById('to_date').value;
+        let type = this.getAttribute('data-type');
+
+        if (fromDate == '' || toDate == '' || fromDate == null || toDate == null) {
+            alert('Please select a date range');
+            return;
+        }
+
+        // Redirect to the correct export route with query parameters
+        window.location.href = `/admin/presaleorders/export/?from_date=${fromDate}&to_date=${toDate}&type=${type}`;
+    });
+});
     </script>
 @endsection

@@ -56,7 +56,7 @@ Route::get('/admin/get/key','EfrisSetupController@getkey')->name('get.efriskey')
     Route::get('/presaleorders/search', 'PresaleOrdersController@search')->name('presaleorders.search');
     Route::get('/presaleorders/searchbydate', 'PresaleOrdersController@searchByDate')->name('presaleorders.searchbydateview');
     Route::post('/presaleorders/searchbydate', 'PresaleOrdersController@searchByDate')->name('presaleorders.searchbydatepost');
-    Route::get('/presaleorders/export/{type}', 'PresaleOrdersController@exportPresale')->name('presaleorders.export');
+    Route::get('/presaleorders/export/', 'PresaleOrdersController@exportPresale')->name('presaleorders.export');
 
     // Map
     Route::delete('maps/destroy', 'MapController@massDestroy')->name('maps.massDestroy');

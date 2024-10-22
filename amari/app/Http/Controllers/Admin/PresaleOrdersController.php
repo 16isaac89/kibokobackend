@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Dealer;
 use App\Models\StockRequest;
 use App\Models\StockRequestProduct;
+use App\Exports\PreordersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PresaleOrdersController extends Controller
 {
@@ -56,20 +58,17 @@ class PresaleOrdersController extends Controller
 
         return response()->json(['preorders' => $preorders]);
     }
-    public function exportPresale(Request $request, $type)
+    public function exportPresale(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
         $fromDate = $request->input('from_date');
         $toDate = $request->input('to_date');
+        $type = $request->input('type');
         switch ($type) {
             case 'csv':
-                return Excel::download(new PreordersExport, 'preorders.csv');
+                return Excel::download(new PreordersExport($fromDate, $toDate), 'preorders.csv');
             case 'excel':
-                return Excel::download(new PreordersExport, 'preorders.xlsx');
-            case 'pdf':
-                $preorders = Preorder::all();
-                $pdf = PDF::loadView('preorders.pdf', compact('preorders'));
-                return $pdf->download('preorders.pdf');
+                return Excel::download(new PreordersExport($fromDate, $toDate), 'preorders.xlsx');
         }
     }
 }
