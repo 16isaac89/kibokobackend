@@ -38,8 +38,12 @@ class Van extends Model
     {
         return $this->hasMany(Sale::class,'van_id');
     }
+    public function stockrequests()
+    {
+        return $this->hasMany(StockRequest::class,'van_id','id');
+    }
     public function target(){
-        return $this->hasManyThrough(Target::class,DealerUser::class);
+        return $this->hasOne(Target::class,'dealer_user_id','id');
     }
     public function routeplan(){
         return $this->hasManyThrough(RoutePlanList::class,DealerUser::class);

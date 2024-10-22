@@ -86,15 +86,15 @@
                     <li class="c-sidebar-nav-item">
                         <a href="{{ route("admin.presaleorders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/presaleorders") || request()->is("admin/presaleorders/*") ? "c-active" : "" }}">
                             <i class="fa-fw fas fa-file-invoice c-sidebar-nav-icon"></i>
-                            Presale Order Details
+                            Presale Order Invoice
                         </a>
                     </li>
-                    {{-- <li class="c-sidebar-nav-item">
-                        <a href="{{ route("admin.vanreports.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/vanreports") || request()->is("admin/vanreports/*") ? "c-active" : "" }}">
+                     <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.presaleorders.general") }}" class="c-sidebar-nav-link {{ request()->is("admin/vanreports") || request()->is("admin/vanreports/*") ? "c-active" : "" }}">
                             <i class="fa-fw fas fa-bus c-sidebar-nav-icon"></i>
-                            Van Reports
+                            Presale Order Subdealer
                         </a>
-                    </li> --}}
+                    </li>
                 </ul>
             </li>
         @endcan

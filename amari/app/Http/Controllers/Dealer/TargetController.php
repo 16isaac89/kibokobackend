@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Dealer;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Target;
-use Auth;
 use App\Models\DealerUser;
+use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\SkuTarget;
 use App\Models\SkuTargetProduct;
 use App\Models\Stock;
-use App\Models\Product;
+use App\Models\Target;
+use App\Models\Van;
+use Auth;
+use Illuminate\Http\Request;
 
 class TargetController extends Controller
 {
@@ -27,7 +28,26 @@ class TargetController extends Controller
             'dealer_id'=>$dealer,
             'dealer_user_id'=>request()->user,
             'type'=>'saler',
-            
+
+        ]);
+        return redirect()->back()->with('success', 'Target by month has been set successfuly.');
+    }else{
+        return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
+    }
+    }
+    public function storeVan(){
+        if(\Auth::guard('dealer')->check()){
+        $dealer = Auth::guard('dealer')->user()->dealer_id;
+        Target::create([
+            'month'=>request()->month,
+            'year'=>request()->year,
+            'money'=>request()->money,
+            //  'fromdate'=>request()->fromdate,
+            //  'todate'=>request()->todate,
+            'dealer_id'=>$dealer,
+            'dealer_user_id'=>request()->user,
+            'type'=>'van',
+
         ]);
         return redirect()->back()->with('success', 'Target by month has been set successfuly.');
     }else{
@@ -80,13 +100,25 @@ class TargetController extends Controller
         if(\Auth::guard('dealer')->check()){
         $user = DealerUser::find(request()->user);
         $brands = ProductBrand::all();
-       
+
         return view('dealer.users.addtarget',compact('user','brands'));
     }else{
         return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
     }
     }
 
-    
-   
+    public function createVan(){
+// dd(request()->all());
+        if(\Auth::guard('dealer')->check()){
+        $user = Van::find(request()->user);
+        $brands = ProductBrand::all();
+
+        return view('dealer.van.addtarget',compact('user','brands'));
+    }else{
+        return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
+    }
+    }
+
+
+
 }

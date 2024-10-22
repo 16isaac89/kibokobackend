@@ -10,9 +10,9 @@
       </button>
 
       <div class="table-wrapper">
-    
-            
-        
+
+
+
         <table id="vans" class="table display responsive nowrap">
           <thead>
             <tr>
@@ -36,6 +36,9 @@
                 <button data-id="{{$van->id}}" data-name="{{$van->name}}" data-reg="{{$van->reg_id}}" style="margin:20px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#editvan">
                   Edit
                 </button>
+                <a type="button" href="{{route('dealer.van.target',['user'=>$van->id])}}"  class="btn btn-primary">
+                    Target
+  </a>
               </td>
             </tr>
         @endforeach
@@ -75,18 +78,18 @@
               </div>
             </div>
 
-                
+
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        
+
         </div>
       </div>
     </div>
   </div>
- 
+
 @endsection
 @section('scripts')
 <script>
@@ -105,7 +108,7 @@
           sSearch: '',
           lengthMenu: '_MENU_ items/page',
         },
-   
+
       });
 })();
     </script>

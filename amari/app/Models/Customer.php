@@ -87,13 +87,14 @@ protected $appends = [
     public function route(){
         return $this->belongsTo(Route::class, 'route_code','code');
     }
+    public function dealer(){
+        return $this->belongsTo(Dealer::class, 'dealer_code','code');
+    }
 
     public function category(){
         return $this->belongsTo(CustomerCategory::class, 'category_id');
     }
-    public function dealer(){
-        return $this->belongsTo(Dealer::class, 'dealer_code','code');
-    }
+
     public function distributor(){
         return $this->belongsTo(Dealer::class, 'dealer_code');
     }

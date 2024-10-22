@@ -53,11 +53,13 @@ Route::get('/admin/get/key','EfrisSetupController@getkey')->name('get.efriskey')
 
     //Presale Orders
     Route::get('/presaleorders/index', 'PresaleOrdersController@index')->name('presaleorders.index');
+    Route::get('/presaleorders/index/general', 'PresaleOrdersController@general')->name('presaleorders.general');
     Route::get('/presaleorders/search', 'PresaleOrdersController@search')->name('presaleorders.search');
     Route::get('/presaleorders/searchbydate', 'PresaleOrdersController@searchByDate')->name('presaleorders.searchbydateview');
     Route::post('/presaleorders/searchbydate', 'PresaleOrdersController@searchByDate')->name('presaleorders.searchbydatepost');
+    Route::get('/presaleorders/searchgeneral', 'PresaleOrdersController@searchGeneral')->name('presaleorders.searchGeneral');
     Route::get('/presaleorders/export/', 'PresaleOrdersController@exportPresale')->name('presaleorders.export');
-
+    Route::get('/presaleorders/exportgeneral/', 'PresaleOrdersController@exportPresaleGeneral')->name('presaleorders.exportgeneral');
     // Map
     Route::delete('maps/destroy', 'MapController@massDestroy')->name('maps.massDestroy');
     Route::resource('maps', 'MapController');
@@ -392,6 +394,9 @@ Route::resource('vans','VanController');
 
 Route::resource('routeplans','RoutePlanController');
 
+
+Route::get('/add/vantarget/','TargetController@createVan')->name('dealer.van.target');
+Route::post('/add/vantarget/post','TargetController@storeVan')->name('dealer.van.targetpost');
 Route::post('/add/skutarget/','TargetController@storesku')->name('dealer.sku.target');
 Route::resource('salertargets','TargetController');
 
