@@ -104,7 +104,6 @@
                         <th>Total Outlets</th>
                         <th>Visited Outlets</th>
                         <th>New Outlets</th>
-                        <th>Strike Rate</th>
                         <th>Calls</th>
                         <th>Invoice Total</th>
                         <th>Sales Target</th>
@@ -123,10 +122,11 @@
                     requeststotal += request.total;
                 })
                   // Prepare route information
-        const routeInfo = routes.map(route => {
-            const customerCount = route.customers.length;
-            return `${route.name} (${customerCount} Customers)`;
-        }).join(', '); // Join multiple routes with a comma
+        // const routeInfo = routes.map(route => {
+        //     const customerCount = route.customers.length;
+        //     return `${route.name} (${customerCount} Customers)`;
+        // }).join(', ');
+        // Join multiple routes with a comma
 
 
                 const row = document.createElement('tr');
@@ -137,11 +137,10 @@
                     <td>${preorder.van?.name ?? ''}</td>
                     <td>${preorder.checkin ?? ''}</td>
                     <td>${preorder.checkout}</td>
-                    <td>${routeInfo}</td>
-                    <td>${preorder.dealer.customers.length ?? ''}</td>
-                    <td>${preorder.dealer.updated_customers.length}</td>
-                    <td>${preorder.dealer.new_customers.length}</td>
-                    <td></td>
+                    <td>${preorder.customerroute.name ?? ''}</td>
+                    <td>${preorder.customerroute.customers.length ?? ''}</td>
+                    <td>${preorder.customerroute.updated_customers.length}</td>
+                    <td>${preorder.customerroute.new_customers.length}</td>
                     <td>${preorder.items.length}</td>
                     <td>${preorder.total}</td>
                     <td>${preorder.van.target?.money ?? ''}</td>

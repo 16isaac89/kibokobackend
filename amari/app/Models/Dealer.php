@@ -33,7 +33,8 @@ class Dealer extends Model
         "branch",
         "aeskey",
         "code",
-        'type_of_business'
+        'type_of_business',
+        'supervisor_id'
     ];
 public function branches(){
 
@@ -85,6 +86,10 @@ public function stockrequests(){
     return $this->hasMany(StockRequest::class,'dealer_id','id');
 
 }
+public function supervisor(){
 
+    return $this->belongsTo(User::class,'supervisor_id','id');
+
+}
 
 }

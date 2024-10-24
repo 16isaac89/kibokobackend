@@ -104,6 +104,7 @@
                                     <a data-id="{{$dealer->id}}" data-start="{{$dealer->start_date}}"
                                         data-end="{{$dealer->end_date}}"
                                         data-email="{{$dealer->email}}"
+                                        data-supervisor = "{{$dealer->supervisor_id}}"
                                         data-sub_type = "{{$dealer->sub_type}}"
                                         data-efris="{{$dealer->efris}}" data-tradename="{{$dealer->tradename}}" data-tin="{{$dealer->tin}}" data-address="{{$dealer->address}}" data-phone="{{$dealer->phonenumber}}" data-status="{{$dealer->status}}" class="btn btn-xs btn-info" data-toggle="modal" data-target="#editdealer">
                                         {{ trans('global.edit') }}
@@ -170,10 +171,11 @@ $('#editdealer').on('show.bs.modal', function (event) {
   var sub_type = button.data('sub_type');
   var startdate = button.data('startdate');
   var enddate = button.data('enddate');
+  var supervisor = button.data('supervisor');
 
   document.getElementById('dealerid').value = id;
   document.getElementById('dealername').value = name;
-  document.getElementById('dealertin').value = tin;
+  document.getElementById('dealertin').value = tin ;
   document.getElementById('dealeraddress').value = address;
   document.getElementById('dealerphone').value = phone;
   document.getElementById('dealerstatus').value = status;
@@ -182,6 +184,7 @@ $('#editdealer').on('show.bs.modal', function (event) {
   document.getElementById('sub_type').value = sub_type;
   document.getElementById('startdate').value = startdate;
   document.getElementById('enddate').value = enddate;
+  document.getElementById('supervisor').value = supervisor;
 })
 </script>
 

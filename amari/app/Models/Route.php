@@ -41,6 +41,17 @@ class Route extends Model
     public function customers(){
         return $this->hasMany(Customer::class, 'route_code','code');
     }
+
+    public function updated_customers(){
+
+        return $this->hasMany(Customer::class,'route_code','code');
+
+    }
+    public function new_customers(){
+
+        return $this->hasMany(Customer::class,'route_code','code');
+
+    }
     public function routesalers(){
         return $this->hasOneThrough(DealerUser::class, Sale::class);
     }

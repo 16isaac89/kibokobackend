@@ -17,6 +17,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
 
+//1 admin
+//2 supervisor
+
 class User extends Authenticatable implements HasMedia
 {
     use SoftDeletes;
@@ -57,7 +60,8 @@ class User extends Authenticatable implements HasMedia
         'updated_at',
         'deleted_at',
         'two_factor_expires_at',
-        'token'
+        'token',
+        'designation'
     ];
 
     public function generateTwoFactorCode()
@@ -93,7 +97,7 @@ class User extends Authenticatable implements HasMedia
         $this->addMediaConversion('preview')->fit('crop', 120, 120);
     }
 
-   
+
 
     public function getEmailVerifiedAtAttribute($value)
     {
@@ -149,5 +153,11 @@ class User extends Authenticatable implements HasMedia
         return $date->format('Y-m-d H:i:s');
     }
 
-    
+    public function subdealers()
+    {
+        return $this->hasMany(Dealer::class,'supervisor_id','id');
+    }
+
+
+
 }

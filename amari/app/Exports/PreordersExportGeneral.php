@@ -25,24 +25,22 @@ class PreordersExportGeneral  implements FromCollection, WithHeadings
     {
         $month = $this->month;
         $year = $this->year;
-        return StockRequest::with(['items','dealer'=>function($query)use ($month, $year){
-            $query->with(['customers','routes'=>function($query)use ($month, $year){
-                $query->with('customers');
-            },'updated_customers'=>function($query)use ($month, $year){
-                $query->whereMonth('created_at', $month)
-                ->whereYear('created_at', $year);
-            },'new_customers'=>function($query)use ($month, $year){
-                $query->whereMonth('created_at', $month)
-                ->whereYear('created_at', $year);
-            }]);
-        },'van'=>function($query)use ($month, $year){
+        return StockRequest::with(['items','dealer','van'=>function($query)use ($month, $year){
             $query->with(['target'=>function($query)use ($month, $year){
                 $query->where(['month'=>$month,'year'=>$year]);
             },'stockrequests'=>function($query)use ($month, $year){
                 $query->whereMonth('created_at', $month)
                 ->whereYear('created_at', $year);
             }]);
-        },'customerroute','saler','customer'])->whereMonth('created_at', $month)
+        },'customerroute'=>function($query)use ($month, $year){
+            $query->with(['customers','updated_customers'=>function($query)use ($month, $year){
+                $query->whereMonth('created_at', $month)
+                ->whereYear('created_at', $year);
+            },'new_customers'=>function($query)use ($month, $year){
+                $query->whereMonth('created_at', $month)
+                ->whereYear('created_at', $year);
+            }]);
+        },'saler','customer'])->whereMonth('created_at', $month)
         ->whereYear('created_at', $year)->get()
 
 
@@ -50,28 +48,28 @@ class PreordersExportGeneral  implements FromCollection, WithHeadings
         ->map(function ($preorder) {
             // Get routes and stock requests
         $routes = $preorder->dealer->routes;
-        $requests = $preorder->van->stockrequests;
+        $requests = $preorder->van?->stockrequests;
 
         // Calculate total stock requests
         $requestTotal = $requests->sum('total');
 
         // Prepare route information
-        $routeInfo = $routes->map(function ($route) {
-            $customerCount = $route->customers->count(); // Count of customers
-            return "{$route->name} ({$customerCount} Customers)";
-        })->join(', ');
+        // $routeInfo = $routes->map(function ($route) {
+        //     $customerCount = $route->customers->count(); // Count of customers
+        //     return "{$route->name} ({$customerCount} Customers)";
+        // })->join(', ');
             return [
                 $preorder->dealer?->tradename ?? '',
                 $preorder->saler?->username ?? '',
                 $preorder->van?->name ?? '',
                 $preorder->checkin ?? '',
                 $preorder->checkout,
-                $routeInfo,
-                $preorder->dealer->customers->count() ?? '',
-                $preorder->dealer->updated_customers->count(),
-                $preorder->dealer->new_customers->count(),
+                $preorder->customerroute?->name ?? '',
+                $preorder->customerroute->customers->count() ?? '',
+                $preorder->customerroute->updated_customers->count(),
+                $preorder->customerroute->new_customers->count(),
                 //strike rate
-                $preorder->dealer->new_customers->count(),
+                //$preorder->customerroute->new_customers->count(),
                     $preorder->items->count(),
                     $preorder->total,
                     $preorder->van->target?->money ?? '',
@@ -93,7 +91,7 @@ class PreordersExportGeneral  implements FromCollection, WithHeadings
                         'Total Outlets',
                         'Visited Outlets',
                         'New Outlets',
-                        'Strike Rate',
+                       // 'Strike Rate',
                         'Calls',
                         'Invoice Total',
                         'Sales Target',

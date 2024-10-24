@@ -20,7 +20,8 @@ class DealersController extends Controller
     use CsvImportTrait;
     public function index(){
         $dealers = Dealer::all();
-        return view('admin.dealers.index',compact('dealers'));
+        $users = User::where('designation',2)->get();
+        return view('admin.dealers.index',compact('dealers','users'));
     }
     public function store(){
         $media = new MediaClass();
@@ -34,6 +35,7 @@ class DealersController extends Controller
 
         $dealer = Dealer::create([
             'tradename'=>request()->name,
+            'name'=>request()->name,
             'tin'=>request()->tin,
             'address'=>request()->address,
             'phonenumber'=>request()->phonenumber,

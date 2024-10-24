@@ -80,24 +80,22 @@ class PresaleOrdersController extends Controller
 
         $month = $request->input('month');
         $year = $request->input('year');
-        $preorders = StockRequest::with(['items','dealer'=>function($query)use ($month, $year){
-            $query->with(['customers','routes'=>function($query)use ($month, $year){
-                $query->with('customers');
-            },'updated_customers'=>function($query)use ($month, $year){
-                $query->whereMonth('created_at', $month)
-                ->whereYear('created_at', $year);
-            },'new_customers'=>function($query)use ($month, $year){
-                $query->whereMonth('created_at', $month)
-                ->whereYear('created_at', $year);
-            }]);
-        },'van'=>function($query)use ($month, $year){
+        $preorders = StockRequest::with(['items','dealer','van'=>function($query)use ($month, $year){
             $query->with(['target'=>function($query)use ($month, $year){
                 $query->where(['month'=>$month,'year'=>$year]);
             },'stockrequests'=>function($query)use ($month, $year){
                 $query->whereMonth('created_at', $month)
                 ->whereYear('created_at', $year);
             }]);
-        },'customerroute','saler','customer'])->whereMonth('created_at', $month)
+        },'customerroute'=>function($query)use ($month, $year){
+            $query->with(['customers','updated_customers'=>function($query)use ($month, $year){
+                $query->whereMonth('created_at', $month)
+                ->whereYear('created_at', $year);
+            },'new_customers'=>function($query)use ($month, $year){
+                $query->whereMonth('created_at', $month)
+                ->whereYear('created_at', $year);
+            }]);
+        },'saler','customer'])->whereMonth('created_at', $month)
         ->whereYear('created_at', $year)->get();
 
         return response()->json(['preorders' => $preorders]);

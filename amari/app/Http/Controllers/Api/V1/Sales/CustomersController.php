@@ -70,6 +70,7 @@ class CustomersController extends Controller
                 'dealer_code'=>$dealer->code,
                 'businessvalue'=>request()->businessvalue,
                 'location'=>request()->location,
+                'userid'=>$id,
 
 
 			]);
@@ -116,6 +117,8 @@ class CustomersController extends Controller
 				'subdimagelong'=>request()->subdimagelong,
                 'businessvalue'=>request()->businessvalue,
                 'location'=>request()->location,
+                'userid'=>$id,
+
 
             ]
             );
