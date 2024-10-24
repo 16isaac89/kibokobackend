@@ -14,6 +14,7 @@ use App\Models\DealerRole;
 use App\Models\Subscription;
 use App\Models\Setting;
 use App\Http\Controllers\Traits\CsvImportTrait;
+use App\Models\User;
 
 class DealersController extends Controller
 {
