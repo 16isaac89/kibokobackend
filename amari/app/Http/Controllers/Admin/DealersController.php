@@ -47,12 +47,12 @@ class DealersController extends Controller
             'email'=>request()->email,
             'code'=>request()->code,
         ]);
-Branch::create([
-    'name'=>request()->branch,
-    'address'=>request()->address,
-    'phone'=>request()->phonenumber,
-    'dealer_id'=>$dealer->id,
-]);
+// Branch::create([
+//     'name'=>request()->branch,
+//     'address'=>request()->address,
+//     'phone'=>request()->phonenumber,
+//     'dealer_id'=>$dealer->id,
+// ]);
         return back();
     }
     public function editDealer(){
