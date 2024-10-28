@@ -30,6 +30,7 @@ class CustomersController extends Controller
 		$customer = request()->id;
         $routes = Route::with('customers')->where('dealer_id',request()->dealer)->get();
         $dealer = Dealer::find(request()->dealer);
+		
         $route = Route::find(request()->route);
 			$client = Customer::find($customer);
 		if($client){
@@ -77,7 +78,7 @@ class CustomersController extends Controller
             if (request()->subdimage) {
                 $client->addMedia(request()->file('subdimage'))->toMediaCollection('location_image','public_uploads');
             }
-
+ $routes = Route::with('customers')->where('dealer_code',$dealer->code)->get();
 			return response()->json(['message'=>'Customer updated successfully','customers'=>[],'routes'=>$routes]);
 		}else{
        $customer =  Customer::create(
@@ -176,7 +177,7 @@ class CustomersController extends Controller
         //    'points'=>1,
          //   'pointtype'=>'createcustomer',
        //   ]);
-
+ $routes = Route::with('customers')->where('dealer_code',$dealer->code)->get();
             return response()->json(['message'=>'Customer saved','customers'=>[],'routes'=>$routes]);
 		}
 	}

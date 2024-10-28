@@ -30,6 +30,20 @@ class CustomerController extends Controller
 
         // Using paginate to load data in chunks instead of all at once
     $customers = Customer::with(['media', 'route', 'dealer'])->paginate(10000);
+    // $customer = Customer::find(211);
+    // $url = $customer->location_image->getUrl();
+    // $needle = '/uploads/';
+    // $insert = '/amari/public';
+
+    // // Find the position of 'uploads' in the URL
+    // $pos = strpos($url, $needle);
+
+    // // If 'uploads' is found, insert 'amari/public' before it
+    // if ($pos !== false) {
+    //     return substr_replace($url, $insert . '/', $pos, 0);
+    // }
+
+    // dd($url);
 
     return view('admin.customers.index', compact('customers'));
     }
