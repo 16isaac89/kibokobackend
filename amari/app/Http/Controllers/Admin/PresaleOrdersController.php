@@ -54,7 +54,7 @@ class PresaleOrdersController extends Controller
         $preorders = StockRequestProduct::with(['dealerproduct','product'=>function($query){
             $query->with('brand','tax');
         },'stockreqs'=>function($query){
-            $query->with('dealer','van','customer','customerroute');
+            $query->with('saler','dealer','van','customer','customerroute');
         }])->whereBetween('created_at', [$request->fromdate, $request->todate])->get();
 
         return response()->json(['preorders' => $preorders]);

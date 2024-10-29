@@ -36,9 +36,10 @@ class PreordersExport  implements FromCollection, WithHeadings
                 $preorder->stockreqs->customer->name ?? '', // Customer Name
                 $preorder->stockreqs->dealer->tradename, // Executive Name
                 $preorder->product->code, // Product Code
+                $preorder->reqqty,
                 $preorder->product->description ?? '', // Item Description
                 $preorder->sellingprice, // Basic Value
-                $preorder->product->tax->value, // VAT Value
+                $preorder->product->tax?->value, // VAT Value
                 $preorder->total, // Total Sales
                 $preorder->stockreqs->customerroute->name, // Route
                 $preorder->stockreqs->checkin, // In Time
@@ -54,9 +55,10 @@ class PreordersExport  implements FromCollection, WithHeadings
             'Invoice No',
             'Invoice Date',
             'Customer Name',
-            'Sales Person',
+            'Dealer',
             'Executive Name',
             'Product Code',
+            'Quantity',
             'Item Description',
             'Basic Value',
             'VAT Value',

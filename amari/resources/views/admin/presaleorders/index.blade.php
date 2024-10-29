@@ -97,8 +97,10 @@
                     <th>Invoice Date</th>
                       <th>Sales Person</th>
                     <th>Customer Name</th>
+                    <th>SUBD</th>
                     <th>Executive Name</th>
                     <th>Product Code</th>
+                    <th>Quantity</th>
                     <th>Item Description</th>
                     <th>Basic Value</th>
                     <th>VAT Value</th>
@@ -126,15 +128,17 @@
 })}</td>
 <td>${preorder.stockreqs.saler?.username ?? ''}</td>
                     <td>${preorder.stockreqs.customer.name ?? ''}</td>
-                    <td>${preorder.stockreqs.dealer.tradename}</td>
+                    <td>${preorder.stockreqs.dealer.tradename ?? ''}</td>
+                    <td>${preorder.stockreqs.saler.username}</td>
                     <td>${preorder.product.code}</td>
+                    <td>${preorder.reqqty}</td>
                     <td>${preorder.product.description ?? ''}</td>
                     <td>${preorder.sellingprice}</td>
-                    <td>${preorder.product.tax.value}</td>
+                    <td>${preorder.product.tax?.value}</td>
                     <td>${preorder.total}</td>
                     <td>${preorder.stockreqs.customerroute.name}</td>
                     <td>${preorder.stockreqs.checkin}</td>
-                    <td>${preorder.stockreqs.checkin}</td>
+                    <td>${preorder.stockreqs.checkout}</td>
                 `;
                 tbody.appendChild(row);
             });

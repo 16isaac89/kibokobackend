@@ -19,7 +19,7 @@ class StockRequestController extends Controller
         $user = DealerUser::find(request()->salerid);
         $customer = Customer::with('route')->find(request()->customer_id);
 $stockreq = StockRequest::create([
-    'van_id'=>request()->van,
+    'van_id'=>request()->van ? request()->van : 0,
         'dealer_user_id'=>request()->salerid,
         'total'=>request()->total,
         'status'=>1,
@@ -32,16 +32,16 @@ $stockreq = StockRequest::create([
 ]);
         foreach($cart as $key=> $a){
             $product = Product::with('tax')->find($a['id']);
-            $sellingprice = $a['dealerproduct']['sellingprice'];
+            $sellingprice = $a['dealerproduct'] ? $a['dealerproduct']['sellingprice'] : 0;
             $quantity = $a['quantity'];
             $net = $quantity*$sellingprice;
             $taxes = $product->tax;
-            $tax = $taxes->value > 0 ? $taxes->value/100 : 0;
-            $taxamount = match ($taxes->value) {
+            $tax = $taxes && $taxes->value > 0 ? $taxes->value/100 : 0;
+            $taxamount = $taxes ? match ($taxes->value) {
                 '18' => floor(($tax*($net/1.18))*100)/100,
                 '0' => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
                 '-' => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
-            };
+            } : 0;
 
             $discount = $a['discounttype'] == 'fixed_value' ? $a['discounttype'] : $a['discountamt']/100;
             $discountamount =  $a['discounttype'] == 'fixed_value' ? $a['discountamt'] : $net*$discount;
@@ -50,11 +50,11 @@ $stockreq = StockRequest::create([
                 'product_id'=>$a['id'],
                 'reqqty'=>$a['quantity'],
                 'appqty'=>0,
-                'van_id'=>request()->van,
-                'dealer_product_id'=>$a['dealerproduct']['id'],
+                'van_id'=>request()->van ? request()->van : 0,
+                'dealer_product_id'=> $a['dealerproduct'] ? $a['dealerproduct']['id'] : 0,
                 'sellingprice'=>$sellingprice,
                 'total'=>$net,
-                'vat'=>$taxes->value,
+                'vat'=> $taxes ? $taxes->value : 0,
                 'vat_amount'=>$taxamount,
                 'discount'=> $discountamount,
                 'discounttype'=>$a['discounttype']
