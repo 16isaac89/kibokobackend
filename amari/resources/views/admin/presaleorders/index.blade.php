@@ -5,6 +5,7 @@
             Preorder Details
         </div>
         <div class="card-body">
+
             <!-- Search Form with From Date and To Date -->
             <form method="GET" action="{{ route('admin.presaleorders.searchbydatepost') }}">
                 <div class="row m-5">

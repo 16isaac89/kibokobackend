@@ -29,7 +29,7 @@ class CustomerController extends Controller
         abort_if(Gate::denies('customer_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         // Using paginate to load data in chunks instead of all at once
-    $customers = Customer::with(['media', 'route', 'dealer'])->paginate(10000);
+    $customers = Customer::with(['media', 'route', 'dealer'])->paginate(1000);
     // $customer = Customer::find(211);
     // $url = $customer->location_image->getUrl();
     // $needle = '/uploads/';

@@ -51,7 +51,7 @@ class PreordersExportGeneral  implements FromCollection, WithHeadings
         $requests = $preorder->van?->stockrequests;
 
         // Calculate total stock requests
-        $requestTotal = $requests->sum('total');
+        $requestTotal = $requests ? $requests->sum('total') : 0;
 
         // Prepare route information
         // $routeInfo = $routes->map(function ($route) {
