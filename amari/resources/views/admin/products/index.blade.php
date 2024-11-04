@@ -27,6 +27,7 @@
 @include('admin.products.modals.edit',['brands'=>$brands])
 @include('admin.products.modals.stock')
 @include('admin.products.modals.opening')
+@include('admin.products.modals.update')
 @can('role_create')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
@@ -37,7 +38,11 @@
                 {{ trans('global.app_csvImport') }}
             </button>
             @include('csvImport.modal', ['model' => 'Product', 'route' => 'admin.products.parseCsvImport'])
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal">
+                Upload Excel File
+            </button>
         </div>
+
 
 
     </div>

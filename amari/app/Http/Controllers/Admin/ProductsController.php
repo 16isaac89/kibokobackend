@@ -23,6 +23,8 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Traits\CsvImportTrait;
 use Illuminate\Support\Facades\DB;
 use App\Models\Tax;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 
 class ProductsController extends Controller
@@ -286,5 +288,41 @@ class ProductsController extends Controller
     $product = Product::find(request()->product);
     $product->delete();
     return redirect()->back();
+   }
+   public function importProductUpdates(Request $request)
+   {
+       // Load the Excel file
+       $path = $request->file('file')->getRealPath();
+       $data = Excel::toArray([], $path);
+
+
+       // Assuming the data is in the first sheet
+       $rows = $data[0];
+       //dd($rows);
+
+       // Loop through each row, skipping the header
+       foreach ($rows as $index => $row) {
+           if ($index == 0) {
+               // Skip header row
+               continue;
+           }
+
+           $productCode = $row[1];
+           $recommendedSellingPrice = $row[4];
+           $vat = $row[5];
+
+           // Find product by product code
+           $product = Product::where('code', $productCode)->first();
+
+
+           if ($product) {
+               // Update product attributes
+               $product->selling_price = $recommendedSellingPrice;
+               $product->tax_amount = $vat;
+               $product->save();
+           }
+       }
+
+       return redirect()->back()->with('message', 'Products have been updated successfully!');
    }
 }

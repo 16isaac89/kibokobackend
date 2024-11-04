@@ -122,6 +122,74 @@
             </li>
         @endcan
 
+
+
+         @can('product_access')
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/products*") ? "c-show" : "" }} {{ request()->is("admin/maps*") ? "c-show" : "" }} {{ request()->is("admin/push-notifications*") ? "c-show" : "" }}">
+                <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                    <i class="fa-fw fas fa-hand-holding-usd c-sidebar-nav-icon">
+
+                    </i>
+                    Manage Products
+                </a>
+                <ul class="c-sidebar-nav-dropdown-items">
+
+
+                        @can('units_access')
+                <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.productunits.index") }}" class="c-sidebar-nav-link {{ request()->is("/product/units/index") || request()->is("/product/units/index/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-user c-sidebar-nav-icon">
+                                </i>
+                                Product Units
+                            </a>
+                        </li>
+                        @endcan
+
+                        @can('product_category_access')
+                <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.productcategory.index") }}" class="c-sidebar-nav-link {{ request()->is("/productcategory") || request()->is("/productcategory/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-user c-sidebar-nav-icon">
+                                </i>
+                                Category
+                            </a>
+                        </li>
+                        @endcan
+
+
+                    @can('brand_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.brands.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/products") || request()->is("admin/products/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-book c-sidebar-nav-icon">
+                                </i>
+                                Brand
+                            </a>
+                        </li>
+                    @endcan
+
+                     @can('product_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.products.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/products") || request()->is("admin/products/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-list c-sidebar-nav-icon">
+
+                                </i>
+                                Products
+                            </a>
+                        </li>
+                    @endcan
+                    @can('push_notification_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.push-notifications.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/push-notifications") || request()->is("admin/push-notifications/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-flag c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.pushNotification.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+        @endcan
+
         <li class="c-sidebar-nav-item">
             <a href="#" class="c-sidebar-nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                 <i class="c-sidebar-nav-icon fas fa-fw fa-sign-out-alt"></i>

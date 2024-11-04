@@ -29,6 +29,8 @@ protected $appends = [
         'updated_at',
         'deleted_at',
         'product_category',
+        'selling_price',
+        'tax_amount',
         'tax_id',
         'efriscategorycode',
         'group',
