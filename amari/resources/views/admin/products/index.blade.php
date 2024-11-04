@@ -92,6 +92,9 @@
                             Tax
                         </th>
                         <th>
+                            Price
+                        </th>
+                        <th>
                             Unit
                         </th>
 
@@ -123,7 +126,10 @@
                                 {{ $product->brand->name ?? '' }}
                             </td>
                             <td>
-                                {{ $product->tax->name ?? '' }}
+                                {{ $product->tax_amount ?? '' }}
+                            </td>
+                            <td>
+                                {{ $product->selling_price ?? '' }}
                             </td>
                             <td>
                                 {{ $product->unit ?? '' }}

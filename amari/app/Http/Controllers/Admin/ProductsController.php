@@ -291,38 +291,50 @@ class ProductsController extends Controller
    }
    public function importProductUpdates(Request $request)
    {
-       // Load the Excel file
-       $path = $request->file('file')->getRealPath();
-       $data = Excel::toArray([], $path);
+// Load the Excel file
+	   //dd($request->all());
+         // Move the uploaded file to a temporary directory with the `.xlsx` extension
+         $file = $request->file('file');
+         $filePath = $file->storeAs('temp', 'import_products.xlsx', 'local');
+
+         // Full path to the stored file
+         $fullPath = storage_path('app/' . $filePath);
+           // dd($fullPath);
+
+               // Load the Excel file explicitly specifying the type
+         $data = Excel::toArray([], $fullPath, null, \Maatwebsite\Excel\Excel::XLSX);
+     //dd($data);
+         // Assuming the data is in the first sheet
+         $rows = $data[0];
 
 
-       // Assuming the data is in the first sheet
-       $rows = $data[0];
-       //dd($rows);
+            // Assuming the data is in the first sheet
+            $rows = $data[0];
+            //dd($rows);
 
-       // Loop through each row, skipping the header
-       foreach ($rows as $index => $row) {
-           if ($index == 0) {
-               // Skip header row
-               continue;
-           }
+            // Loop through each row, skipping the header
+            foreach ($rows as $index => $row) {
+                if ($index == 0) {
+                    // Skip header row
+                    continue;
+                }
 
-           $productCode = $row[1];
-           $recommendedSellingPrice = $row[4];
-           $vat = $row[5];
+                $productCode = $row[1];
+                $recommendedSellingPrice = $row[4];
+                $vat = $row[5];
 
-           // Find product by product code
-           $product = Product::where('code', $productCode)->first();
+                // Find product by product code
+                $product = Product::where('code', $productCode)->first();
 
 
-           if ($product) {
-               // Update product attributes
-               $product->selling_price = $recommendedSellingPrice;
-               $product->tax_amount = $vat;
-               $product->save();
-           }
-       }
+                if ($product) {
+                    // Update product attributes
+                    $product->selling_price = $recommendedSellingPrice;
+                    $product->tax_amount = $vat;
+                    $product->save();
+                }
+            }
 
-       return redirect()->back()->with('message', 'Products have been updated successfully!');
+            return redirect()->back()->with('message', 'Products have been updated successfully!');
    }
 }
