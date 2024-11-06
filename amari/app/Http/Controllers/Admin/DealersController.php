@@ -20,7 +20,17 @@ class DealersController extends Controller
 {
     use CsvImportTrait;
     public function index(){
-        $dealers = Dealer::all();
+        $designation = \Auth::user()->designation;
+        $dealers = [];
+
+        if($designation == 2){
+            $dealers_ids = \Auth::user()->dealers->pluck('id');
+
+            $dealers = Dealer::whereIn('id',$dealers_ids)->get();
+        }else{
+            $dealers = Dealer::all();
+        }
+
         $users = User::where('designation',2)->get();
         return view('admin.dealers.index',compact('dealers','users'));
     }

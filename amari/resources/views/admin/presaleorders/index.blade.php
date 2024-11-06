@@ -135,7 +135,7 @@
                     <td>${preorder.reqqty}</td>
                     <td>${preorder.product.description ?? ''}</td>
                     <td>${preorder.sellingprice}</td>
-                    <td>${preorder.product.tax?.value}</td>
+                    <td>${preorder.product.tax_amount ?? 0}</td>
                     <td>${preorder.total}</td>
                     <td>${preorder.stockreqs.customerroute.name}</td>
                     <td>${preorder.stockreqs.checkin}</td>

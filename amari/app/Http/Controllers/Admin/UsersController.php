@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Dealer;
 use App\Models\Role;
 use App\Models\User;
 use Gate;
@@ -99,12 +100,13 @@ class UsersController extends Controller
         abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $roles = Role::all()->pluck('title', 'id');
-
-        return view('admin.users.create', compact('roles'));
+$dealers = Dealer::all();
+        return view('admin.users.create', compact('roles','dealers'));
     }
 
     public function store(StoreUserRequest $request)
     {
+        //dd($request->all());
         $user = User::create($request->all());
         $user->roles()->sync($request->input('roles', []));
         if ($request->input('picture', false)) {
@@ -113,6 +115,10 @@ class UsersController extends Controller
 
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $user->id]);
+        }
+        if($request->dealers){
+            $user->dealers()->sync($request->dealers);
+
         }
 
         return redirect()->route('admin.users.index');
@@ -123,10 +129,11 @@ class UsersController extends Controller
         abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $roles = Role::all()->pluck('title', 'id');
+        $dealers = Dealer::all();
 
-        $user->load('roles');
+        $user->load('roles','dealers');
 
-        return view('admin.users.edit', compact('roles', 'user'));
+        return view('admin.users.edit', compact('roles', 'user','dealers'));
     }
 
     public function update(UpdateUserRequest $request, User $user)
@@ -142,6 +149,10 @@ class UsersController extends Controller
             }
         } elseif ($user->picture) {
             $user->picture->delete();
+        }
+        if($request->dealers){
+            $user->dealers()->sync($request->dealers);
+
         }
 
         return redirect()->route('admin.users.index');

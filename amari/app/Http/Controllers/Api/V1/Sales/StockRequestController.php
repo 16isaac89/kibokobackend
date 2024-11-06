@@ -32,15 +32,15 @@ $stockreq = StockRequest::create([
 ]);
         foreach($cart as $key=> $a){
             $product = Product::with('tax')->find($a['id']);
-            $sellingprice = $a['dealerproduct'] ? $a['dealerproduct']['sellingprice'] : 0;
+            $sellingprice = $a['dealerproduct'] ? $a['dealerproduct']['sellingprice'] : $product->selling_price;
             $quantity = $a['quantity'];
             $net = $quantity*$sellingprice;
-            $taxes = $product->tax;
-            $tax = $taxes && $taxes->value > 0 ? $taxes->value/100 : 0;
-            $taxamount = $taxes ? match ($taxes->value) {
-                '18' => floor(($tax*($net/1.18))*100)/100,
-                '0' => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
-                '-' => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
+            $taxes = $product->tax_amount;
+            $tax = $taxes && $taxes > 0 ? $taxes : 0;
+            $taxamount = $taxes ? match ($tax) {
+                0.18 => floor(($tax*($net/1.18))*100)/100,
+                0 => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
+                00 => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
             } : 0;
 
             $discount = $a['discounttype'] == 'fixed_value' ? $a['discounttype'] : $a['discountamt']/100;
@@ -49,12 +49,12 @@ $stockreq = StockRequest::create([
                 'stock_request_id'=>$stockreq->id,
                 'product_id'=>$a['id'],
                 'reqqty'=>$a['quantity'],
-                'appqty'=>0,
+                'appqty'=>$a['quantity'],
                 'van_id'=>request()->van ? request()->van : 0,
                 'dealer_product_id'=> $a['dealerproduct'] ? $a['dealerproduct']['id'] : 0,
                 'sellingprice'=>$sellingprice,
                 'total'=>$net,
-                'vat'=> $taxes ? $taxes->value : 0,
+                'vat'=> $taxes,
                 'vat_amount'=>$taxamount,
                 'discount'=> $discountamount,
                 'discounttype'=>$a['discounttype']

@@ -39,7 +39,7 @@ class PreordersExport  implements FromCollection, WithHeadings
                 $preorder->reqqty,
                 $preorder->product->description ?? '', // Item Description
                 $preorder->sellingprice, // Basic Value
-                $preorder->product->tax?->value, // VAT Value
+                $preorder->product->tax_amount, // VAT Value
                 $preorder->total, // Total Sales
                 $preorder->stockreqs->customerroute->name, // Route
                 $preorder->stockreqs->checkin, // In Time

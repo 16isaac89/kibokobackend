@@ -41,9 +41,10 @@ class CustomersExport implements FromCollection, WithHeadings, WithMapping, Shou
         }
 
         return [
-            $customer->name ?? '',
             $customer->dealer->tradename ?? '',
             $customer->route->name ?? '',
+            $customer->name ?? '',
+
             $customer->customercheckin ?? '',
             $customer->customercheckout ?? '',
             $customer->telephoneno ?? '',
@@ -74,7 +75,7 @@ class CustomersExport implements FromCollection, WithHeadings, WithMapping, Shou
     public function headings(): array
     {
         return [
-            'Name', 'Dealer', 'Route', 'CheckIN', 'Checkout', 'Telephone No', 'Phone', 'Email',
+            'Dealer', 'Route','Name','CheckIN', 'Checkout', 'Telephone No', 'Phone', 'Email',
             'Area', 'City', 'Country', 'Classification', 'Cash Registers', 'Daily Footfall',
             'Product Range', 'Contact Person', 'Customer Category', 'B\'ss Value', 'Location',
             'Lat', 'Long', 'IMGlat', 'IMGlong', 'Image URL' // Updated heading to "Image URL"

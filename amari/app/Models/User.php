@@ -23,7 +23,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class User extends Authenticatable implements HasMedia
 {
     use SoftDeletes;
-    use Notifiable;
+    //use Notifiable;
     use InteractsWithMedia;
     use HasFactory;
 
@@ -85,11 +85,11 @@ class User extends Authenticatable implements HasMedia
         return $this->roles()->where('id', 1)->exists();
     }
 
-    public static function boot()
-    {
-        parent::boot();
-        User::observe(new \App\Observers\UserActionObserver());
-    }
+    // public static function boot()
+    // {
+    //     parent::boot();
+    //     User::observe(new \App\Observers\UserActionObserver());
+    // }
 
     public function registerMediaConversions(Media $media = null): void
     {
@@ -157,6 +157,11 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(Dealer::class,'supervisor_id','id');
     }
+    public function dealers()
+    {
+        return $this->belongsToMany(Dealer::class);
+    }
+
 
 
 
