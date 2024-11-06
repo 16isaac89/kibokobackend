@@ -11,11 +11,11 @@
                 <div class="row m-5">
                     <div class="col-md-3">
                         <label for="from_date">From Date</label>
-                        <input type="text" name="from_date" class="form-control date" id="from_date">
+                        <input type="text" name="from_date" class="form-control datetime" id="from_date">
                     </div>
                     <div class="col-md-3">
                         <label for="to_date">To Date</label>
-                        <input type="text" name="to_date" class="form-control date" id="to_date">
+                        <input type="text" name="to_date" class="form-control datetime" id="to_date">
                     </div>
                     <div class="col-md-2 mt-4">
                         <!-- Search Button with Loader -->

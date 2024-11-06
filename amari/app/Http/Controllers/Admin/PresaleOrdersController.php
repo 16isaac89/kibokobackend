@@ -59,6 +59,25 @@ class PresaleOrdersController extends Controller
 
         return response()->json(['preorders' => $preorders]);
     }
+    public function searchByDateDealer(Request $request)
+    {
+        $dealerId = $request->input('dealer_id');
+        $preorders = StockRequestProduct::with([
+            'dealerproduct',
+            'product' => function($query) {
+                $query->with('brand', 'tax');
+            },
+            'stockreqs' => function($query) {
+                $query->with('saler', 'dealer', 'van', 'customer', 'customerroute');
+            }
+        ])->whereBetween('created_at', [$request->fromdate, $request->todate])
+          ->whereHas('stockreqs', function($query) use ($dealerId) {
+              $query->where('dealer_id', $dealerId);
+          })
+          ->get();
+
+        return response()->json(['preorders' => $preorders]);
+    }
     public function exportPresale(Request $request)
     {
         //dd($request->all());
@@ -70,6 +89,21 @@ class PresaleOrdersController extends Controller
                 return Excel::download(new PreordersExport($fromDate, $toDate), 'preorders.csv');
             case 'excel':
                 return Excel::download(new PreordersExport($fromDate, $toDate), 'preorders.xlsx');
+        }
+    }
+    public function exportPresaleDealer(Request $request)
+    {
+        //dd($request->all());
+        $dealer_id = $request->input('dealer_id');
+        $fromDate = $request->input('from_date');
+        $toDate = $request->input('to_date');
+        $type = $request->input('type');
+        $dealer_id = $request->input('dealer_id');
+        switch ($type) {
+            case 'csv':
+                return Excel::download(new PreordersExportDealer($fromDate, $toDate, $dealer_id), 'preorders.csv');
+            case 'excel':
+                return Excel::download(new PreordersExportDealer($fromDate, $toDate, $dealer_id), 'preorders.xlsx');
         }
     }
 
@@ -116,5 +150,6 @@ class PresaleOrdersController extends Controller
                 return Excel::download(new PreordersExportGeneral($month, $year), 'preorders.xlsx');
         }
     }
+
 
 }

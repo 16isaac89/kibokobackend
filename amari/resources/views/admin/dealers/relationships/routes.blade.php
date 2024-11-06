@@ -12,7 +12,11 @@
                 <tr data-entry-id="{{ $route->id }}">
                     <td></td>
                     <td>{{ $route->name ?? '' }}</td>
-                    <td class="text-truncate" style="max-width: 150px;">{{ $route->customers->count() }} Customers</td>
+                    <td class="text-truncate" style="max-width: 150px;">{{ $route->customers->count() }} Customers<br>
+                        <h6>Visited:{{ $route->customers->whereNotNull('updated_at')->count(); }}</h6>
+
+
+                    </td>
                 </tr>
             @endforeach
         </tbody>
