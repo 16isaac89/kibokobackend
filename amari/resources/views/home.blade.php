@@ -1,258 +1,279 @@
 @extends('layouts.admin')
 @section('styles')
 <style>
+    /* General Styles */
+    :root {
+        --primary-color: #4e73df;
+        --secondary-color: #858796;
+        --success-color: #1cc88a;
+        --info-color: #36b9cc;
+        --warning-color: #f6c23e;
+        --danger-color: #e74a3b;
+    }
+
+    body {
+        background-color: #f8f9fc;
+    }
+
+    /* Card Styles */
     .card {
-        border-radius: 0;
+        border: none;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+        transition: transform 0.2s;
     }
-    .table th, .table td {
-        padding: 0.5rem;
+
+    .card:hover {
+        transform: translateY(-3px);
     }
-    .calendar-cell {
-        width: 40px;
-        height: 40px;
-        text-align: center;
-        padding: 5px;
+
+    .card-header {
+        border-bottom: 1px solid #e3e6f0;
+        padding: 1.25rem;
+        font-weight: 900;
+        color: var(--primary-color);
     }
-    .calendar-cell.active {
-        background-color: #007bff;
-        color: white;
-        border-radius: 50%;
+
+    /* Stats Cards with Color Backgrounds */
+    .card-bg-primary { background-color: var(--primary-color); color: white; }
+    .card-bg-success { background-color: var(--success-color); color: white; }
+    .card-bg-info { background-color: var(--info-color); color: white; }
+    .card-bg-warning { background-color: var(--warning-color); color: white; }
+
+    /* Adjust text and icon colors in stats cards */
+    .stats-card h6, .stats-card h3, .stats-card i { color: rgb(15, 15, 15); }
+
+    .stats-card {
+        padding: 1.5rem;
+        position: relative;
+    }
+
+    .stats-card i {
+        position: absolute;
+        right: 1rem;
+        bottom: 1rem;
+        opacity: 0.4;
+        font-size: 2.5rem;
+    }
+
+    /* Table Styles */
+    .table th {
+        background-color: #f8f9fc;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        color: var(--secondary-color);
+    }
+
+    .table td {
+        vertical-align: middle;
+        padding: 1rem;
+    }
+
+    /* Spinner Modal */
+    .spinnermodal .modal-content {
+        background: transparent;
+        border: none;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .card {
+            margin-bottom: 1rem;
+        }
+
+        .stats-card h3 {
+            font-size: 1.6rem;
+        }
     }
 </style>
 @endsection
 @section('content')
 <div class="content">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    Dashboard
-                </div>
-
-                <div class="card-body">
-                    @if(session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-
-
-
-                    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
-                        <!-- Navbar -->
-                        <div class="container-fluid mt-4">
-                            <div class="row mb-4">
-                                <div class="col-md-3">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h6 class="card-title">Customers</h6>
-                                            <h3 class="card-text">{{ $customers }}</h3>
-                                            <i class="fas fa-chart-line text-primary fa-2x"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h6 class="card-title">Routes</h6>
-                                            <h3 class="card-text">{{ $routes }}</h3>
-                                            <i class="fas fa-chart-bar text-primary fa-2x"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h6 class="card-title">Dealers</h6>
-                                            <h3 class="card-text">{{ $dealers }}</h3>
-                                            <i class="fas fa-chart-area text-primary fa-2x"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h6 class="card-title">Vans</h6>
-                                            <h3 class="card-text">{{ $vans }}</h3>
-                                            <i class="fas fa-chart-pie text-primary fa-2x"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Worldwide Sales</h5>
-                                            <a href="#" class="float-right">Show All</a>
-                                            <canvas id="worldwideSalesChart" width="400" height="200"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Sales & Revenue</h5>
-                                            <a href="#" class="float-right">Show All</a>
-                                            <canvas id="salesRevenueChart" width="400" height="200"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <h5 class="card-title">Recent Sales</h5>
-                                    <a href="#" class="float-right">Show All</a>
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th><input type="checkbox"></th>
-                                                <th>Date</th>
-                                                <th>Invoice</th>
-                                                <th>Customer</th>
-                                                <th>Amount</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><input type="checkbox"></td>
-                                                <td>01 Jan 2045</td>
-                                                <td>INV-0123</td>
-                                                <td>Jhon Doe</td>
-                                                <td>$123</td>
-                                                <td>Paid</td>
-                                                <td><button class="btn btn-sm btn-primary">Detail</button></td>
-                                            </tr>
-                                            <!-- Repeat the above row structure for more entries -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Messages</h5>
-                                            <a href="#" class="float-right">Show All</a>
-                                            <ul class="list-unstyled">
-                                                <li class="media mb-3">
-                                                    <img src="https://via.placeholder.com/50" class="mr-3 rounded-circle" alt="User">
-                                                    <div class="media-body">
-                                                        <h6 class="mt-0 mb-1">Jhon Doe</h6>
-                                                        <p class="mb-0">Short message goes here...</p>
-                                                        <small class="text-muted">15 minutes ago</small>
-                                                    </div>
-                                                </li>
-                                                <!-- Repeat the above list item for more messages -->
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Calendar</h5>
-                                            <a href="#" class="float-right">Show All</a>
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th colspan="7" class="text-center">
-                                                            <button class="btn btn-link"><i class="fas fa-chevron-left"></i></button>
-                                                            October 2024
-                                                            <button class="btn btn-link"><i class="fas fa-chevron-right"></i></button>
-                                                        </th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Su</th>
-                                                        <th>Mo</th>
-                                                        <th>Tu</th>
-                                                        <th>We</th>
-                                                        <th>Th</th>
-                                                        <th>Fr</th>
-                                                        <th>Sa</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <!-- Calendar rows go here -->
-                                                    <tr>
-                                                        <td class="calendar-cell">29</td>
-                                                        <td class="calendar-cell">30</td>
-                                                        <td class="calendar-cell">1</td>
-                                                        <td class="calendar-cell">2</td>
-                                                        <td class="calendar-cell">3</td>
-                                                        <td class="calendar-cell">4</td>
-                                                        <td class="calendar-cell">5</td>
-                                                    </tr>
-                                                    <!-- More rows... -->
-                                                    <tr>
-                                                        <td class="calendar-cell">13</td>
-                                                        <td class="calendar-cell active">14</td>
-                                                        <td class="calendar-cell">15</td>
-                                                        <td class="calendar-cell">16</td>
-                                                        <td class="calendar-cell">17</td>
-                                                        <td class="calendar-cell">18</td>
-                                                        <td class="calendar-cell">19</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">To Do List</h5>
-                                            <a href="#" class="float-right">Show All</a>
-                                            <div class="input-group mb-3">
-                                                <input type="text" class="form-control" placeholder="Enter task">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-primary" type="button">Add</button>
-                                                </div>
-                                            </div>
-                                            <ul class="list-group">
-                                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <input type="checkbox" class="mr-2">
-                                                        Short task goes here...
-                                                    </div>
-                                                    <button class="btn btn-sm btn-link"><i class="fas fa-times"></i></button>
-                                                </li>
-                                                <!-- Repeat the above list item for more tasks -->
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                      </main>
-
-
-
-
-
-
-
+    <div class="container-fluid mt-4">
+        <!-- Dashboard Header Row -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <a href="{{ route('admin.customers.index') }}" class="card stats-card card-bg-primary">
+                    <h6 class="card-header">Customers</h6>
+                    <div class="card-body">
+                        <h3 class="card-text">{{ $customers }}</h3>
+                        <i class="fas fa-users"></i>
                     </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card card-bg-success">
+                    <h6 class="card-header">Routes</h6>
+                    <div class="card-body">
+                        <h3 class="card-text">{{ $routes }}</h3>
+                        <i class="fas fa-route"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card card-bg-info">
+                    <h6 class="card-header">Dealers</h6>
+                    <div class="card-body">
+                        <h3 class="card-text">{{ $dealers }}</h3>
+                        <i class="fas fa-store"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card card-bg-warning">
+                    <h6 class="card-header">Vans</h6>
+                    <div class="card-body">
+                        <h3 class="card-text">{{ $vans }}</h3>
+                        <i class="fas fa-truck"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales and Revenue Charts Row -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Presale By Month</h5>
+
+                        <canvas id="presalesmonthChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            {{-- <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Sales & Revenue</h5>
+                        <a href="#" class="float-right">Show All</a>
+                        <canvas id="salesRevenueChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div> --}}
+        </div>
+
+        <!-- Recent Sales Table -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Recent Presale Orders</h5>
+                <a href="#" class="float-right">Show All</a>
+                <table class="table table-striped" id="recentSalesTable">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>Dealer</th>
+                            <th>Date</th>
+                            <th>Invoice</th>
+                            <th>Customer</th>
+                            <th>Quantity</th>
+                            <th>Amount</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($preorders as $preorder)
+                        <tr>
+                            <td><input type="checkbox"></td>
+                            <td>{{ $preorder->stockreqs->dealer->tradename }}</td>
+                            <td>{{ $preorder->created_at }}</td>
+                            <td>{{ $preorder->stockreqs->id }}</td>
+                            <td>{{ $preorder->stockreqs->customer->name }}</td>
+                            <td>{{ $preorder->reqqty }}</td>
+                            <td>{{ $preorder->total }}</td>
+                        </tr>
+                        @endforeach
+
+                        <!-- Repeat rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Other Components (Messages, Calendar, To-Do List) -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Messages</h5>
+                        <ul class="list-unstyled">
+                            <li class="media mb-3">
+                                <img src="https://via.placeholder.com/50" class="mr-3 rounded-circle" alt="User">
+                                <div class="media-body">
+                                    <h6 class="mt-0 mb-1">John Doe</h6>
+                                    <p>Short message here...</p>
+                                    <small class="text-muted">15 minutes ago</small>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Calendar</h5>
+                        <!-- Calendar Structure -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">To Do List</h5>
+                        <!-- To Do List Structure -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade bd-example-modal-lg spinnermodal"  data-backdrop="static" data-keyboard="false" tabindex="-1">
+<div class="modal fade spinnermodal" data-backdrop="static" data-keyboard="false" tabindex="-1">
     <div class="modal-dialog modal-sm">
         <div class="modal-content" style="width: 48px">
-            <span class="fa fa-spinner fa-spin fa-3x"></span>
+            <span class="fa fa-spinner fa-spin fa-3x" style="color: var(--primary-color);"></span>
         </div>
     </div>
 </div>
 @endsection
 @section('scripts')
 @parent
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Get monthly data from the backend
+    const monthlyUpdatesCount = @json(array_values($preordersmonth)); // [0, 0, 0, ..., 11, 0, 0]
 
+    // Labels for each month
+    const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    // Render the chart
+    const ctx = document.getElementById('presalesmonthChart').getContext('2d');
+    const monthlyUpdatesChart = new Chart(ctx, {
+        type: 'bar', // or 'line' for a line chart
+        data: {
+            labels: monthLabels,
+            datasets: [{
+                label: 'Monthly Updates Count',
+                data: monthlyUpdatesCount,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number Orders'
+                    }
+                }
+            }
+        }
+    });
+</script>
 @endsection
