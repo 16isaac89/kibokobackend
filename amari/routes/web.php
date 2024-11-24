@@ -160,6 +160,9 @@ Route::get('admin/customers/export/csv', 'CustomerController@exportCsv')->name('
     Route::get('route/reports','ReportsController@route')->name('route.reports');
     Route::get('van/report','ReportsController@van')->name('van.reports');
     Route::get('rep/report','ReportsController@rep')->name('rep.reports');
+    Route::get('reports/all','ReportsController@all')->name('all.reports');
+    Route::get('reports/salesorder','ReportsController@salesorderview')->name('allreports.salesorderview');
+    Route::get('reports/salesorderregister','ReportsController@salesordersearch')->name('allreports.salesordersearch');
 
     //search reports
     Route::post('search/rep/reports','SearchReportsController@rep')->name('searchrep.report');

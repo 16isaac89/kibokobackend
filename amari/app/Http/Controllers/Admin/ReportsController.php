@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Sale;
 use App\Models\DealerUser;
-use App\Models\Van;
 use App\Models\Route;
+use App\Models\Sale;
+use App\Models\StockRequestProduct;
+use App\Models\Van;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
@@ -17,12 +18,12 @@ class ReportsController extends Controller
         return view('admin.reports.index',compact('sales'));
     }
     public function datatableindex(){
-      
+
         $sales = Sale::with('dealer','user','van','route','items','customer')->get();
         return response()->json(["data"=>$sales]);
     }
     public function map(){
-       
+
         $sales = Sale::with('dealer','user','van','route','items','customer')->get();
         return view('dealer.reports.map',compact('sales'));
     }
@@ -33,7 +34,7 @@ class ReportsController extends Controller
         return view('dealer.reports.trading',compact('sales'));
     }
     public function exec(){
-       
+
         $sales = Sale::with('dealer','user','van','route','items','customer')->get();
         return view('admin.reports.exec',compact('sales'));
     }
@@ -64,5 +65,25 @@ class ReportsController extends Controller
     public function subd(){
         $sales = Sale::with('dealer','user','van','route','items','customer')->get();
         return view('admin.reports.subd',compact('sales'));
+    }
+    public function all(){
+        return view('admin.reports.reportsmenu');
+    }
+    public function salesorderview(){
+        return view('admin.reports.salesorder');
+    }
+    public function salesordersearch(Request $request){
+
+        $orders = StockRequestProduct::with([
+            'dealerproduct',
+            'product' => function($query) {
+                $query->with('brand', 'tax');
+            },
+            'stockreqs' => function($query) {
+                $query->with('saler', 'dealer', 'van', 'customer', 'customerroute');
+            }
+        ])->whereBetween('created_at', [$request->fromDate, $request->toDate])
+          ->get();
+        return response()->json(["orders"=>$orders]);
     }
 }

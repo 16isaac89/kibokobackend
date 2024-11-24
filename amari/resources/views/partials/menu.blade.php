@@ -84,6 +84,12 @@
                 </a>
                 <ul class="c-sidebar-nav-dropdown-items">
                     <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.all.reports") }}" class="c-sidebar-nav-link {{ request()->is("admin/presaleorders") || request()->is("admin/presaleorders/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-file-invoice c-sidebar-nav-icon"></i>
+                            All Reports
+                        </a>
+                    </li>
+                    <li class="c-sidebar-nav-item">
                         <a href="{{ route("admin.presaleorders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/presaleorders") || request()->is("admin/presaleorders/*") ? "c-active" : "" }}">
                             <i class="fa-fw fas fa-file-invoice c-sidebar-nav-icon"></i>
                             Presale Order Invoice
