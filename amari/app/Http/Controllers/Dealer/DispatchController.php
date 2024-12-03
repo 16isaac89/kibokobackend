@@ -36,6 +36,7 @@ class DispatchController extends Controller
 	   $dealer = Auth::guard('dealer')->user()->dealer_id;
 	   $vans = Van::where('dealer_id',$dealer)->get();
        $brands = ProductBrand::all();
+
 	   return view('dealer.dispatch.create',compact('brands','vans'));
     }else{
       return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');

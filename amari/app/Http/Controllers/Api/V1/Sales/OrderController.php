@@ -59,28 +59,28 @@ class OrderController extends Controller
                 'branch_id' => $branch,
             ]);
             foreach ($cart as $key => $a) {
-                Product::find($a['product_id'])->decrement('stock', intval($a['quantity']));
+               // Product::find($a['product_id'])->decrement('stock', intval($a['quantity']));
                 $product = Product::find($a['product_id']);
-                if (DealerUser::find($salerid)->targettype === 'sku') {
-                    $sku = SkuTargetProduct::where(['product_id' => $a['product_id'], 'user_id' => $salerid])->whereDate('fromdate', '>=', request()->date)
-                        ->whereDate('todate', '<=', request()->date)->first();
-                    if ($sku) {
-                        $sku->increment('sold', $a['quantity']);
-                    }
+                // if (DealerUser::find($salerid)->targettype === 'sku') {
+                //     $sku = SkuTargetProduct::where(['product_id' => $a['product_id'], 'user_id' => $salerid])->whereDate('fromdate', '>=', request()->date)
+                //         ->whereDate('todate', '<=', request()->date)->first();
+                //     if ($sku) {
+                //         $sku->increment('sold', $a['quantity']);
+                //     }
 
-                }
-                $hsvat = (0.18 / 118) * $product->price;
+                // }
+                // $hsvat = (0.18 / 118) * $product->price;
                 $dispatchp = DispatchProducts::find($a['id']);
                 SaleProduct::create([
                     'sale_id' => $sale->id,
                     'product_id' => $a['product_id'],
-                    'name' => $a['name'],
-                    'quantity' => $a['quantity'],
+                    // 'name' => $a['name'],
+                    'qtybefore' => $a['quantity'],
                     'total' => intval($a['quantity']) * $a['sellingprice'] - $a['discount'],
                     'withoutdiscount' => intval($a['quantity']) * $a['sellingprice'],
                     'sellingprice' => $a['sellingprice'],
                     'totalcost' => $product->cost * $a['quantity'],
-                    'hosanavat' => $hsvat * $a['quantity'],
+                    // 'hosanavat' => $hsvat * $a['quantity'],
                     'customer' => $customer,
                     'van' => $van,
                     // 'product_variance_id'=>$a['variance'],
@@ -88,12 +88,12 @@ class OrderController extends Controller
                     'discount' => $a['discount'],
                     'batch' => $a['batch'],
                     'product_brand_id' => $product->brand_id,
-                    'sale_type' => $a['sale_type'],
+                    // 'sale_type' => $a['sale_type'],
                 ]);
-                if (request()->deliveryorder === "0" || request()->deliveryorder === 0) {
+                // if (request()->deliveryorder === "0" || request()->deliveryorder === 0) {
                     $dispatchp->increment('sold', $a['quantity']);
                     $dispatchp->decrement('stock', $a['quantity']);
-                }
+                // }
             }
 
             $goodsdetails = array();
@@ -105,19 +105,20 @@ class OrderController extends Controller
                     'goodsCategoryId' => $item->category ?? '',
                     "qty" => $a['quantity'],
                     "unitOfMeasure" => $item->unit ?? '',
-                    "unitPrice" => $item->price,
-                    "total" => $item->price * $a['quantity'] - $a['discount'],
+                    "unitPrice" => $item->selling_price,
+                    "total" => $item->selling_price * $a['quantity'] - $a['discount'],
                     'discount' => $a['discount'],
+                    "id"=>$a['product_id']
                 ];
                 array_push($goodsdetails, $gooddetails);
             }
             //$dispatch = Dispatch::with('dispatchproducts')->where(['type'=>'van','van_id'=>$van])->first();
-            $dispatch = Dispatch::with('dispatchproducts')->where(['type' => 'van', 'van_id' => $van])->latest()->first();
-            if (request()->deliveryorder === "1" || request()->deliveryorder === 1) {
-                StockRequest::find(request()->deliveryorderid)->update([
-                    'delivered' => 1,
-                ]);
-            }
+          $dispatch = Dispatch::with('dispatchproducts')->where(['type' => 'van', 'van_id' => $van])->latest()->first();
+            // if (request()->deliveryorder === "1" || request()->deliveryorder === 1) {
+            //     StockRequest::find(request()->deliveryorderid)->update([
+            //         'delivered' => 1,
+            //     ]);
+            // }
             //$stock = VanProduct::with('dealerproduct')->where('van_id',request()->van)->get();
             return response()->json([
                 'message' => 200,
@@ -398,7 +399,7 @@ class OrderController extends Controller
         if ($efris->status === 200) {
             if ($efris->respcode['returnStateInfo']['returnCode'] === "00") {
                 EfrisDocument::create([
-                    "fdn" => $efris->data->basicInformation->invoiceNo, 
+                    "fdn" => $efris->data->basicInformation->invoiceNo,
                     "invoiceid" => $efris->data->basicInformation->antifakeCode,
                     "invoiceindustrycode" => $efris->data->basicInformation->invoiceIndustryCode,
                     "invoicekind" => $efris->data->basicInformation->invoiceKind,
