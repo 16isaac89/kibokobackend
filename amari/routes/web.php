@@ -390,6 +390,7 @@ Route::get('/dealer/user/routes/customers/','DealerUserController@userdetails')-
 
 Route::get('/dealer/user/delete/route','DealerUserController@deleteroute')->name('user.delete.assignroute');
 Route::get('/dealer/user/delete/plan','DealerUserController@deleteplan')->name('user.delete.plan');
+Route::post('/dealer/user/delete/plans','DealerUserController@deleteplans')->name('user.delete.plans');
 
 Route::post('/edit/route/','RouteController@updateRoute')->name('dealer.route.edit');
 Route::resource('routes','RouteController');

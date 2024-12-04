@@ -118,6 +118,7 @@ class DealerUserController extends Controller
     public function userdetails(){
         $routeplans = RoutePlanList::where('dealer_user_id',request()->userid)->get();
         $routes = RepRoute::where('dealer_user_id',request()->userid)->get();
+
         return view('dealer.users.details',compact('routeplans','routes'));
     }
 
@@ -147,6 +148,20 @@ class DealerUserController extends Controller
 
         return view('dealer.users.targethistory',compact('target','targettype'));
         }
+    }
+
+    public function deleteplans(Request $request){
+        $routeplanIds = $request->input('routeplan_ids', []);
+
+    if (!empty($routeplanIds)) {
+        // Delete selected plans
+        RoutePlanList::whereIn('id', $routeplanIds)->delete();
+        return redirect()->back()->with('success', 'Selected plans deleted successfully.');
+    }
+
+    return redirect()->back()->with('error', 'No plans were selected.');
+
+
     }
 
 }
