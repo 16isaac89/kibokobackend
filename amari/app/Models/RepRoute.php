@@ -35,6 +35,12 @@ class RepRoute extends Model
     public function list(){
         return $this->hasMany(RoutePlanList::class,'rep_route_id','id');
     }
+    public function dealeruser(){
+        return $this->belongsTo(DealerUser::class,'dealer_user_id','id');
+    }
+    public function van(){
+        return $this->belongsTo(Van::class,'van_id','id');
+    }
     public function forceDelete()
     {
         // delete all related photos

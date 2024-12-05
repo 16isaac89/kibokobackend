@@ -51,6 +51,11 @@ class Van extends Model
     public function summarydaybook(){
         return $this->hasMany(Summarydaybook::class,'van_id');
     }
+    public function routeplans()
+    {
+        return $this->hasMany(RepRoute::class,'van_id');
+    }
+
 
 
 }

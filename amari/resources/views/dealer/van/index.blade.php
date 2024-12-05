@@ -39,6 +39,9 @@
                 <a type="button" href="{{route('dealer.van.target',['user'=>$van->id])}}"  class="btn btn-primary">
                     Target
   </a>
+  <a type="button" href="{{route('dealer.van.assignedplans',['van'=>$van->id])}}"  class="btn btn-primary">
+    Assigned Plans
+</a>
               </td>
             </tr>
         @endforeach

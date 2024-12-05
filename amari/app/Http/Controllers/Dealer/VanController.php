@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Dealer;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Van;
 use App\Models\Branch;
+use App\Models\RepRoute;
+use App\Models\Van;
 use Auth;
+use Illuminate\Http\Request;
 
 class VanController extends Controller
 {
@@ -42,5 +43,11 @@ class VanController extends Controller
         'reg_id'=>request()->vanreg
     ]);
     return back();
+}
+public function assignedplans(Request $request){
+    //dd($request->all());
+$reproutes = RepRoute::with('list','van','dealeruser')->where('van_id',request()->van)->get();
+return view('dealer.van.assignedplans',compact('reproutes'));
+
 }
 }

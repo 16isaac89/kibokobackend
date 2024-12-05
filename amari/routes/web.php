@@ -397,12 +397,14 @@ Route::resource('routes','RouteController');
 Route::resource('customers','CustomerController');
 
 Route::post('/edit/van/','VanController@updateVan')->name('dealer.van.edit');
+Route::get('/add/van/assignedplans','VanController@assignedplans')->name('dealer.van.assignedplans');
 Route::resource('vans','VanController');
 
 Route::resource('routeplans','RoutePlanController');
 
 
 Route::get('/add/vantarget/','TargetController@createVan')->name('dealer.van.target');
+
 Route::post('/add/vantarget/post','TargetController@storeVan')->name('dealer.van.targetpost');
 Route::post('/add/skutarget/','TargetController@storesku')->name('dealer.sku.target');
 Route::resource('salertargets','TargetController');

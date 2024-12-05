@@ -56,6 +56,11 @@ class DealerUser extends Authenticatable
     public function routeplan(){
         return $this->hasOne(RoutePlan::class,'dealer_user_id','id');
     }
+    public function routeplans()
+    {
+        return $this->hasMany(RepRoute::class,'dealer_user_id');
+    }
+
     public function plans(){
         return $this->hasMany(RoutePlanList::class,'dealer_user_id','id');
     }
