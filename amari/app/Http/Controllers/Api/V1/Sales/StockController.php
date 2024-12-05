@@ -36,19 +36,19 @@ class StockController extends Controller
     }
 
     public function getCustomers(){
-        // $id = request()->id;
-        // $day = request()->day;
-        // $week = request()->week;
-        // $customers="";
-       // $custs = RoutePlan::with('list')->whereDate('date', Carbon::today())->where('dealer_user_id',$id)->first();
-       // $custs = RoutePlan::with('list')->where('dealer_user_id',$id)->latest()->first();
-    //    $custs = RoutePlanList::with(['customer','route'])->where(['dealer_user_id'=>$id,'week'=>$week,'day'=>$day])->get();
-    //     if($custs){
-    //         $customers = $custs;
-    //     }else{
-    //         $customers = array();
-    //     }
-    $customers = Customer::where('dealer_code',request()->dealer)->get();
+        $id = request()->id;
+        $day = request()->day;
+        $week = request()->week;
+        $customers="";
+      // $custs = RoutePlan::with('list')->whereDate('date', Carbon::today())->where('dealer_user_id',$id)->first();
+       //$custs = RoutePlan::with('list')->where('dealer_user_id',$id)->latest()->first();
+       $custs = RoutePlanList::with(['customer','route'])->where(['dealer_user_id'=>$id,'week'=>$week,'day'=>$day])->get();
+        if($custs){
+            $customers = $custs;
+        }else{
+            $customers = array();
+        }
+    //$customers = Customer::where('dealer_code',request()->dealer)->get();
         return response()->json(['customers'=>$customers]);
     }
 
