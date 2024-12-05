@@ -26,12 +26,14 @@ class RoutePlanList extends Model
         'dealer_id',
         'week',
         'day',
+        'rep_route_id',
+        'van_id',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
     public function routeplan(){
-        return $this->belongsTo(RoutePlan::class, 'routeplan_id');
+        return $this->belongsTo(RepRoute::class, 'rep_route_id','id');
     }
     public function route(){
         return $this->belongsTo(Route::class,'route_id','code');

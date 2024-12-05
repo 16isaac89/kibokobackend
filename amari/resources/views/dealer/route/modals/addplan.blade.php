@@ -10,7 +10,7 @@
 
             <form method="post" action="{{route('routeplans.store')}}">
                 @csrf
-                <input type="hidden" name="van" value="{{$van->id}}">
+                <input type="hidden" name="van" id="van" value="{{$van->id}}">
                 <input type="hidden" name="user" id="user">
                 <input type="hidden" name="week" id="week">
                 <input type="hidden" name="day" id="day">

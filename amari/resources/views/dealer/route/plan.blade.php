@@ -196,7 +196,7 @@
         }}
         )</b></a></td>
     </tr>
-    
+
   </tbody>
 </table>
 </div>
@@ -208,7 +208,7 @@
     </div><!-- card -->
 
   </div><!-- am-pagebody -->
- 
+
 @endsection
 @section('scripts')
 {{-- <script>
@@ -227,7 +227,7 @@
           sSearch: '',
           lengthMenu: '_MENU_ items/page',
         },
-   
+
       });
 })();
     </script> --}}
@@ -236,16 +236,29 @@
 
 var selectElement = event.target;
 var value = selectElement.value;
+let day = document.getElementById('day').value
+let week = document.getElementById('week').value
+let van = document.getElementById('van').value
+let user = document.getElementById('user').value
+// let route = document.getElementById('route').value
+// console.log(day,week,van,user,route)
+// return
 $.ajax({
     url: "{{route('route.customers')}}",
-    data: { 
+    data: {
         "route":value,
+        "van":van,
+        "user":user,
+        "day":day,
+        "week":week,
         "_token":"{{ csrf_token() }}"
     },
     cache: false,
     method: "GET",
     success: function(response) {
         let data = response.customers
+        let assignedcustomers = response.assignedcustomers
+console.log(assignedcustomers)
         document.getElementById('customers_div').innerHTML = ""
         var span = document.createElement('span');
         span.style.color = 'black';
@@ -254,7 +267,8 @@ $.ajax({
         $('#customers_div').append(span)
         $('#customers_div').append(document.createElement("br"));
         data.forEach( function (obj){
-        $('#customers_div').append('<input name="customer[]" type="checkbox" value="'+obj.id+'"/> '+obj.name +'<br/>');
+            let isChecked = assignedcustomers.includes(obj.id.toString()) ? 'checked' : '';
+            $('#customers_div').append('<input name="customer[]" type="checkbox" value="' + obj.id + '" ' + isChecked + '/> ' + obj.name + '<br/>');
     });
 
     },
