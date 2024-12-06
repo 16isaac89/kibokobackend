@@ -32,13 +32,44 @@
                     <td>{{ $product->dealerproduct?->sellingprice ?? '' }}</td>
                     <td>{{ $product->dealerproduct?->stock ?? '' }}</td>
                     <td>
-                        <a href="{{route('dealer.product.viewedit', $product->id)}}" class="btn btn-primary">
-                            @if($product->dealerproduct)
-                            Update
-                            @else
-                            Create
+
+                        @if(\Gate::forUser('dealer')->allows('product_edit'))
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Actions
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a href="{{route('dealer.product.viewedit', $product->id)}}" class="btn btn-primary">
+                                    @if($product->dealerproduct)
+                                    Update
+                                    @else
+                                    Create
+                                    @endif
+                                </a>
+                                <a href="{{route('dealer.product.batches',['product'=>$product->id])}}" class="dropdown-item">
+                                    Batches
+                                </a>
+                                <a href="{{route('dealer.product.adjust',['product'=>$product->id])}}" class="dropdown-item">
+                                    Adjust Stock
+                                </a>
+                                <a href="{{route('dealer.product.addbatches',['product'=>$product->id])}}" class="dropdown-item">
+                                    ADD Batch
+                                </a>
+
+
+                            @if($product->efrissync?->type !== 1 && \Auth::guard('dealer')->user()->dealer->efris === 1)
+                                <a class="dropdown-item" href="{{route('dealer.sync.product',$product->id)}}">
+                                    Sync
+                                </a>
                             @endif
-                        </a>
+                            @if($product->openingstock === 0 && \Auth::guard('dealer')->user()->dealer->efris === 1)
+                                <a class="dropdown-item" onclick="openingstockmodal(this)" id="opbtn" data-id="{{$product->id}}" data-name="{{$product->name}}" data-toggle="modal" data-target="#openingstock">
+                                    Opening Stock
+                                </a>
+                             @endif
+                            </div>
+                          </div>
+        @endif
                     </td>
                 </tr>
                 @endforeach

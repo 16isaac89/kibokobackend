@@ -359,6 +359,21 @@ Route::get('/dealer/product/bulkedit','DealerProductController@bulkEdit')->name(
 Route::post('/dealer/product/postbulkedit','DealerProductController@bulkEditPost')->name('bulk-edit-products.dealer.products');
 
 
+
+Route::get('dealer/product/cost/view','DealerProductController@productcost')->name('dealer.product.cost');
+Route::post('dealer/product/save/cost','DealerProductController@saveproductcost')->name('dealer.save.cost');
+Route::post('dealer/product/save/batch','DealerProductController@savebatch')->name('dealer.save.batch');
+Route::get('dealer/product/view/batches','DealerProductController@viewbatches')->name('dealer.product.batches');
+Route::get('dealer/product/adjust/stock','DealerProductController@adjuststockbatch')->name('dealer.product.adjust');
+
+Route::post('dealer/product/edit/batch','DealerProductController@editbatch')->name('dealer.edit.batch');
+Route::post('dealer/product/adjust/batch','DealerProductController@adjustbatch')->name('dealer.edit.batch');
+
+Route::get('dealer/product/delete/batch/{stock}','DealerProductController@deletebatch')->name('dealer.product.deletebatch');
+
+Route::get('dealer/product/view/addbatches','DealerProductController@addbatchesview')->name('dealer.product.addbatches');
+Route::post('dealer/product/save/addbatches','DealerProductController@saveaddbatch')->name('dealer.product.saveaddbatch');
+
 Route::get('dealer/product/delete','DealerProductController@delete')->name('dealer.product.delete');
 
 //Dealer Efris product methods

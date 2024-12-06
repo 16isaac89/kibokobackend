@@ -98,7 +98,8 @@
                 <a href="{{ route('admin.customers.index') }}" class="card stats-card card-bg-primary">
                     <h6 class="card-header">Customers</h6>
                     <div class="card-body">
-                        <h3 class="card-text">{{ $customers }}</h3>
+                        <h3 class="card-text">All:{{ $customers }}</h3>
+                        <h3 class="card-text">Geotagged: {{ $geotagged }}</h3>
                         <i class="fas fa-users"></i>
                     </div>
                 </a>
@@ -193,7 +194,7 @@
         </div>
 
         <!-- Other Components (Messages, Calendar, To-Do List) -->
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
@@ -227,7 +228,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 </div>
 

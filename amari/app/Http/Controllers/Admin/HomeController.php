@@ -20,6 +20,12 @@ class HomeController
         $vans = Van::all()->count();
         $routes = Route::all()->count();
         $dealers = Dealer::all()->count();
+        $geotagged = Customer::whereNotNull('latitude')
+        ->whereNotNull('longitude')
+        ->where('latitude', '!=', '')
+        ->where('longitude', '!=', '')
+        ->count();
+
 
         $preorders = StockRequestProduct::with([
             'dealerproduct',
@@ -60,6 +66,6 @@ $preordersmonth = $ordersArr;
 
 
 
-        return view('home', compact('preordersmonth','preorders','customers','vans','routes','dealers'));
+        return view('home', compact('preordersmonth','preorders','customers','vans','routes','dealers','geotagged'));
     }
 }

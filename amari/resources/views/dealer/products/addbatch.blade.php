@@ -7,8 +7,8 @@
     </style>
 @endsection
 @section('content')
-@include('admin.dealers.modals.add')
-@include('admin.dealers.modals.edit')
+{{-- @include('admin.dealers.modals.add')
+@include('admin.dealers.modals.edit') --}}
 
 <div class="card">
     <div class="card-header">
