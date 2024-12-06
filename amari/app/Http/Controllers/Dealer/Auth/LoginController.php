@@ -24,7 +24,7 @@ public function login(Request $request){
         return redirect()->route('dashboard.home')
          ->with('status','You have logged in!');
     }
-    return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
+    return redirect()->back()->with('error','Opps! You have entered invalid credentials');
 
 
 

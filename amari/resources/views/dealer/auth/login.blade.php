@@ -57,6 +57,11 @@
           </div>
           <div class="col-lg-7">
             <h5 class="tx-gray-800 mg-b-25">Signin to Your Account</h5>
+            @if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
 <form method="post" action="{{route('dealer.login.post')}}">
     @csrf
             <div class="form-group">
