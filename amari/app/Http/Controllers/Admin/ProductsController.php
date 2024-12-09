@@ -339,34 +339,44 @@ class ProductsController extends Controller
    }
    public function importProductEfris(Request $request)
 {
-    $request->validate([
-        'excel_file' => 'required|file|mimes:xlsx,csv',
-    ]);
+    // Load the Excel file
+	  // dd($request->all());
+         // Move the uploaded file to a temporary directory with the `.xlsx` extension
+         $file = $request->file('excel_file');
+         $filePath = $file->storeAs('temp', 'import_excel_products.xlsx', 'local');
 
-    $path = $request->file('excel_file')->getRealPath();
-    $data = Excel::toArray([], $path);
+         // Full path to the stored file
+         $fullPath = storage_path('app/' . $filePath);
+           // dd($fullPath);
 
-    $sheet = $data[0];
+               // Load the Excel file explicitly specifying the type
+         $data = Excel::toArray([], $fullPath, null, \Maatwebsite\Excel\Excel::XLSX);
+     //dd($data);
+         // Assuming the data is in the first sheet
+         $sheet = $data[0];
 
-    foreach ($sheet as $index => $row) {
 
-        if ($index === 0) continue;
 
-        $code = $row[1];
-        $catCode = $row[5];
-        $catName = $row[6];
+            // Loop through each row, skipping the header
+            foreach ($sheet as $index => $row) {
 
-        $product = Product::where('code', $code)->first();
+                if ($index === 0) continue;
 
-        if ($product) {
-            $product->update([
-                'efriscategorycode' => $catCode,
-                'efriscategoryname' => $catName,
-            ]);
-        }
-    }
+                $code = $row[1];
+                $catCode = $row[5];
+                $catName = $row[6];
 
-    return redirect()->back()->with('success', 'Products updated successfully!');
+                $product = Product::where('code', $code)->first();
+
+                if ($product) {
+                    $product->update([
+                        'efriscategorycode' => $catCode,
+                        'efriscategoryname' => $catName,
+                    ]);
+                }
+            }
+
+            return redirect()->back()->with('message', 'Products have been updated successfully!');
 }
 
 }
