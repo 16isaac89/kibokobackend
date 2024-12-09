@@ -102,7 +102,9 @@ Route::get('admin/customers/export/csv', 'CustomerController@exportCsv')->name('
     //products
     Route::post('products/parse-csv-import', 'ProductsController@parseCsvImport')->name('products.parseCsvImport');
     Route::post('products/process-csv-import', 'ProductsController@processCsvImport')->name('products.processCsvImport');
+
     Route::post('/products/import-product-updates', 'ProductsController@importProductUpdates')->name('products.importProductUpdates');
+    Route::post('/products/update-products/efris', 'ProductsController@importProductEfris')->name('products.importProductEfris');
 
     Route::get('product/cost/view','ProductsController@productcost')->name('product.cost');
     Route::post('product/save/cost','ProductsController@saveproductcost')->name('save.cost');

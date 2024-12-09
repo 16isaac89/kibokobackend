@@ -28,6 +28,7 @@
 @include('admin.products.modals.stock')
 @include('admin.products.modals.opening')
 @include('admin.products.modals.update')
+@include('admin.products.modals.updateefris')
 @can('role_create')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
@@ -40,6 +41,9 @@
             @include('csvImport.modal', ['model' => 'Product', 'route' => 'admin.products.parseCsvImport'])
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal">
                 Upload Excel File
+            </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadEfrisModal">
+                Update Efris
             </button>
         </div>
 
@@ -97,7 +101,12 @@
                         <th>
                             Unit
                         </th>
-
+                        <th>
+                           Efris Category Code
+                        </th>
+                        <th>
+                            Efris Category Name
+                         </th>
                         <th>
                             Action
                         </th>
@@ -133,6 +142,12 @@
                             </td>
                             <td>
                                 {{ $product->unit ?? '' }}
+                            </td>
+                            <td>
+                                {{ $product->efriscategorycode ?? '' }}
+                            </td>
+                            <td>
+                                {{ $product->efriscategoryname ?? '' }}
                             </td>
                             <td>
 

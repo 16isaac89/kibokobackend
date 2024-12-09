@@ -52,6 +52,7 @@ class StockController extends Controller
         return response()->json(['customers'=>$customers]);
     }
 
+
     public function getproducts(){
         $products = Product::with(['brand','dealerproduct'=>function($q){
             $q->where('dealer_id',request()->dealer)->get();

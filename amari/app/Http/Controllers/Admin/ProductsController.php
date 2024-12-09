@@ -337,4 +337,36 @@ class ProductsController extends Controller
 
             return redirect()->back()->with('message', 'Products have been updated successfully!');
    }
+   public function importProductEfris(Request $request)
+{
+    $request->validate([
+        'excel_file' => 'required|file|mimes:xlsx,csv',
+    ]);
+
+    $path = $request->file('excel_file')->getRealPath();
+    $data = Excel::toArray([], $path);
+
+    $sheet = $data[0];
+
+    foreach ($sheet as $index => $row) {
+
+        if ($index === 0) continue;
+
+        $code = $row[1];
+        $catCode = $row[5];
+        $catName = $row[6];
+
+        $product = Product::where('code', $code)->first();
+
+        if ($product) {
+            $product->update([
+                'efriscategorycode' => $catCode,
+                'efriscategoryname' => $catName,
+            ]);
+        }
+    }
+
+    return redirect()->back()->with('success', 'Products updated successfully!');
+}
+
 }

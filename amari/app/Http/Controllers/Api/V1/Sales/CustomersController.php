@@ -72,6 +72,8 @@ class CustomersController extends Controller
                 'businessvalue'=>request()->businessvalue,
                 'location'=>request()->location,
                 'userid'=>$id,
+                "identification"=>request()->identification,
+
 
 
 			]);
@@ -248,11 +250,11 @@ class CustomersController extends Controller
                 'branch_id'=>request()->branch
             ]
             );
-            Performance::create([
-                'user'=>request()->userid,
-                'points'=>1,
-                'pointtype'=>'createcustomer',
-              ]);
+            // Performance::create([
+            //     'user'=>request()->userid,
+            //     'points'=>1,
+            //     'pointtype'=>'createcustomer',
+            //   ]);
     return response()->json(['message'=>1]);
     }
 }

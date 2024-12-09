@@ -44,7 +44,7 @@ class OrderController extends Controller
         if ($lock->get()) {
             $sale = Sale::create([
                 'dealer_user_id' => $salerid,
-                'route_id' => $route->route_id,
+                'route_id' => $route ? $route->route_id : $request->route,
                 'van_id' => $van,
                 'dealer_id' => $dealer,
                 'total' => $total,

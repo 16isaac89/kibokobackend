@@ -33,6 +33,7 @@ protected $appends = [
         'tax_amount',
         'tax_id',
         'efriscategorycode',
+        'efriscategoryname',
         'group',
         'division',
     ];
