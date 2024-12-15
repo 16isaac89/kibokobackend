@@ -57,6 +57,8 @@ class OrderController extends Controller
                 'datecreated' => request()->datetime,
                 'dealer_id' => $dealer,
                 'branch_id' => $branch,
+                'checkin'=>request()->checkin,
+                'checkout'=>request()->checkout,
             ]);
             foreach ($cart as $key => $a) {
                // Product::find($a['product_id'])->decrement('stock', intval($a['quantity']));
@@ -163,6 +165,8 @@ class OrderController extends Controller
             'saleidentification' => request()->saleidentification,
             'dealer_id' => $dealer,
             'branch_id' => $branch,
+            'checkin'=>request()->checkin,
+            'checkout'=>request()->checkout,
         ]);
         $customerdetails = Customer::where('identification', $customer)->first();
 

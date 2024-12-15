@@ -30,6 +30,8 @@ class Sale extends Model
         'latitude',
         'longitude',
         "taxamount",
+        "checkin",
+        "checkout",
         'created_at',
         'updated_at',
         'deleted_at',
