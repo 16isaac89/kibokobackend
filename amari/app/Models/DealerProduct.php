@@ -19,6 +19,7 @@ class DealerProduct extends Model
     protected $fillable = [
         'product_id',
         'dealer_id',
+        'efris_product_code',
         'stock',
         'sellingprice',
         'created_at',

@@ -15,9 +15,16 @@
       <label>Stock:</label>
       <input type="text" id="stock" name="stock" class="form-control" >
     </div>
+
     <div class="col-6">
     <label>Selling Price</label>
       <input type="text" id="sellingprice" name="sellingprice"  class="form-control" >
+    </div>
+  </div>
+  <div class="row" style="margin:10px;">
+    <div class="col-6">
+      <label>Efris Product Code:</label>
+      <input type="text" id="efris_product_code" name="efris_product_code" class="form-control" >
     </div>
   </div>
   <input type="hidden" name="productid" value="{{$product->id}}" id="productid">

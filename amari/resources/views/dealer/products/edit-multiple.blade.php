@@ -28,6 +28,12 @@
                                     <input required type="number" id="sellingprice" name="sellingprices[]" value="{{ $product->dealerproduct ? $product->dealerproduct->sellingprice : '' }}" class="form-control" >
                                 </div>
                             </div>
+                            <div class="row" style="margin:10px;">
+                                <div class="col-6">
+                                  <label>Efris Product Code:</label>
+                                  <input type="text" id="efris_product_code" name="efris_product_code" class="form-control" >
+                                </div>
+                              </div>
                             <input type="hidden" name="productids[]" value="{{ $product->id }}" id="productid">
                             <input type="hidden" name="status[]" value="{{ $product->dealerproduct ? '1' : '0' }}">
                             <input type="hidden" name="dealerproductids[]" value="{{ $product->dealerproduct ? $product->dealerproduct->id : '' }}">

@@ -25,7 +25,7 @@
                     <td><input type="checkbox" class="selectProduct" data-id="{{$product->id}}"></td> <!-- Row Checkbox -->
                     <td>{{$product->id}}</td>
                     <td>{{ $product->name ?? '' }}</td>
-                    <td>{{$product->code}}</td>
+                    <td>{{$product->code}} <br> <b>SUBD:{{ $product->dealerproduct?->efris_product_code ?? '' }}</b></td>
                     <td>{{$product->brand->name ?? ''}}</td>
                     <td>{{ $product->category?->name ?? '' }}</td>
                     <td>{{$product->unit}}</td>

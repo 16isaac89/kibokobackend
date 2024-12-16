@@ -100,10 +100,10 @@ class OrderController extends Controller
 
             $goodsdetails = array();
             foreach ($cart as $key => $a) {
-                $item = Product::find($a['product_id']);
+                $item = Product::with('dealerproduct')->find($a['product_id']);
                 $gooddetails = (Object) [
                     "item" => $item->name,
-                    "itemCode" => $item->code ?? '',
+                    "itemCode" => $item->dealerproduct->efris_product_code ? $item->dealerproduct->efris_product_code : $item->code,
                     'goodsCategoryId' => $item->category ?? '',
                     "qty" => $a['quantity'],
                     "unitOfMeasure" => $item->unit ?? '',

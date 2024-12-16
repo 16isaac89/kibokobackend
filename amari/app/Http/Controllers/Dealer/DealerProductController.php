@@ -45,7 +45,8 @@ class DealerProductController extends Controller
         if(\Auth::guard('dealer')->check()){
       $product->update([
           'sellingprice'=>request()->sellingprice,
-          'stock'=>request()->stock
+          'stock'=>request()->stock,
+          'efris_product_code'=>request()->efris_product_code
       ]);
         return redirect()->back()->with('message', 'Product has been updated successfully!');
     }else{
@@ -103,7 +104,8 @@ class DealerProductController extends Controller
             'product_id'=>request()->productid,
             'sellingprice'=>request()->sellingprice,
             'dealer_id'=>Auth::guard('dealer')->user()->dealer_id,
-            'stock'=>request()->stock
+            'stock'=>request()->stock,
+            'efris_product_code'=>request()->efris_product_code
         ]);
         return redirect()->route('products.index')->with('success', 'Product has been added successfully!');
     }else{
@@ -480,6 +482,7 @@ $ids = $request->query('ids');
                 'product_id'=>$request->productids[$key],
                 'stock'=>$request->stocks[$key],
                 'sellingprice'=>$request->sellingprices[$key],
+                'efris_product_code'=>request()->efris_product_code
             ]);
         }
     }
