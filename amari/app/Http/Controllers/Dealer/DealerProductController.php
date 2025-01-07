@@ -216,7 +216,11 @@ class DealerProductController extends Controller
     return view('dealer.products.batches',compact('product'));
    }
    public function adjuststockbatch(){
-    $product = Product::with('stocks')->find(request()->product);
+    //dd(request()->all());
+    $dealer_id = Auth::guard('dealer')->user()->dealer_id;
+    $product = DealerProduct::with('product')->where(['dealer_id'=>$dealer_id,'product_id'=>request()->product])->first();
+    //dd($product,request()->all(),$dealer_id);
+   // $product = Product::with('stocks')->find(request()->product);
     //dd($product);
     return view('dealer.products.adjuststock',compact('product'));
    }
@@ -427,7 +431,7 @@ class DealerProductController extends Controller
 //    if($efris->status === 1){
     if($returncode === "00"){
 
-        $stock->decrement('amount', request()->amount);
+        $item->decrement('stock', request()->amount);
         return response()->json(['message'=>'Batch adjusted successfuly','status'=>1,]);
         //return redirect()->back()->with('message', 'Product stock has been saved in EFRIS add batch Added.');
        }else{
@@ -441,7 +445,7 @@ class DealerProductController extends Controller
 //     return \Redirect::back()->withErrors(['msg' => "There is a network error try again later"]);
 //    }
 }else{
-    $stock->decrement('amount', request()->amount);
+    $item->decrement('amount', request()->amount);
     return response()->json(['message'=>'Batch adjusted successfuly','status'=>1,]);
    }
 

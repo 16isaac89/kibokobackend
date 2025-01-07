@@ -2,7 +2,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-       <b style="color:black;font-size:20px;font-weight:bold;">{{$product->name}} Batches</b>
+       <b style="color:black;font-size:20px;font-weight:bold;">{{$product->product->name}} Stock</b>
        @if (\Session::has('success'))
     <div class="alert alert-success">
         <ul>
@@ -30,22 +30,22 @@
         </thead>
         <tbody>
 
-    @foreach($product->stocks as $stock)
+    {{-- @foreach($product->stocks as $stock) --}}
 		<TR>
 			<TD >
-            <INPUT type="number" id="{{ 'amount'.$stock->id }}" value="{{$stock->amount}}" class="form-control productunit"/>
+            <INPUT type="number" id="{{ 'amount'.$product->id }}" value="{{$product->stock}}" class="form-control productunit"/>
         </TD>
             <TD >
                 <INPUT  type = "number"
-                maxlength = "6" id="{{ 'sellingprice'.$stock->id }}"
-                min="1" max="{{$stock->amount}}"
+                maxlength = "6" id="{{ 'sellingprice'.$product->id }}"
+                min="1" max="{{$product->stock}}"
                     name="selling[]" class="form-control productunit" /></TD>
 
                 <TD >
-                    <textarea class="form-control" id="{{ 'remarks'.$stock->id }}" rows="7"></textarea>
+                    <textarea class="form-control" id="{{ 'remarks'.$product->id }}" rows="7"></textarea>
                     </TD>
                     <TD >
-                        <select id="{{ 'reason'.$stock->id }}" class="form-control" id="exampleFormControlSelect1">
+                        <select id="{{ 'reason'.$product->id }}" class="form-control" id="exampleFormControlSelect1">
                             <option value="101">Expired Goods</option>
                             <option value="102">Damaged Goods</option>
                             <option value="103">Personal Uses</option>
@@ -54,11 +54,11 @@
                           </select>
                         </TD>
                 <TD >
-            <button type="button" class="btn btn-success" data-id="{{ $stock->id }}" onclick="edititem(this)">EDIT</button>
+            <button type="button" class="btn btn-success" data-id="{{ $product->id }}" onclick="edititem(this)">EDIT</button>
         </TD>
 		</TR>
 
-        @endforeach
+        {{-- @endforeach --}}
     </tbody>
 	</TABLE>
 
