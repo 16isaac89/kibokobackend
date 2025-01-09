@@ -87,7 +87,7 @@ let product = '{{ $product->id }}'
 // console.log(id,amount,product)
 // return
 $("#activityindicator").modal('show')
-let route = "{{ route('dealer.edit.batch') }}";
+let route = "{{ route('dealer.adjust.batch') }}";
             let token = "{{ csrf_token()}}";
             $.ajax({
                 url: route,

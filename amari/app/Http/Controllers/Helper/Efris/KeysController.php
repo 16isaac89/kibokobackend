@@ -30,8 +30,8 @@ class KeysController extends Controller
 
     //GET AES KEY
        public function getAesKey($tin,$deviceno,$privatek){
-        $url = env("EFRIS_URL", "https://efrisws.ura.go.ug/ws/taapp/")."getInformation";
-       // $url = "https://efristest.ura.go.ug/efrisws/ws/taapp/getInformation";
+       // $url = env("EFRIS_URL", "https://efrisws.ura.go.ug/ws/taapp/")."getInformation";
+       $url = "https://efristest.ura.go.ug/efrisws/ws/taapp/getInformation";
             $appId = "AP04";
             $brn = "";
             $dataExchangeId = "9230489223014123";

@@ -284,12 +284,14 @@ class DealerProductController extends Controller
     return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
 }
    }
-   public function saveaddbatch(){
+   public function saveaddbatch(Request $request){
+   // dd($request->all());
     if(\Auth::guard('dealer')->check()){
         $dealer  = Auth::guard('dealer')->user()->dealer;
-
+//dd($dealer);
         $item = Product::find(request()->product);
         $supplier = Supplier::find($item->supplier_id);
+        $dealerproduct = DealerProduct::where(['dealer_id'=>$dealer->id,'product_id'=>request()->product])->first();
        // dd($dealer);
         if($dealer->efris === 1 || $dealer->efris === "1"){
 
@@ -306,7 +308,11 @@ class DealerProductController extends Controller
        // $aeskey = (new KeysController)->getAesKey($tin,$deviceno,$privatek);
 
        //$efris = (new ProductController)->addproductStock($item,$aeskey,$privatek,$tin,$deviceno,$quantity);
-       $efris = (new ProductController)->restockProduct($item,$aeskey,$privatek,$tin,$deviceno,$quantity,$supplier,$purchase_type);
+    //    $efris = (new ProductController)->restockProduct($item,$aeskey,$privatek,$tin,$deviceno,$quantity,
+    //    $supplier,$purchase_type,$dealerproduct);
+    $purchase_type = request()->purchase_type;
+       $efris = (new ProductController)->addproductStock($item,$aeskey,$privatek,$tin,$deviceno,$quantity,
+       $supplier,$dealerproduct,$purchase_type);
 
        $returncode = $efris->message['returnStateInfo']['returnCode'];
        if($returncode === "00"){
@@ -318,7 +324,7 @@ class DealerProductController extends Controller
             'cost'=>request()->cost,
             'receivedate'=>request()->receivedate,
             'expirydate'=>request()->expiry,
-            'supplier_id'=>$supplier->id,
+            // 'supplier_id'=>$supplier->id,
             'purchase_type'=>request()->purchase_type
         ]);
         return redirect()->back()->with('message', 'Product stock has been saved in EFRIS and Batch added successfuly.');
@@ -336,8 +342,9 @@ class DealerProductController extends Controller
             'cost'=>request()->cost,
             'receivedate'=>request()->receivedate,
             'expirydate'=>request()->expiry,
-            'supplier_id'=>$supplier->id,
+            // 'supplier_id'=>$supplier->id,
         ]);
+        $dealerproduct->increment('stock',request()->stocks);
         return redirect()->back()->with('message', 'Product stock has been saved.');
     }
     }else{
@@ -407,11 +414,12 @@ class DealerProductController extends Controller
     if(\Auth::guard('dealer')->check()){
     $stock = Stock::find(request()->id);
     $item = Product::find(request()->product);
+    $dealer_product = DealerProduct::with('product')->find(request()->product);
     $quantity = request()->amount;
     $remarks = request()->remarks;
     $reason = request()->reason;
    // $stock->decrement('amount', request()->amount);
-   $supplier = Supplier::find($item->supplier_id);
+//    $supplier = Supplier::find($item->supplier_id);
    $dealerefris = Dealer::find(\Auth::guard('dealer')->user()->dealer_id);
    if($dealerefris->efris === 1){
 
@@ -422,7 +430,8 @@ class DealerProductController extends Controller
    $aeskey = $dealerefris->aeskey;
     $privatek = (new KeysController)->getPrivateKey($keypath,$keypwd);
 
-   $efris = (new ProductController)->stockReduction($item,$aeskey,$privatek,$tin,$deviceno,$quantity,$supplier,$remarks,$reason);
+   $efris = (new ProductController)->stockReduction($item,$aeskey,$privatek,$tin,$deviceno,$quantity,
+   $remarks,$reason,$dealer_product);
 
 
    //$efris = (new ProductController)->restockProduct($item,$aeskey,$privatek,$tin,$deviceno,$quantity);
@@ -431,7 +440,7 @@ class DealerProductController extends Controller
 //    if($efris->status === 1){
     if($returncode === "00"){
 
-        $item->decrement('stock', request()->amount);
+        $dealer_product->decrement('stock', request()->amount);
         return response()->json(['message'=>'Batch adjusted successfuly','status'=>1,]);
         //return redirect()->back()->with('message', 'Product stock has been saved in EFRIS add batch Added.');
        }else{
@@ -445,7 +454,7 @@ class DealerProductController extends Controller
 //     return \Redirect::back()->withErrors(['msg' => "There is a network error try again later"]);
 //    }
 }else{
-    $item->decrement('amount', request()->amount);
+    $dealer_product->decrement('stock', request()->amount);
     return response()->json(['message'=>'Batch adjusted successfuly','status'=>1,]);
    }
 

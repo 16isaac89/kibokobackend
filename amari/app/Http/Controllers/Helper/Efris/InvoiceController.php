@@ -24,8 +24,8 @@ class InvoiceController extends Controller
 
     public function saveInvoice($aeskey, $privatek, $tin, $deviceno, $goodsdetails, $taxDetails, $saleid, $total, $itemcount, $route, $dealerefris, $sumgross, $summarytotal, $taxamount, $customerdetails)
     {
-        $url = env("EFRIS_URL", "https://efrisws.ura.go.ug/ws/taapp/")."getInformation";
-        //$url = "https://efristest.ura.go.ug/efrisws/ws/taapp/getInformation";
+       // $url = env("EFRIS_URL", "https://efrisws.ura.go.ug/ws/taapp/")."getInformation";
+        $url = "https://efristest.ura.go.ug/efrisws/ws/taapp/getInformation";
         $appId = "AP04";
         $brn = "";
         $dataExchangeId = "9230489223014123";

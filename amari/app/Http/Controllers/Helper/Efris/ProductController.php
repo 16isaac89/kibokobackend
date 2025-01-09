@@ -21,8 +21,9 @@ class ProductController extends Controller
             return $decodedDecryptedData;
             }
     public function saveProduct($item,$aeskey,$privatek,$tin,$deviceno){
-        $url = env("EFRIS_URL", "https://efrisws.ura.go.ug/ws/taapp/")."getInformation";
-       // $url = "https://efristest.ura.go.ug/efrisws/ws/taapp/getInformation";
+        //dd($item,$aeskey,$privatek,$tin,$deviceno);
+       //$url = env("EFRIS_URL", "https://efrisws.ura.go.ug/ws/taapp/")."getInformation";
+        $url = "https://efristest.ura.go.ug/efrisws/ws/taapp/getInformation";
         $appId = "AP04";
         $brn = "";
         $dataExchangeId = "9230489223014123";
@@ -52,9 +53,9 @@ class ProductController extends Controller
                 "goodsName"=> $item->name,
                 "goodsCode"=> $item->code,
                 "measureUnit"=> $item->unit,
-                "unitPrice"=> $item->price,
+                "unitPrice"=> $item->selling_price,
                 "currency"=> "101",
-                "commodityCategoryId"=>$item->category,
+                "commodityCategoryId"=>$item->efriscategorycode,
 				//101 has excise tax 102 does not have
                 "haveExciseTax"=> "102",
                 //"exciseDutyCode"=> "LED010100",
@@ -117,9 +118,9 @@ class ProductController extends Controller
 
 
 // add product stock
-    public function restockProduct($item,$aeskey,$privatek,$tin,$deviceno,$quantity,$supplier,$purchase_type){
-        $url = env("EFRIS_URL", "https://efrisws.ura.go.ug/ws/taapp/")."getInformation";
-       // $url = "https://efristest.ura.go.ug/efrisws/ws/taapp/getInformation";
+    public function restockProduct($item,$aeskey,$privatek,$tin,$deviceno,$quantity,$supplier,$purchase_type,$dealerproduct){
+        //$url = env("EFRIS_URL", "https://efrisws.ura.go.ug/ws/taapp/")."getInformation";
+        $url = "https://efristest.ura.go.ug/efrisws/ws/taapp/getInformation";
         $appId = "AP04";
         $brn = "";
         $dataExchangeId = "9230489223014123";
@@ -147,8 +148,10 @@ class ProductController extends Controller
                         "goodsStockIn"=> (Object)[
 
                             "operationType"=> "101",
-                            "supplierTin"=> $supplier->tin,
-                            "supplierName"=> $supplier->name,
+                            //"supplierTin"=> $supplier->tin,
+                            "supplierTin"=> "1011030099",
+                            // "supplierName"=> $supplier->name,
+                            "supplierName"=> "Clear Way Services",
                             "adjustType"=> "",
                             "remarks"=> "Increase inventory",
                             "stockInDate"=> $datetime,
@@ -163,15 +166,15 @@ class ProductController extends Controller
                                 "goodsStockInItem"=> [
                                         (Object)[
                                 "commodityGoodsId"=> "",
-                                "goodsCode"=> $item->code,
+                                "goodsCode"=> $item->efriscategorycode,
                                 "measureUnit"=>$item->unit,
                                 "quantity"=> $quantity,
-                                "unitPrice"=> $item->price
+                                "unitPrice"=> $item->selling_price
                                         ]
                                 ]
             ],
         );
-            // dd($json,$json3);
+            // dd($json);
     $encryptedcontent = $this->aes_encrypt(base64_decode($decrypted_aeskey), $json);
 
     /*Sign Encrypted Content*/
@@ -192,7 +195,7 @@ class ProductController extends Controller
         $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
         if ( $status != 200 ) {
-            
+
             die("Error: call to URL $url failed with status $status, response $json_response, curl_error " . curl_error($curl) . ", curl_errno " . curl_errno($curl));
         }
 
@@ -201,14 +204,14 @@ class ProductController extends Controller
 
         /*Decode response*/
         $response = json_decode($json_response, true);
-
+dd($response);
         $data = $response['data'];
         /*Get data*/
         $data_json = $data;
         $key = "content";
         $encryptedrespcontent = $data['content'];
         $decryptedrescontent = $this->aes_decrypt(base64_decode($decrypted_aeskey), base64_decode($encryptedrespcontent));
-        $item->increment('stock',$quantity);
+        $dealerproduct->increment('stock',$quantity);
        // dd($response);
         //dd((Object)['status'=>1,'message'=>$response,'data'=>$decryptedrescontent]);
         return (Object)['status'=>1,'message'=>$response,'data'=>$decryptedrescontent];
@@ -218,9 +221,11 @@ class ProductController extends Controller
 
 
     ///save product opening stock
-    public function addproductStock($item,$aeskey,$privatek,$tin,$deviceno,$quantity,$supplier){
-        $url = env("EFRIS_URL", "https://efrisws.ura.go.ug/ws/taapp/")."getInformation";
-        //$url = "https://efristest.ura.go.ug/efrisws/ws/taapp/getInformation";
+    public function addproductStock($item,$aeskey,$privatek,$tin,$deviceno,$quantity,$supplier,$dealerproduct,$purchase_type){
+       // dd($item);
+
+        //$url = env("EFRIS_URL", "https://efrisws.ura.go.ug/ws/taapp/")."getInformation";
+        $url = "https://efristest.ura.go.ug/efrisws/ws/taapp/getInformation";
         $appId = "AP04";
         $brn = "";
         $dataExchangeId = "9230489223014123";
@@ -246,18 +251,20 @@ class ProductController extends Controller
             $json = json_encode(
                 (Object)[
                         "goodsStockIn"=> (Object)[
-                                "operationType"=>"101",
-                                "supplierTin"=> $supplier->tin,
-                                "supplierName"=> $supplier->name,
-                                "adjustType"=> "",
-                                "remarks"=> "Item opening stock",
-                                "stockInDate"=> $datetime,
-                                "stockInType"=> "104",
-                                "productionBatchNo"=> "",
-                                "productionDate"=> "",
-                                "branchId"=> "",
-                                "invoiceNo"=> "",
-                                "isCheckBatchNo"=> "0"
+                                "operationType"=> "101",
+                            //"supplierTin"=> $supplier->tin,
+                            "supplierTin"=> "1011030099",
+                            // "supplierName"=> $supplier->name,
+                            "supplierName"=> "Clear Way Services",
+                            "adjustType"=> "",
+                            "remarks"=> "Increase inventory",
+                            "stockInDate"=> $datetime,
+                            "stockInType"=> $purchase_type,
+                            "productionBatchNo"=> "",
+                            "productionDate"=> "",
+                            "branchId"=> "",
+                            "invoiceNo"=> "",
+                            "isCheckBatchNo"=> "0"
                         ],
                                 "goodsStockInItem"=> [
                                         (Object)[
@@ -265,12 +272,12 @@ class ProductController extends Controller
                                 "goodsCode"=> $item->code,
                                 "measureUnit"=>$item->unit,
                                 "quantity"=> $quantity,
-                                "unitPrice"=> $item->price
+                                "unitPrice"=> $item->selling_price
                                         ]
                                 ]
             ],
         );
-            // dd($json,$json3);
+            // dd($json);
     $encryptedcontent = $this->aes_encrypt(base64_decode($decrypted_aeskey), $json);
 
     /*Sign Encrypted Content*/
@@ -301,16 +308,17 @@ class ProductController extends Controller
 
         /*Decode response*/
         $response = json_decode($json_response, true);
-      //dd($response);
+     // dd($response);
         $data = $response['data'];
         /*Get data*/
         $data_json = $data;
         $key = "content";
         $encryptedrespcontent = $data['content'];
         $decryptedrescontent = $this->aes_decrypt(base64_decode($decrypted_aeskey), base64_decode($encryptedrespcontent));
-        $item->increment('stock',$quantity);
+        $dealerproduct->increment('stock',$quantity);
         $status = $response['returnStateInfo']['returnCode'];
         //dd($status);
+       // dd($decryptedrescontent,$response);
         return (Object)['status'=>1,'message'=>$response,'data'=>$decryptedrescontent];
         //return $decryptedrescontent;
     }
@@ -318,7 +326,8 @@ class ProductController extends Controller
 
 
     ///save product opening stock
-    public function stockReduction($item,$aeskey,$privatek,$tin,$deviceno,$quantity,$supplier,$remarks,$reason){
+    public function stockReduction($item,$aeskey,$privatek,$tin,$deviceno,$quantity,$remarks,
+    $reason,$dealer_product){
         $url = "https://efristest.ura.go.ug/efrisws/ws/taapp/getInformation";
         $appId = "AP04";
         $brn = "";
@@ -330,7 +339,7 @@ class ProductController extends Controller
         $codeType = "1";
         $encryptCode = "1";
         $zipCode = "0";
- $privatekey = $privatek;
+        $privatekey = $privatek;
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -361,10 +370,10 @@ class ProductController extends Controller
                                 "goodsStockInItem"=> [
                                         (Object)[
                                 "commodityGoodsId"=> "",
-                                "goodsCode"=> $item->code,
-                                "measureUnit"=>$item->unit,
+                                "goodsCode"=> $dealer_product->product->code,
+                                "measureUnit"=>$dealer_product->product->unit,
                                 "quantity"=> $quantity,
-                                "unitPrice"=> $item->price
+                                "unitPrice"=> $dealer_product->product->selling_price
                                         ]
                                 ]
             ],
@@ -407,7 +416,7 @@ class ProductController extends Controller
         $key = "content";
         $encryptedrespcontent = $data['content'];
         $decryptedrescontent = $this->aes_decrypt(base64_decode($decrypted_aeskey), base64_decode($encryptedrespcontent));
-        $item->increment('stock',$quantity);
+        //$item->increment('stock',$quantity);
         $status = $response['returnStateInfo']['returnCode'];
         //dd($status);
         return (Object)['status'=>1,'message'=>$response,'data'=>$decryptedrescontent,'json'=>$json];

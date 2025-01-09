@@ -147,13 +147,33 @@ public function records(){
  }
 }
 
-public function getvanrecords(){
-  $records = Dispatch::with('dispatchproducts')->where(['van_id'=>request()->van,'type'=>'van','dispatchdate'=>request()->dispatchdate])->get();
+public function getvanrecords(Request $request){
+    // $validatedData = $request->validate([
+    //     'van' => 'required|exists:vans,id',
+    //     'from_date' => 'required|date',
+    //     'to_date' => 'required|date|after_or_equal:from_date',
+    // ]);
+   // dd($request->all());
 
-  $dealer = Auth::guard('dealer')->user()->dealer_id;
-  $vans = Van::where('dealer_id',$dealer)->get();
-  return view('dealer.dispatch.records',compact('vans','records'));
+    $records = Dispatch::with('dispatchproducts')
+        ->where('van_id', $request->van)
+        ->where('type', 'van')
+        ->whereBetween('dispatchdate', [$request->from_date, $request->to_date])
+        ->get();
+       // dd($records);
+
+    $dealer = Auth::guard('dealer')->user()->dealer_id;
+    $vans = Van::where('dealer_id', $dealer)->get();
+    return view('dealer.dispatch.records',compact('vans','records'));
+    // return view([
+    //     'vans' => $vans,
+    //     'records' => $records,
+    //     'from_date' => $request->from_date,
+    //     'to_date' => $request->to_date,
+    //     'van_id' => $request->van,
+    // ]);
 }
+
 
 public function savecount(){
   $products = request()->product;

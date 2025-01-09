@@ -21,7 +21,8 @@ class EfrisProductController extends Controller
 {
     public function syncproduct(Product $product){
          $item = $product;
-        // dd($item);
+         $dealerproduct = DealerProduct::where(['product_id'=>$item->id,'dealer_id'=>\Auth::guard('dealer')->user()->dealer_id])->first();
+       //  dd($item);
         $dealerefris = Dealer::find(\Auth::guard('dealer')->user()->dealer_id);
         if($item->sync){
             return response()->json(['message'=>"This item has already been synced"]);
@@ -41,7 +42,7 @@ class EfrisProductController extends Controller
             'type'=>1,
             'product_id'=>$item->id,
         ]);
-        
+
         return redirect()->back()->with('message','Sync successful');
         //return response()->json(['message'=>"Sync Successfull"]);
 
@@ -54,8 +55,11 @@ class EfrisProductController extends Controller
     }
 
 
-    public function restock(){
+    public function restock(Request $request){
+
         $item = DealerProduct::with('product')->find(1);
+        $dealerproduct = DealerProduct::where(['product_id'=>$item->id,'dealer_id'=>\Auth::guard('dealer')->user()->dealer_id])->first();
+
         $dealer = 1;
         //$item = DealerProduct::with('product','sync')->find(request()->product);
         $dealerefris = Dealer::find($dealer);

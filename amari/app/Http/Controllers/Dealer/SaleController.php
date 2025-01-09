@@ -337,9 +337,9 @@ public function receiptview(Sale $sale){
 
     }
     //dd($calcs);
-    $customer = $sale->customer_id?Customer::find($sale->customer_id):null;
+    $customer = $sale->customer_id?Customer::where('identification',$sale->customer_id)->with('route')->first():null;
    // dd($sale);
-  //  dd($customer);
+    //dd($sale,$customer);
     if(\Auth::guard('dealer')->user()->dealer->efris === 1 && $customer->tin){
         $tin2 = $sale->customer->tin;
         $dealerefris = $dealer;

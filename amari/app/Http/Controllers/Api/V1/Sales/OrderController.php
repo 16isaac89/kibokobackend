@@ -23,6 +23,7 @@ use App\Models\StockRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Tax;
+use App\Models\DealerProduct;
 
 class OrderController extends Controller
 {
@@ -103,7 +104,8 @@ class OrderController extends Controller
                 $item = Product::with('dealerproduct')->find($a['product_id']);
                 $gooddetails = (Object) [
                     "item" => $item->name,
-                    "itemCode" => $item->dealerproduct->efris_product_code ? $item->dealerproduct->efris_product_code : $item->code,
+                    // "itemCode" => $item->dealerproduct->efris_product_code ? $item->dealerproduct->efris_product_code : $item->code,
+                    "itemCode" => $item->code,
                     'goodsCategoryId' => $item->category ?? '',
                     "qty" => $a['quantity'],
                     "unitOfMeasure" => $item->unit ?? '',
@@ -225,7 +227,7 @@ class OrderController extends Controller
                 $gooddetails = (Object) [
                     "item" => $item->name,
                     "itemCode" => $item->code,
-                    'goodsCategoryId' => $item->category,
+                    'goodsCategoryId' => $item->efriscategorycode,
                     "qty" => $a['quantity'],
                     "unitOfMeasure" => $item->unit,
                     "unitPrice" => $a['sellingprice'],
@@ -244,7 +246,7 @@ class OrderController extends Controller
                     "exciseFlag" => "2",
                     "categoryId" => "1234",
                     "categoryName" => "Test",
-                    "commodityCategoryId" => $item->category,
+                    "commodityCategoryId" => $item->efriscategorycode,
                     "goodsCategoryName" => "Test",
                     "exciseRate" => "",
                     "exciseRule" => "1",
@@ -258,7 +260,7 @@ class OrderController extends Controller
                 $discountdetails = (Object) [
                     "item" => $item->name . " (Discount)",
                     "itemCode" => $item->code,
-                    'goodsCategoryId' => $item->category,
+                   'goodsCategoryId' => $item->efriscategorycode,
                     "qty" => "",
                     "unitOfMeasure" => $item->unit,
                     "unitPrice" => "",
@@ -275,7 +277,7 @@ class OrderController extends Controller
                     "exciseFlag" => "2",
                     "categoryId" => "1234",
                     "categoryName" => "Test",
-                    "commodityCategoryId" => $item->category,
+                    "commodityCategoryId" => $item->efriscategorycode,
                     "goodsCategoryName" => "Test",
                     "exciseRate" => "",
                     "exciseRule" => "1",
@@ -290,30 +292,31 @@ class OrderController extends Controller
                     "taxCategory" => "Standard",
                     "taxRateName" => "VAT-Standard",
 
-
                     "netAmount"=>$tax > 0 ? floor((($a['quantity']*$a['sellingprice'])/1.18 + 0.18*(($a['sellingprice']*$a['quantity'])/1.18)-floor((0.18*(($a['sellingprice']*$a['quantity'])/1.18))*100)/100)*100)/100 : floor((($a['quantity']*$a['sellingprice'])/1.18 + 0.18*(($a['sellingprice']*$a['quantity'])/1.18))*100)/100,
                     //'netAmount'=>5*$sellingprice,
                     "taxRate"=>$taxrate,
                     "taxAmount"=>$taxamount,
-
                     //"taxAmount"=>"0",
+                    //"grossAmount"=>  floor((($a['quantity']*$a['sellingprice'])/1.18 + 0.18*(($a['sellingprice']*$a['quantity'])/1.18))*100)/100,
+                    //"taxAmount"=>"0",
+                    //"grossAmount"=>  $a['quantity']*$a['sellingprice'],
+                    //"grossAmount" => $a['sellingprice'] * $a['quantity'] - $a['discount'],
                     "grossAmount"=>  floor((($a['quantity']*$a['sellingprice'])/1.18 + 0.18*(($a['sellingprice']*$a['quantity'])/1.18))*100)/100,
 
 
-                    // "netAmount" => ($a['sellingprice'] * $a['quantity'] - $net * 0.18) - $a['discount'],
+                    // "netAmount" => $a['sellingprice'] * $a['quantity'] - $net * 0.18,
                     // "taxRate" => "0.18",
                     // "taxAmount" => $a['sellingprice'] * 0.18 * $a['quantity'],
-                    // "grossAmount" => $a['sellingprice'] * $a['quantity'] - $a['discount'],
+                    // "grossAmount" => $a['sellingprice'] * $a['quantity'],
                     "exciseUnit"=> "101",
                     "exciseCurrency" => "UGX",
                     "taxRateName" => "123",
-
                 ];
             } else {
                 $gooddetails = (Object) [
                     "item" => $item->name,
                     "itemCode" => $item->code,
-                    'goodsCategoryId' => $item->category,
+                    'goodsCategoryId' => $item->efriscategorycode,
                     "qty" => $a['quantity'],
                     "unitOfMeasure" => $item->unit,
                     "unitPrice" => $a['sellingprice'],
@@ -321,7 +324,7 @@ class OrderController extends Controller
                     //"taxCategoryCode" => $tax > 0 ? "01":"02",
                     //"taxCategory" => "Standard",
                     "taxRate"=>$taxrate,
-             "tax"=>$taxamount,
+                    "tax"=>$taxamount,
                     //LINE FOR DISCOUNT
                     "discountTotal" => "",
                     "discountTaxRate" => "",
@@ -331,7 +334,7 @@ class OrderController extends Controller
                     "exciseFlag" => "2",
                     "categoryId" => "1234",
                     "categoryName" => "Test",
-                    "commodityCategoryId" => $item->category,
+                    "commodityCategoryId" => $item->efriscategorycode,
                     "goodsCategoryName" => "Test",
                     "exciseRate" => "",
                     "exciseRule" => "1",
@@ -419,7 +422,10 @@ class OrderController extends Controller
                 ]);
 
                 foreach ($cart as $key => $a) {
-                    Product::find($a['product_id'])->decrement('stock', intval($a['quantity']));
+                    $delerproduct = DealerProduct::where(['product_id' => $a['product_id'], 'dealer_id' => $dealer])->first();
+                    $delerproduct->decrement('stock', intval($a['quantity']));
+
+
                     $product = Product::find($a['product_id']);
                     // if (DealerUser::find($salerid)->targettype === 'sku') {
                     //     $sku = SkuTargetProduct::where(['product_id' => $a['product_id'], 'user_id' => $salerid])->whereDate('fromdate', '>=', request()->date)
@@ -500,7 +506,9 @@ class OrderController extends Controller
                     'respmsg' => $efris->respcode['returnStateInfo']['returnMessage'],
                     "taxamount" => intVal($taxamount),
                     "netAmount" => $efris->netAmount,
-                    'gds'=>$taxDetails
+                    'gds'=>$taxDetails,
+                    'goodsdets'=>$goodsdetails,
+                    'tds'=>$taxDetails,
                 ]);
             }
 

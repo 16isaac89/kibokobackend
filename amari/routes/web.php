@@ -369,7 +369,7 @@ Route::get('dealer/product/view/batches','DealerProductController@viewbatches')-
 Route::get('dealer/product/adjust/stock','DealerProductController@adjuststockbatch')->name('dealer.product.adjust');
 
 Route::post('dealer/product/edit/batch','DealerProductController@editbatch')->name('dealer.edit.batch');
-Route::post('dealer/product/adjust/batch','DealerProductController@adjustbatch')->name('dealer.edit.batch');
+Route::post('dealer/product/adjust/batch','DealerProductController@adjustbatch')->name('dealer.adjust.batch');
 
 Route::get('dealer/product/delete/batch/{stock}','DealerProductController@deletebatch')->name('dealer.product.deletebatch');
 
@@ -549,7 +549,7 @@ Route::get('get/private/key', 'Helper\Efris\KeysController@getPrivateKey');
 
 Route::get('get/aes/key/efris', function(){
 
-    $dealer = Dealer::find(1);
+    $dealer = Dealer::find(17);
    // dd($dealer);
 
    // foreach($dealers as $dealer){
