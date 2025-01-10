@@ -1,6 +1,26 @@
 @extends('layouts.dealer')
+@section('styles')
+<style>
+    #infoDiv {
+        display: none; /* Hidden by default */
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    th {
+        background-color: #f2f2f2;
+        text-align: left;
+    }
+</style>
+@endsection
 @section('content')
 @include('dealer.customer.modals.add',['categories'=>$categories,'routes'=>$routes])
+@include('dealer.customer.modals.verifytin')
 <div class="am-pagebody">
     <div>
         <h6 class="card-body-title">Customer List</h6>
@@ -12,6 +32,9 @@
       <div class="float-right" style="float:right">
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
         ADD
+      </button>
+      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#verifytinModal">
+        VERIFY TIN
       </button>
     </div>
     </div>
@@ -74,6 +97,41 @@
 
       });
 })();
+    </script>
+    <script>
+        function verifytin() {
+    $.ajax({
+        url: '{{ route('dealer.taxpayer.info') }}',
+        type: 'GET',
+        data: {
+            "_token": "{{ csrf_token() }}",
+            tin: document.getElementById('customer_tin').value,
+        },
+        success: function(response) {
+            let taxpayer = response.taxpayer;
+
+            const tableBody = document.getElementById('infoTableBody');
+                    tableBody.innerHTML = ''; // Clear existing rows
+                    for (const key in taxpayer) {
+                        if (taxpayer.hasOwnProperty(key)) {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${key}</td>
+                                <td>${taxpayer[key]}</td>
+                            `;
+                            tableBody.appendChild(row);
+                        }
+                    }
+
+                    // Show the info div
+                    document.getElementById('infoDiv').style.display = 'block';
+
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown, jqXHR);
+        }
+    });
+}
     </script>
 
 @endsection

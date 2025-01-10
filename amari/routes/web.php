@@ -352,6 +352,9 @@ Route::post('/dealerusers/target/history','DealerUserController@targethistory')-
 
 Route::get('/dealerusers/home','DealerUserController@home')->name('dealer.users.index');
 
+//get taxpayer info
+Route::get('/dealer/taxpayer/info','CustomerController@getTaxPayerDetails')->name('dealer.taxpayer.info');
+
 
 //dealer products
 Route::get('dealer/product-edit/{product}','DealerProductController@viewedit')->name('dealer.product.viewedit');

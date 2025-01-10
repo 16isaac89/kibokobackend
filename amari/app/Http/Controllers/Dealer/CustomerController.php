@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Dealer;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Auth;
+use App\Http\Controllers\Helper\Efris\KeysController;
+use App\Http\Controllers\Helper\Efris\TaxPayerController;
 use App\Models\Customer;
 use App\Models\CustomerCategory;
+use App\Models\Dealer;
 use App\Models\Route;
+use Auth;
+use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
@@ -45,5 +48,20 @@ class CustomerController extends Controller
     }else{
         return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
     }
+    }
+
+    public function getTaxPayerDetails(Request $request){
+        $tin2 = request()->tin;
+        $dealerefris = Auth::guard('dealer')->user()->dealer;
+        $keypath = $dealerefris->privatekey;
+        $keypwd = $dealerefris->keypwd;
+        $tin = $dealerefris->tin;
+        $deviceno = $dealerefris->deviceno;
+        $privatek = (new KeysController)->getPrivateKey($keypath,$keypwd);
+        //$aeskey = (new KeysController)->getAesKey($tin,$deviceno,$privatek);
+        $aeskey = $dealerefris->aeskey;
+        $payer = (new TaxPayerController)->getTaxPayer($deviceno,$tin,$privatek,$aeskey,$tin2);
+        return response()->json(['taxpayer'=>$payer]);
+
     }
 }
