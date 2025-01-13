@@ -72,10 +72,7 @@ class CustomersController extends Controller
                 'businessvalue'=>request()->businessvalue,
                 'location'=>request()->location,
                 'userid'=>$id,
-                "identification"=>request()->identification,
-
-
-
+                "tin"=>request()->tin,
 			]);
             // if (request()->subdimage) {
             //     $client->addMedia(request()->file('subdimage'))->toMediaCollection('location_image','public_uploads');
@@ -121,8 +118,7 @@ class CustomersController extends Controller
                 'businessvalue'=>request()->businessvalue,
                 'location'=>request()->location,
                 'userid'=>$id,
-
-
+                "tin"=>request()->tin,
             ]
             );
 		//	$file = $customer->locationimage;

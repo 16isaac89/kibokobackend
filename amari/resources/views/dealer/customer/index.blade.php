@@ -109,7 +109,7 @@
         },
         success: function(response) {
             let taxpayer = response.taxpayer;
-
+console.log(taxpayer)
             const tableBody = document.getElementById('infoTableBody');
                     tableBody.innerHTML = ''; // Clear existing rows
                     for (const key in taxpayer) {
