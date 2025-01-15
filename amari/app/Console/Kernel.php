@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\GetAesKey::class,
+        Commands\CheckEfrisFailedJobs::class,
     ];
 
     /**
@@ -27,6 +28,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         //$schedule->command('aeskey:cron')->dailyAt('23:00');
         $schedule->command('aeskey:cron')->everyMinute();
+        $schedule->command('check:efris-failed-jobs')->hourly(); // Adjust frequency as needed
     }
 
     /**

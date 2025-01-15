@@ -22,6 +22,7 @@ protected $appends = [
     protected $fillable = [
         'sale_id',
         'product_id',
+        'dealer_product_id',
         'name',
         'quantity',
         'qtybefore',
@@ -48,6 +49,10 @@ protected $appends = [
     ];
     public function product(){
         return $this->belongsTo(Product::class,'product_id');
+    }
+    //
+    public function dealerproduct(){
+        return $this->belongsTo(DealerProduct::class,'dealer_product_id','id');
     }
     public function sale(){
         return $this->belongsTo(Sale::class,'sale_id');

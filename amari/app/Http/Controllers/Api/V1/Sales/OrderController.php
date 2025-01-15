@@ -440,6 +440,7 @@ class OrderController extends Controller
                     SaleProduct::create([
                         'sale_id' => $sale->id,
                         'product_id' => $a['product_id'],
+                        'dealer_product_id' => $delerproduct->id,
                         'name' => $a['name'],
                         'quantity' => $a['quantity'],
                         'total' => intval($a['quantity']) * $a['sellingprice'] - $a['discount'],
@@ -497,11 +498,15 @@ class OrderController extends Controller
                     'dispatchstock' => $dispatch ? $dispatch->dispatchproducts : null,
                     'efris' => 1,
                     "invoiceno" => $efris->data->basicInformation->invoiceNo,
+                    'efris'=>1
                 ]);
             } else {
-                $sale->delete();
+                //$sale->delete();
+                EfrisFailedJobs::create([
+                    'sale_id'=>$sale->id,
+                ]);
                 return response()->json([
-                    'message' => 203,
+                    'message' => 200,
                     'respcode' => $efris->respcode['returnStateInfo']['returnCode'],
                     'respmsg' => $efris->respcode['returnStateInfo']['returnMessage'],
                     "taxamount" => intVal($taxamount),
@@ -509,13 +514,53 @@ class OrderController extends Controller
                     'gds'=>$taxDetails,
                     'goodsdets'=>$goodsdetails,
                     'tds'=>$taxDetails,
+
+                    'message' => 200,
+                'number' => $sale->id,
+                'total' => $total,
+                'saler' => $saler,
+                'customer' => $route,
+                'dealer' => $dealerefris,
+                'items' => $goodsdetails,
+                'created' => $sale->created_at,
+                'dispatchstock' => $dispatch ? $dispatch->dispatchproducts : [],
+                "customertype" => request()->customertype,
+                'efris'=>0
                 ]);
             }
 
         } else {
-            $sale->delete();
-            return response()->json(['message' => 500]);
+            EfrisFailedJobs::create([
+                'sale_id'=>$sale->id,
+            ]);
+            return response()->json([
+                'message' => 200,
+                'respcode' => $efris->respcode['returnStateInfo']['returnCode'],
+                'respmsg' => $efris->respcode['returnStateInfo']['returnMessage'],
+                "taxamount" => intVal($taxamount),
+                "netAmount" => $efris->netAmount,
+                'gds'=>$taxDetails,
+                'goodsdets'=>$goodsdetails,
+                'tds'=>$taxDetails,
+
+                'message' => 200,
+            'number' => $sale->id,
+            'total' => $total,
+            'saler' => $saler,
+            'customer' => $route,
+            'dealer' => $dealerefris,
+            'items' => $goodsdetails,
+            'created' => $sale->created_at,
+            'dispatchstock' => $dispatch ? $dispatch->dispatchproducts : [],
+            "customertype" => request()->customertype,
+            'efris'=>0
+            ]);
+            // $sale->delete();
+            // return response()->json(['message' => 500]);
         }
+
+
+
 
         //decrement from van stock
         //save sale locally

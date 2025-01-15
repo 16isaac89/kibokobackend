@@ -66,4 +66,5 @@ class Sale extends Model
         return $this->hasOne(EfrisDocument::class);
     }
 
+
 }
