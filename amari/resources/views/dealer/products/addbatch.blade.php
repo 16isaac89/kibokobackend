@@ -12,7 +12,7 @@
 
 <div class="card">
     <div class="card-header">
-       <b>ADD {{$product->name}} batch</b>
+       <b>ADD {{$product->product->name}} Stock</b>
        @if(session()->has('message'))
     <div class="alert alert-success">
         {{ session()->get('message') }}

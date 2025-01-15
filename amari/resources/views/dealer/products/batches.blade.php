@@ -2,7 +2,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-       <b style="color:black;font-size:20px;font-weight:bold;">{{$product->name}} Batches</b>
+       <b style="color:black;font-size:20px;font-weight:bold;">{{$product->product->name}} Batches</b>
        @if (\Session::has('success'))
     <div class="alert alert-success">
         <ul>

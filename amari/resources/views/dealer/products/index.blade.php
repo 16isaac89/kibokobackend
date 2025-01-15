@@ -46,27 +46,40 @@
                                     Create
                                     @endif
                                 </a>
-                                <a href="{{route('dealer.product.batches',['product'=>$product->id])}}" class="dropdown-item">
+
+
+                                @if($product->dealerproduct && $product->dealerproduct->stock > 0)
+                                <a href="{{route('dealer.product.batches',$product->dealerproduct->id)}}" class="dropdown-item">
                                     Batches
                                 </a>
+                                @endif
+
+                                @if($product->dealerproduct)
                                 <a href="{{route('dealer.product.adjust',['product'=>$product->id])}}" class="dropdown-item">
                                     Adjust Stock
                                 </a>
-                                <a href="{{route('dealer.product.addbatches',['product'=>$product->id])}}" class="dropdown-item">
+                                @endif
+
+                                @if($product->dealerproduct)
+                                <a href="{{route('dealer.product.addbatches',['product'=>$product->dealerproduct?->id])}}" class="dropdown-item">
                                     ADD Batch
                                 </a>
+                                @endif
 
 
-                            @if($product->efrissync?->type !== 1 && \Auth::guard('dealer')->user()->dealer->efris === 1)
+                            @if($product->dealerproduct &&($product->efrissync?->type !== 1 && \Auth::guard('dealer')->user()->dealer->efris === 1))
                                 <a class="dropdown-item" href="{{route('dealer.sync.product',$product->id)}}">
                                     Sync
                                 </a>
                             @endif
-                            @if($product->openingstock === 0 && \Auth::guard('dealer')->user()->dealer->efris === 1)
+                            {{-- @if($product->openingstock === 0 && \Auth::guard('dealer')->user()->dealer->efris === 1)
                                 <a class="dropdown-item" onclick="openingstockmodal(this)" id="opbtn" data-id="{{$product->id}}" data-name="{{$product->name}}" data-toggle="modal" data-target="#openingstock">
                                     Opening Stock
                                 </a>
-                             @endif
+                             @endif --}}
+
+
+
                             </div>
                           </div>
         @endif

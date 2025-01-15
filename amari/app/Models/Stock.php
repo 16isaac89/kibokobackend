@@ -36,7 +36,7 @@ class Stock extends Model
         'deleted_at',
     ];
     public function product(){
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(DealerProduct::class,'product_id','id');
     }
     public function salesproducts(){
         return $this->hasMany(SaleProduct::class,'batch');

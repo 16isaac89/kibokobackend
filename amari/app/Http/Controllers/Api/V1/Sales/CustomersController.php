@@ -119,6 +119,7 @@ class CustomersController extends Controller
                 'location'=>request()->location,
                 'userid'=>$id,
                 "tin"=>request()->tin,
+                "identification"=>request()->identification,
             ]
             );
 		//	$file = $customer->locationimage;

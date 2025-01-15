@@ -210,8 +210,11 @@ class DealerProductController extends Controller
        //return back();
    }
 
-   public function viewbatches(){
-    $product = Product::with('stocks')->find(request()->product);
+   public function viewbatches(DealerProduct $product){
+    $product->load('product','stocks');
+    $stocks = Stock::where(['product_id'=>$product->id])->get();
+   // dd($product);
+    //$product = Product::with('stocks')->find(request()->product);
     //dd($product);
     return view('dealer.products.batches',compact('product'));
    }
@@ -275,10 +278,12 @@ class DealerProductController extends Controller
 }
    }
 
-   public function addbatchesview(){
+   public function addbatchesview(Request $request){
+    //dd($request->all());
     if(\Auth::guard('dealer')->check()){
     $id = request()->product;
-    $product = Product::find($id);
+    $product = DealerProduct::with('product')->find($id);
+    //dd($product);
     return view('dealer.products.addbatch',compact('product'));
 }else{
     return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
@@ -288,10 +293,11 @@ class DealerProductController extends Controller
    // dd($request->all());
     if(\Auth::guard('dealer')->check()){
         $dealer  = Auth::guard('dealer')->user()->dealer;
+        $dealerproduct = DealerProduct::with('product')->find(request()->product);
 //dd($dealer);
-        $item = Product::find(request()->product);
+        $item = $dealerproduct->product;
         $supplier = Supplier::find($item->supplier_id);
-        $dealerproduct = DealerProduct::where(['dealer_id'=>$dealer->id,'product_id'=>request()->product])->first();
+
        // dd($dealer);
         if($dealer->efris === 1 || $dealer->efris === "1"){
 
@@ -327,6 +333,7 @@ class DealerProductController extends Controller
             // 'supplier_id'=>$supplier->id,
             'purchase_type'=>request()->purchase_type
         ]);
+        $dealerproduct->increment('stock',request()->stocks);
         return redirect()->back()->with('message', 'Product stock has been saved in EFRIS and Batch added successfuly.');
         //return redirect()->back()->with('success', 'Product stock has been saved in EFRIS and Batch added successfuly.');
        }else{
@@ -413,8 +420,9 @@ class DealerProductController extends Controller
    public function adjustbatch(){
     if(\Auth::guard('dealer')->check()){
     $stock = Stock::find(request()->id);
-    $item = Product::find(request()->product);
     $dealer_product = DealerProduct::with('product')->find(request()->product);
+    $item = $dealer_product->product;
+
     $quantity = request()->amount;
     $remarks = request()->remarks;
     $reason = request()->reason;
@@ -502,4 +510,5 @@ $ids = $request->query('ids');
     return redirect()->back()->with('message', 'Items have been created and updated successfully.');
 
    }
+
 }

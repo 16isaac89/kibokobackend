@@ -74,13 +74,13 @@ protected $appends = [
         'updated_at',
         'deleted_at',
     ];
-	
-	protected static function boot(){
-		parent::boot();
-		static::creating(function($model){
-			$model->identification = Str::uuid();
-		});
-	}
+
+	// protected static function boot(){
+	// 	parent::boot();
+	// 	static::creating(function($model){
+	// 		$model->identification = Str::uuid();
+	// 	});
+	// }
 
 	public function getLocationImageAttribute()
     {

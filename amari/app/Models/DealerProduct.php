@@ -37,5 +37,9 @@ class DealerProduct extends Model
     public function sync(){
         return $this->belongsTo(EfrisSync::class,'product_id');
     }
+    public function stocks(){
+        return $this->hasMany(Stock::class,'product_id','id');
+    }
+
 
 }

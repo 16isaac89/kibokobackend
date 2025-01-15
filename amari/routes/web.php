@@ -368,7 +368,7 @@ Route::post('/dealer/product/postbulkedit','DealerProductController@bulkEditPost
 Route::get('dealer/product/cost/view','DealerProductController@productcost')->name('dealer.product.cost');
 Route::post('dealer/product/save/cost','DealerProductController@saveproductcost')->name('dealer.save.cost');
 Route::post('dealer/product/save/batch','DealerProductController@savebatch')->name('dealer.save.batch');
-Route::get('dealer/product/view/batches','DealerProductController@viewbatches')->name('dealer.product.batches');
+Route::get('dealer/product/batches/{product}','DealerProductController@viewbatches')->name('dealer.product.batches');
 Route::get('dealer/product/adjust/stock','DealerProductController@adjuststockbatch')->name('dealer.product.adjust');
 
 Route::post('dealer/product/edit/batch','DealerProductController@editbatch')->name('dealer.edit.batch');
@@ -377,7 +377,9 @@ Route::post('dealer/product/adjust/batch','DealerProductController@adjustbatch')
 Route::get('dealer/product/delete/batch/{stock}','DealerProductController@deletebatch')->name('dealer.product.deletebatch');
 
 Route::get('dealer/product/view/addbatches','DealerProductController@addbatchesview')->name('dealer.product.addbatches');
+
 Route::post('dealer/product/save/addbatches','DealerProductController@saveaddbatch')->name('dealer.product.saveaddbatch');
+//Route::post('dealer/product/batches/{product}','DealerProductController@productStock')->name('dealer.product.showbatches');
 
 Route::get('dealer/product/delete','DealerProductController@delete')->name('dealer.product.delete');
 
