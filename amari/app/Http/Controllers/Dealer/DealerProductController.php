@@ -104,7 +104,8 @@ class DealerProductController extends Controller
             'product_id'=>request()->productid,
             'sellingprice'=>request()->sellingprice,
             'dealer_id'=>Auth::guard('dealer')->user()->dealer_id,
-            'stock'=>request()->stock,
+            // 'stock'=>request()->stock,
+            'stock'=>0,
             'efris_product_code'=>request()->efris_product_code
         ]);
         return redirect()->route('products.index')->with('success', 'Product has been added successfully!');
@@ -495,7 +496,8 @@ $ids = $request->query('ids');
         if($request->status[$key] == 1 || $request->status[$key] == '1'){
             $item = DealerProduct::find($request->dealerproductids[$key]);
             $item->sellingprice = $request->sellingprices[$key];
-            $item->stock = $request->stocks[$key];
+            // $item->stock = $request->stocks[$key];
+            $item->stock = 0;
             $item->save();
         }else{
             DealerProduct::create([

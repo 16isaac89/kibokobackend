@@ -24,8 +24,8 @@ class NotesController extends Controller
 
     public function creditnote($deviceno,$tin,$privatek, $aeskey,$reason,$details,$doc,$itemcount,$reasoncode,$dealerefris){
 //dd($doc);
-$url = env("EFRIS_URL", "https://efrisws.ura.go.ug/ws/taapp/")."getInformation";
-        //$url = "https://efristest.ura.go.ug/efrisws/ws/taapp/getInformation";
+//$url = env("EFRIS_URL", "https://efrisws.ura.go.ug/ws/taapp/")."getInformation";
+        $url = "https://efristest.ura.go.ug/efrisws/ws/taapp/getInformation";
         $appId = "AP04";
         $brn = "";
         $dataExchangeId = "9230489223014123";
@@ -184,7 +184,7 @@ $url = env("EFRIS_URL", "https://efrisws.ura.go.ug/ws/taapp/")."getInformation";
 
         /*Get Response*/
         $json_response = curl_exec($curl);
-    //dd($json_response);
+    dd($json_response);
         $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
         if ( $status != 200 ) {

@@ -19,6 +19,7 @@ use App\Models\EfrisSetting;
 use App\Models\Stock;
 use App\Http\Controllers\Helper\Efris\TaxPayerController;
 use App\Models\Tax;
+use Illuminate\Support\Str;
 
 
 class SaleController extends Controller
@@ -30,7 +31,7 @@ class SaleController extends Controller
         $sales = Sale::with('dealer','user','van','route','items','customer')->where('dealer_id',$dealer)->get();
         return view('dealer.sales.index',compact('sales'));
     }else{
-        return redirect()->back()->with('errors', $response->respcode['returnStateInfo']["returnMessage"]);
+        return redirect()->back()->with('errors', "Session timed out please login again....");
 
     }
     }
@@ -100,6 +101,7 @@ return view('dealer.sales.index',compact('sales'));
     }
 
     public function deduct(){
+
         $reasoncode = request()->reasoncode;
         $items = request()->product;
         $units = request()->unit;
@@ -142,6 +144,8 @@ return view('dealer.sales.index',compact('sales'));
     }
 
 
+
+    //apply credit note
     public function creditdebitnote(){
        //dd(request()->all());
        $saleid = request()->saleid;
@@ -170,35 +174,39 @@ return view('dealer.sales.index',compact('sales'));
         $privatek = (new KeysController)->getPrivateKey($keypath,$keypwd);
        // $aeskey = (new KeysController)->getAesKey($tin,$deviceno,$privatek);
         $aeskey = $dealerefris->aeskey;
-        $details = (new GoodsTaxDetails)->goodtaxdetails($items,$units);
-        $response = (new NotesController)->creditnote($deviceno,$tin,$privatek, $aeskey,$reason,
-        $details,$doc,$itemcount,$reasoncode,$dealerefris);
+       // $details = (new GoodsTaxDetails)->goodtaxdetails($items,$units);
+        //$response = (new NotesController)->creditnote($deviceno,$tin,$privatek, $aeskey,$reason,
+       // $details,$doc,$itemcount,$reasoncode,$dealerefris);
        // dd($sale);
 // dd($response,json_decode($response->data, true));
 
-        if($response->respcode['returnStateInfo']["returnCode"]=== "00"){
-        foreach($items as $a => $b){
-            $item = SaleProduct::with('product')->find($items[$a]);
-            $batch = Stock::find($item->batch);
+       // if($response->respcode['returnStateInfo']["returnCode"]=== "00"){
+        // foreach($items as $a => $b){
+        //     $item = SaleProduct::with('product')->find($items[$a]);
+        //     $batch = Stock::find($item->batch);
 
-            $finalunits = $item->quantity-$units[$a];
+        //     $finalunits = $item->quantity-$units[$a];
 
-            $product = Product::find($item->product_id);
-            $item->deduction = $units[$a];
-            $item->total = $finalunits*$product->price;
-            $item->save();
-            //decrease total in sale receipt and increase in stock
-            $item->credit_note_value = $units[$a];
-            $item->save();
-            //$item->decrement('quantity',$units[$a]);
-            $batch->increment('amount',$units[$a]);
-        }
-        $data = json_decode($response->data, true);
+        //     $product = Product::find($item->product_id);
+        //     $item->deduction = $units[$a];
+        //     $item->total = $finalunits*$product->price;
+        //     $item->save();
+        //     //decrease total in sale receipt and increase in stock
+        //     $item->credit_note_value = $units[$a];
+        //     $item->save();
+        //     //$item->decrement('quantity',$units[$a]);
+        //     $batch->increment('amount',$units[$a]);
+        // }
+        // $data = json_decode($response->data, true);
         //dd($data);
+
+
         EfrisNoteDocument::create([
             'sale_id'=>$sale->id,
             'type'=>'1',
-            'reference'=>$data["referenceNo"],
+           // 'reference'=>$data["referenceNo"] ||,
+            'reason'=>$reason,
+            'reference'=>(string) Str::uuid(),
             'efris_document_id'=>$sale->efrisdoc->id,
             'status'=> "1",
         ]);
@@ -208,18 +216,19 @@ return view('dealer.sales.index',compact('sales'));
             $total+=$newtotal;
             $item->update([
                 'total'=>$newtotal,
+                'credit_note_value'=>$units[$a],
             ]);
         }
         $sale->decrement('total',$total);
-        return redirect()->back()->with('success', 'Credit note application successful.');
+        return redirect()->back()->with('success', 'Sales return has been issued.');
     // }else{
     //     return redirect()->back()->with('errors', $response->respcode['returnStateInfo']["returnMessage"]);
 
     // }
 
-}else{
-    return redirect()->back()->with('error', 'Credit note has already been issued');
-}
+// }else{
+//     return redirect()->back()->with('error', 'Credit note has already been issued');
+// }
 
     }
 
@@ -309,6 +318,7 @@ return view('dealer.sales.index',compact('sales'));
 
     }
 public function receiptview(Sale $sale){
+    if(\Auth::guard('dealer')->check()){
     $sale->load('efrisdoc','items','customer');
     $dealer = \Auth::guard('dealer')->user()->dealer;
     $net = 0;
@@ -356,6 +366,10 @@ public function receiptview(Sale $sale){
 
         return view('dealer.sales.viewreceipt',compact('sale','customer','dealer','gross','net','tax'));
     }
+}else{
+    return redirect()->route("dealer.login.view")->with('status','Opps! Your session has timed out');
+
+}
 
 
 }

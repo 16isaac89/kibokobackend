@@ -17,6 +17,7 @@ class GoodsTaxDetails extends Controller
         $ordernumber = 0;
         foreach ($items as $a => $b) {
             $item = SaleProduct::with('product')->find($items[$a]);
+           // dd($item);
             $net = intval($units[$a]) * $item->sellingprice;
             $discount = $item->discount;
             $total = ($item->sellingprice * $units[$a]);
@@ -46,7 +47,7 @@ class GoodsTaxDetails extends Controller
                 $gooddetails = (Object) [
                 "item" => $item->product->name,
                 "itemCode" => $item->product->code,
-                'goodsCategoryId' => $item->product->category,
+                'goodsCategoryId' => $item->product->efriscategorycode,
                 "qty" => -$units[$a],
                 "unitOfMeasure" => $item->product->unit,
                 "unitPrice" => $item->sellingprice,

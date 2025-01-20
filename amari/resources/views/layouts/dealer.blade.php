@@ -138,7 +138,7 @@ td a, td input, td img {
 
     <div class="am-mainpanel">
       <div class="am-pagetitle">
-        <h5 class="am-title">Dashboard</h5>
+        <h5 class="am-title">{{ \Auth::guard('dealer')->user()->dealer->tradename }}</h5>
         <form id="searchBar" class="search-bar" action="index.html">
           <div class="form-control-wrapper">
             <input type="search" class="form-control bd-0" placeholder="Search...">

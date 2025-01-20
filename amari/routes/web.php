@@ -66,6 +66,12 @@ Route::get('/admin/get/key','EfrisSetupController@getkey')->name('get.efriskey')
     Route::delete('maps/destroy', 'MapController@massDestroy')->name('maps.massDestroy');
     Route::resource('maps', 'MapController');
 
+    // Product Division
+    Route::delete('product-divisions/destroy', 'ProductDivisionController@massDestroy')->name('product-divisions.massDestroy');
+    Route::post('product-divisions/parse-csv-import', 'ProductDivisionController@parseCsvImport')->name('product-divisions.parseCsvImport');
+    Route::post('product-divisions/process-csv-import', 'ProductDivisionController@processCsvImport')->name('product-divisions.processCsvImport');
+    Route::resource('product-divisions', 'ProductDivisionController');
+
 
 
     // Customer
@@ -129,9 +135,9 @@ Route::get('admin/customers/export/csv', 'CustomerController@exportCsv')->name('
     Route::post('dealers/parse-csv-import', 'DealersController@parseCsvImport')->name('dealers.parseCsvImport');
     Route::post('dealers/process-csv-import', 'DealersController@processCsvImport')->name('dealers.processCsvImport');
     Route::post('dealer/target/add','DealersController@dealerTarget')->name('dealer.target');
-    Route::post('dealer/edit','DealersController@editDealer')->name('edit.dealer');
+    Route::put('dealer/edit/{dealer}','DealersController@editDealer')->name('edit.dealer');
     Route::get('efris/get/taxpayer','DealersController@getDealer')->name('efris.dealer');
-
+    Route::get('/dealer/edit/{dealer}','DealersController@edit')->name('dealer.edit');
     Route::post('/save/dealer/user','DealersController@savedealeradmin')->name('dealer.user');
     Route::get('/dealer/add/sub/{dealer}','DealersController@addsub')->name('dealer.addsub');
     Route::post('/dealer/subprice','DealersController@subprice')->name('dealer.subprice');

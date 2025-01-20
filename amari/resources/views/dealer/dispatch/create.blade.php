@@ -1,87 +1,98 @@
 @extends('layouts.dealer')
 
 @section('content')
-    {{-- @include('admin.dealers.modals.add')
-    @include('admin.dealers.modals.edit') --}}
 
-    <div class="card">
-        <div class="card-header">
-            <h4 class="mb-0">Add New Dispatch</h4>
-        </div>
-
-        @if($errors->any())
-            <div class="alert alert-danger">
-                <strong>Error:</strong> {{ $errors->first() }}
-            </div>
-        @endif
-
-        <div class="card-body">
-            <div class="mb-3">
-                <button class="btn btn-success" onclick="addRow('dataTable')">Add Row</button>
-                <button class="btn btn-danger" onclick="deleteRow('dataTable')">Delete Row</button>
-            </div>
-
-            <form method="post" action="{{ route('dispatches.store') }}">
-                @csrf
-                <div class="form-row mb-3">
-                    <div class="col">
-                        <label for="inlineFormCustomSelect">Van</label>
-                        <select class="custom-select" name="van" required>
-                            <option readonly value="">Choose van.</option>
-                            @foreach ($vans as $van)
-                                <option value="{{ $van->id }}">{{ $van->name }} {{ $van->reg_id }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col">
-                        <label for="dispatchdate">Dispatch Date</label>
-                        <input type="text" class="form-control dispatchdate" placeholder="Dispatch date" required name="dispatchdate"/>
-                    </div>
-                </div>
-
-                <div class="table-responsive">
-                    <table id="dataTable" class="table table-bordered">
-                        <thead class="thead-light">
-                            <tr>
-                                <th style="width: 50px;">Select</th>
-                                <th class="text-center">Brand</th>
-                                <th class="text-center">Product</th>
-                                <th class="text-center">Stock (Total/Exp)</th>
-                                <th class="text-center">Units</th>
-                                <th class="text-center">Price</th>
-                                <th class="text-center">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="checkbox" name="chk" /></td>
-                                <td>
-                                    <select name="brands[]" class="form-control brand" required>
-                                        <option>Select product brand</option>
-                                        @foreach($brands as $brand)
-                                            <option value="{{ $brand->code }}">{{ $brand->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="products[]" id="productlist" required class="form-control product"></select>
-                                </td>
-                                <td>
-                                    <input type="number" readonly name="batches[]" id="batchlist" required class="form-control batch" />
-                                </td>
-                                <td><input type="number" required name="unit[]" id="productunit" class="form-control productunit" /></td>
-                                <td><input type="text" readonly name="price[]" class="form-control productprice" /></td>
-                                <td><input type="text" readonly name="total[]" class="form-control producttotal" /></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <button type="submit" class="btn btn-primary mt-3">Save</button>
-            </form>
-        </div>
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Add New Dispatch</h4>
     </div>
 
+    @if($errors->any())
+        <div class="alert alert-danger">
+            <strong>Error:</strong> {{ $errors->first() }}
+        </div>
+    @endif
+
+    <div class="card-body">
+        <div class="d-flex mb-3">
+            <button type="button" class="btn btn-success mr-2" onclick="addRow('dataTable')">
+                <i class="fas fa-plus"></i> Add Row
+            </button>
+            <button type="button" class="btn btn-danger" onclick="deleteRow('dataTable')">
+                <i class="fas fa-trash"></i> Delete Row
+            </button>
+        </div>
+
+        <form method="post" action="{{ route('dispatches.store') }}">
+            @csrf
+            <div class="form-row mb-3">
+                <div class="col">
+                    <label for="van">Van</label>
+                    <select class="custom-select" name="van" id="van" required>
+                        <option readonly value="">Choose van</option>
+                        @foreach ($vans as $van)
+                            <option value="{{ $van->id }}">{{ $van->name }} - {{ $van->reg_id }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="dispatchdate">Dispatch Date</label>
+                    <input type="text" class="form-control dispatchdate" id="dispatchdate" placeholder="Dispatch date" required name="dispatchdate" />
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="dataTable" class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="width: 50px;">Select</th>
+                            <th class="text-center">Brand</th>
+                            <th class="text-center">Product</th>
+                            <th class="text-center">Stock (Total/Exp)</th>
+                            <th class="text-center">Units</th>
+                            <th class="text-center">Price</th>
+                            <th class="text-center">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" name="chk" /></td>
+                            <td>
+                                <select name="brands[]" class="form-control brand" required>
+                                    <option value="">Select product brand</option>
+                                    @foreach($brands as $brand)
+                                        <option value="{{ $brand->code }}">{{ $brand->name }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
+                                <select name="products[]" id="productlist" class="form-control product" required></select>
+                            </td>
+                            <td>
+                                <input type="number" readonly name="batches[]" id="batchlist" class="form-control batch" required />
+                            </td>
+                            <td>
+                                <input type="number" name="unit[]" id="productunit" class="form-control productunit" required />
+                            </td>
+                            <td>
+                                <input type="text" readonly name="price[]" class="form-control productprice" />
+                            </td>
+                            <td>
+                                <input type="text" readonly name="total[]" class="form-control producttotal" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">
+                <i class="fas fa-save"></i> Save
+            </button>
+        </form>
+    </div>
+</div>
+
 @endsection
+
 
 @section('scripts')
     @parent

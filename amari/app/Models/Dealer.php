@@ -91,5 +91,9 @@ public function supervisor(){
     return $this->belongsTo(User::class,'supervisor_id','id');
 
 }
+public function productDivisions()
+    {
+        return $this->belongsToMany(ProductDivision::class);
+    }
 
 }

@@ -40,6 +40,7 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a href="{{route('dealer.product.viewedit', $product->id)}}" class="btn btn-primary">
+
                                     @if($product->dealerproduct)
                                     Update
                                     @else

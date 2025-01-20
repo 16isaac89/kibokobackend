@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 @include('admin.dealers.modals.add')
-@include('admin.dealers.modals.edit')
+{{-- @include('admin.dealers.modals.edit') --}}
 @include('admin.dealers.modals.user')
 @include('admin.dealers.modals.target')
 @can('role_create')
@@ -41,6 +41,9 @@
                             Trade Name
                         </th>
                         <th>
+                            Division(s)
+                        </th>
+                        <th>
                            TIN
                         </th>
                         <th>
@@ -75,6 +78,11 @@
                             <td>
                                 {{ $dealer->tradename ?? '' }}
                             </td>
+                            <td>
+                                @foreach($dealer->productDivisions as $division)
+                                    <b>{{ $division->name }},</b><br>
+                                @endforeach
+                            </td>
                              <td>
                                 {{ $dealer->tin ?? '' }}
                             </td>
@@ -101,14 +109,17 @@
 
                             <td>
                                 @can('dealer_edit')
-                                    <a data-id="{{$dealer->id}}" data-start="{{$dealer->start_date}}"
+                                <a href="{{route('admin.dealer.edit',$dealer->id)}}" class="btn btn-xs btn-info">
+                                    {{ trans('global.edit') }}
+                                </a>
+                                    {{-- <a data-id="{{$dealer->id}}" data-start="{{$dealer->start_date}}"
                                         data-end="{{$dealer->end_date}}"
                                         data-email="{{$dealer->email}}"
                                         data-supervisor = "{{$dealer->supervisor_id}}"
                                         data-sub_type = "{{$dealer->sub_type}}"
                                         data-efris="{{$dealer->efris}}" data-tradename="{{$dealer->tradename}}" data-tin="{{$dealer->tin}}" data-address="{{$dealer->address}}" data-phone="{{$dealer->phonenumber}}" data-status="{{$dealer->status}}" class="btn btn-xs btn-info" data-toggle="modal" data-target="#editdealer">
                                         {{ trans('global.edit') }}
-                                    </a>
+                                    </a> --}}
                                 @endcan
                                 @can('dealer_edit')
                                     <a data-id="{{$dealer->id}}"  class="btn btn-xs btn-success" data-toggle="modal" data-target="#dealeruser">

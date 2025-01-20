@@ -24,6 +24,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Tax;
 use App\Models\DealerProduct;
+use App\Models\EfrisFailedJob;
 
 class OrderController extends Controller
 {
@@ -487,7 +488,7 @@ class OrderController extends Controller
                     'number' => $saleid,
                     'verifcode' => $efris->data->basicInformation->invoiceId,
                     'qrcode' => $efris->data->summary->qrCode,
-                    'total' => $total,
+                    'total' => $sumgross,
                     'saler' => $saler,
                     'customer' => $route,
                     'dealer' => $dealerefris,
@@ -498,11 +499,12 @@ class OrderController extends Controller
                     'dispatchstock' => $dispatch ? $dispatch->dispatchproducts : null,
                     'efris' => 1,
                     "invoiceno" => $efris->data->basicInformation->invoiceNo,
-                    'efris'=>1
+                    'efris'=>1,
+                    "vat"=>$taxamount
                 ]);
             } else {
                 //$sale->delete();
-                EfrisFailedJobs::create([
+                EfrisFailedJob::create([
                     'sale_id'=>$sale->id,
                 ]);
                 return response()->json([
@@ -523,14 +525,15 @@ class OrderController extends Controller
                 'dealer' => $dealerefris,
                 'items' => $goodsdetails,
                 'created' => $sale->created_at,
-                'dispatchstock' => $dispatch ? $dispatch->dispatchproducts : [],
+                //'dispatchstock' => $dispatch ? $dispatch->dispatchproducts : [],
                 "customertype" => request()->customertype,
-                'efris'=>0
+                'efris'=>0,
+                'r'=>1
                 ]);
             }
 
         } else {
-            EfrisFailedJobs::create([
+            EfrisFailedJob::create([
                 'sale_id'=>$sale->id,
             ]);
             return response()->json([
@@ -551,9 +554,10 @@ class OrderController extends Controller
             'dealer' => $dealerefris,
             'items' => $goodsdetails,
             'created' => $sale->created_at,
-            'dispatchstock' => $dispatch ? $dispatch->dispatchproducts : [],
+            //'dispatchstock' => $dispatch ? $dispatch->dispatchproducts : [],
             "customertype" => request()->customertype,
-            'efris'=>0
+            'efris'=>0,
+            'r'=>2
             ]);
             // $sale->delete();
             // return response()->json(['message' => 500]);

@@ -124,6 +124,12 @@
                             Routes
                         </a>
                     </li>
+                    <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.product-divisions.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/product-divisions") || request()->is("admin/product-divisions/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-user-tie c-sidebar-nav-icon"></i>
+                            Division
+                        </a>
+                    </li>
                 </ul>
             </li>
         @endcan

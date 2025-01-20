@@ -20,6 +20,7 @@ class EfrisNoteDocument extends Model
         'sale_id',
         'type',
         'reference',
+        'reason',
         'status',
         'fdn',
         'ver_code',

@@ -57,6 +57,17 @@
                 </select>
               </div>
             </div>
+            <div class="form-group">
+                <label for="product_divisions">Select Product Divisions</label>
+                <select id="product_divisions" name="product_divisions[]" class="form-control" multiple>
+                    @foreach ($divisions as $division)
+                        <option value="{{ $division->id }}"
+                                {{ in_array($division->id, old('product_divisions', $dealer->productDivisions->pluck('id')->toArray())) ? 'selected' : '' }}>
+                            {{ $division->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary btn-block">Submit</button>
           </form>
         </div>

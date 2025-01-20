@@ -3,18 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Dealer;
 use App\Http\Controllers\Helper\MediaClass;
-use App\Models\DealerUser;
-use App\Models\Target;
-use Carbon\Carbon;
-use App\Models\Branch;
-use App\Models\DealerRole;
-use App\Models\Subscription;
-use App\Models\Setting;
 use App\Http\Controllers\Traits\CsvImportTrait;
+use App\Models\Branch;
+use App\Models\Dealer;
+use App\Models\DealerRole;
+use App\Models\DealerUser;
+use App\Models\ProductDivision;
+use App\Models\Setting;
+use App\Models\Subscription;
+use App\Models\Target;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class DealersController extends Controller
 {
@@ -28,11 +29,11 @@ class DealersController extends Controller
 
             $dealers = Dealer::whereIn('id',$dealers_ids)->get();
         }else{
-            $dealers = Dealer::all();
+            $dealers = Dealer::with('productDivisions')->get();
         }
-
+        $divisions  = ProductDivision::all();
         $users = User::where('designation',2)->get();
-        return view('admin.dealers.index',compact('dealers','users'));
+        return view('admin.dealers.index',compact('dealers','users','divisions'));
     }
     public function store(){
         $media = new MediaClass();
@@ -57,7 +58,9 @@ class DealersController extends Controller
             'keypwd'=>request()->keypwd,
             'email'=>request()->email,
             'code'=>request()->code,
+            'supervisor_id'=>request()->supervisor,
         ]);
+        $dealer->productDivisions()->sync(request()->product_divisions);
 // Branch::create([
 //     'name'=>request()->branch,
 //     'address'=>request()->address,
@@ -66,17 +69,38 @@ class DealersController extends Controller
 // ]);
         return back();
     }
-    public function editDealer(){
-        Dealer::find(request()->dealerid)->update([
+    public function editDealer(Dealer $dealer){
+    //     dd($dealer);
+    //    $dealer  = Dealer::find(request()->dealerid);
+        $dealer->update([
             'tradename'=>request()->dealername,
             'tin'=>request()->dealertin,
             'address'=>request()->dealeraddress,
             'phonenumber'=>request()->dealerphonenumber,
             'status'=>request()->dealerstatus,
             'efris'=>request()->dealerefris,
-            'type_of_business'=>request()->business_type,
+            'supervisor_id'=>request()->supervisor,
+            //'type_of_business'=>request()->business_type,
         ]);
-        return back();
+        $dealer->productDivisions()->sync(request()->product_divisions);
+        return redirect()->back()->with('message', 'Dealer has been updated successfully!');
+    }
+    public function edit(Dealer $dealer){
+        $dealer->load('productDivisions');
+        $designation = \Auth::user()->designation;
+        $dealers = [];
+
+        if($designation == 2){
+            $dealers_ids = \Auth::user()->dealers->pluck('id');
+
+            $dealers = Dealer::whereIn('id',$dealers_ids)->get();
+        }else{
+            $dealers = Dealer::with('productDivisions')->get();
+        }
+        $divisions  = ProductDivision::all();
+        $users = User::where('designation',2)->get();
+
+        return view('admin.dealers.edit',compact('dealer','users','divisions'));
     }
 
     public function savedealeradmin(){
@@ -113,6 +137,7 @@ class DealersController extends Controller
     public function show(Dealer $dealer){
         // $subscriptions = $dealer->dealersubs;
         // $lates =  = $dealer->dealersubslat;
+
         $dealer->load(['dealerclients'=>function($query){
             $query->with('route');
         },'routes'=>function($query){

@@ -1,88 +1,49 @@
 @extends('layouts.dealer')
-@section('content')
-@include('admin.dispatch.modals.view')
-<div class="card">
 
-<div style="margin-bottom: 10px;" class="row">
-        <div class="col-lg-12">
-        <a class="btn btn-success" href="{{route('dispatches.create')}}" class="button btn-primary">
-                ADD DISPATCH
+@section('content')
+
+@include('admin.dispatch.modals.view')
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Dispatch Management</h5>
+    </div>
+
+    <div class="card-body">
+        <div class="mb-3">
+            <a href="{{ route('dispatches.create') }}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add Dispatch
             </a>
         </div>
-    </div>
-    <div class="card-body">
+
         <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-dispatch" id="datatable-dispatch">
-                <thead>
+            <table class="table table-bordered table-striped table-hover datatable" id="datatable-dispatch">
+                <thead class="thead-light">
                     <tr>
-                        <th width="10">
-
-                        </th>
-
-                        <th>
-                            ID
-                        </th>
-                        <th>
-                            Total
-                        </th>
-                        <th>
-                           Count
-                        </th>
-                        <th>
-                            Dispatcher
-                        </th>
-                        <th>
-                           Van
-                        </th>
-                        <th>
-                            Date
-                        </th>
-                        <th>
-                            Action
-                        </th>
-
+                        <th width="10"></th>
+                        <th>ID</th>
+                        <th>Total</th>
+                        <th>Count</th>
+                        <th>Dispatcher</th>
+                        <th>Van</th>
+                        <th>Date</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($dispatches as $dispatch)
+                    @foreach ($dispatches as $dispatch)
                         <tr data-entry-id="{{ $dispatch->id }}">
-
+                            <td></td>
+                            <td>{{ $dispatch->id ?? '' }}</td>
+                            <td>{{ $dispatch->total ?? '' }}</td>
+                            <td>{{ $dispatch->count ?? '' }}</td>
+                            <td>{{ $dispatch->user->name ?? '' }}</td>
+                            <td>{{ $dispatch->van->name ?? '' }}</td>
+                            <td>{{ $dispatch->created_at->format('Y-m-d H:i') ?? '' }}</td>
                             <td>
-
-                            </td>
-                            <td>
-                                {{ $dispatch->id ?? '' }}
-                            </td>
-
-                            <td>
-                                {{ $dispatch->total ?? '' }}
-                            </td>
-                             <td>
-                                {{ $dispatch->count ?? '' }}
-                            </td>
-                             <td>
-                                {{ $dispatch->user->name ?? '' }}
-                            </td>
-                             <td>
-                                {{ $dispatch->van->name ?? '' }}
-                            </td>
-                            <td>
-                                {{ $dispatch->created_at ?? '' }}
-                            </td>
-
-                            <td>
-                                {{-- <button type="button" class="btn btn-primary">Primary</button>
-<button type="button" class="btn btn-secondary">Secondary</button> --}}
-                                <!-- @can('dispatch_copy')
-                                    <a href="{{route('admin.dispatch.copy',['id'=>$dispatch->id])}}"  class="btn btn-xs btn-info">
-                                        Copy
-                                    </a>
-                                @endcan -->
-
-                                <button data-id="{{$dispatch->id}}"  class="btn btn-xs btn-success" data-toggle="modal" data-target="#viewitems">
-                                   View
+                                <button data-id="{{ $dispatch->id }}" class="btn btn-success btn-sm" data-toggle="modal" data-target="#viewitems">
+                                    <i class="fas fa-eye"></i> View
                                 </button>
-
                             </td>
                         </tr>
                     @endforeach
@@ -92,9 +53,8 @@
     </div>
 </div>
 
-
-
 @endsection
+
 @section('scripts')
 @parent
 <script>

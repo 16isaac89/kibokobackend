@@ -1,43 +1,43 @@
 @extends('layouts.dealer')
 @section('content')
 
-<div class="card">
-    <div class="card-header">
-       Edit Product
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Update {{ $product->name }} for {{ \Auth::guard('dealer')->user()->dealer->tradename }}</h5>
     </div>
 
     <div class="card-body">
-        <div class="table-responsive">
-        <form method="post" action="{{route('store.dealer.product')}}">
-        @csrf
-   <div class="row" style="margin:10px;">
-    <div class="col-6">
-      <label>Stock:</label>
-      <input type="text" id="stock" name="stock" class="form-control" >
-    </div>
+        <form method="POST" action="{{ route('store.dealer.product') }}">
+            @csrf
+            <div class="row mb-3">
+                {{-- <div class="col-md-6">
+                    <label for="stock" class="form-label">Stock</label>
+                    <input type="text" id="stock" name="stock" class="form-control" required>
+                </div> --}}
+                <div class="col-md-6">
+                    <label for="sellingprice" class="form-label">Selling Price</label>
+                    <input type="text" id="sellingprice" name="sellingprice" class="form-control" required>
+                </div>
+            </div>
 
-    <div class="col-6">
-    <label>Selling Price</label>
-      <input type="text" id="sellingprice" name="sellingprice"  class="form-control" >
-    </div>
-  </div>
-  <div class="row" style="margin:10px;">
-    <div class="col-6">
-      <label>Efris Product Code:</label>
-      <input type="text" id="efris_product_code" name="efris_product_code" class="form-control" >
-    </div>
-  </div>
-  <input type="hidden" name="productid" value="{{$product->id}}" id="productid">
-  <button type="submit" style="margin:10px;" class="btn btn-primary">Submit</button>
-</form>
-        </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="efris_product_code" class="form-label">Efris Product Code</label>
+                    <input type="text" id="efris_product_code" name="efris_product_code" class="form-control">
+                </div>
+            </div>
+
+            <input type="hidden" name="productid" value="{{ $product->id }}">
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Save Product</button>
+            </div>
+        </form>
     </div>
 </div>
 
-
-
 @endsection
+
 @section('scripts')
 @parent
-
 @endsection

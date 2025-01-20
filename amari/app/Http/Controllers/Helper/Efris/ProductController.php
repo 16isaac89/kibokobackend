@@ -111,6 +111,7 @@ class ProductController extends Controller
         $decryptedrescontent = $this->aes_decrypt(base64_decode($decrypted_aeskey), base64_decode($encryptedrespcontent));
   $status = $response['returnStateInfo']['returnCode'];
         $msg = $response['returnStateInfo']['returnMessage'];
+        //dd($decryptedrescontent);
         return (Object)['status'=>$status,'message'=>$response,'data'=>$decryptedrescontent,'msg'=>$msg];
         //return base64_encode($decryptedrescontent)
     }
