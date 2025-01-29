@@ -37,10 +37,10 @@ $stockreq = StockRequest::create([
             $net = $quantity*$sellingprice;
             $taxes = $product->tax_amount;
             $tax = $taxes && $taxes > 0 ? $taxes : 0;
-            $taxamount = $taxes ? match ($tax) {
-                0.18 => floor(($tax*($net/1.18))*100)/100,
-                0 => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
-                00 => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
+            $taxamount = $taxes ? match ($taxes) {
+                "0.18" => floor(($tax*($net/1.18))*100)/100,
+                "0" => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
+                "-" => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
             } : 0;
 
             $discount = $a['discounttype'] == 'fixed_value' ? $a['discounttype'] : $a['discountamt']/100;

@@ -17,12 +17,15 @@ class RouteController extends Controller
     public function store(){
         $dealer = Auth::guard('dealer')->user()->dealer_id;
         $branch = Auth::guard('dealer')->user()->branch_id;
+       // dd(Auth::guard('dealer')->user()->dealer->code);
         Route::create([
             'name'=>request()->name,
             'dealer_id'=>$dealer,
-            'branch_id'=>$branch
+            'branch_id'=>$branch,
+            'code'=>Auth::guard('dealer')->user()->dealer->code,
+            'dealer_code'=>Auth::guard('dealer')->user()->dealer->code,
         ]);
-        return back();
+        return redirect()->back()->with('message','Route created successfully');
     }
     public function updateRoute(){
         Route::find(request()->routeid)->update([

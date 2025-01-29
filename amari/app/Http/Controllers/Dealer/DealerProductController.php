@@ -31,10 +31,14 @@ class DealerProductController extends Controller
     public function index(){
         if(\Auth::guard('dealer')->check()){
         $dealer  = Auth::guard('dealer')->user()->dealer->code;
+        $divisions  = Auth::guard('dealer')->user()->dealer->productDivisions;
+        $divisionsarray = $divisions->pluck('id')->toArray();
 
         $products = Product::with(['category','brand','tax','dealerproduct'=>function($query){
             return $query->where('dealer_id',Auth::guard('dealer')->user()->dealer_id);
-        }])->get();
+        }])->whereIn('product_division_id',$divisionsarray)->get();
+
+
         return view('dealer.products.index',compact('products'));
     }else{
         return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');

@@ -34,12 +34,16 @@ protected $appends = [
         'tax_id',
         'efriscategorycode',
         'efriscategoryname',
+        'product_division_id',
         'group',
         'division',
     ];
 
    public function brand(){
     return $this->belongsTo(ProductBrand::class, 'brand_id','code');
+   }
+   public function division(){
+    return $this->belongsTo(ProductDivision::class, 'product_division_id','id');
    }
    public function tax(){
     return $this->belongsTo(Tax::class, 'tax_id','id');

@@ -3,18 +3,19 @@
 namespace App\Http\Controllers\Api\V1\Sales;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\VanProduct;
-use App\Models\Product;
-use App\Models\RoutePlan;
-use Carbon\Carbon;
+use App\Models\Customer;
+use App\Models\Dealer;
 use App\Models\Dispatch;
-use App\Models\RoutePlanList;
+use App\Models\Performance;
+use App\Models\Product;
 use App\Models\ProductBrand;
+use App\Models\RoutePlan;
+use App\Models\RoutePlanList;
 use App\Models\SkuTarget;
 use App\Models\Van;
-use App\Models\Performance;
-use App\Models\Customer;
+use App\Models\VanProduct;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 
 class StockController extends Controller
@@ -53,10 +54,14 @@ class StockController extends Controller
     }
 
 
+    //get all products for requests
     public function getproducts(){
+        $dealer = Dealer::with('productDivisions')->find(request()->dealer);
+        $divisions = $dealer->productDivisions->pluck('id')->toArray();
         $products = Product::with(['brand','dealerproduct'=>function($q){
             $q->where('dealer_id',request()->dealer)->get();
-        }])->where('selling_price','>',0)->get();
+        }])->where('selling_price','>',0)->whereIn('product_division_id',$divisions)->get();
+
         return response()->json(['products'=>$products,'dealer'=>request()->dealer]);
     }
     public function getskutarget(){

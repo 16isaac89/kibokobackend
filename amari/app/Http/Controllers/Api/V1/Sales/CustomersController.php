@@ -73,6 +73,7 @@ class CustomersController extends Controller
                 'location'=>request()->location,
                 'userid'=>$id,
                 "tin"=>request()->tin,
+                "buyerType"=>request()->buyerType
 			]);
             // if (request()->subdimage) {
             //     $client->addMedia(request()->file('subdimage'))->toMediaCollection('location_image','public_uploads');
