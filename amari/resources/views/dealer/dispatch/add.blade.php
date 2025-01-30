@@ -1,284 +1,167 @@
 @extends('layouts.dealer')
-@section('content')
-@include('admin.dealers.modals.add')
-@include('admin.dealers.modals.edit')
 
+@section('content')
 <div class="card">
-	@if($errors->any())
-<h4>{{$errors->first()}}</h4>
-@endif
+    @if($errors->any())
+        <div class="alert alert-danger">{{ $errors->first() }}</div>
+    @endif
 
     <div class="card-body">
-       <INPUT type="button" class="btn btn-success" value="Add Row" onclick="addRow('dataTable')" />
-
-	<INPUT type="button" class="btn btn-danger" value="Delete Row" onclick="deleteRow('dataTable')" />
-
-
-
-
-
-	<form method="post" action="{{route('dealer.topup.store')}}">
-        <input type="hidden" value="{{$dispatch->id}}" name="dispatch">
-        <input type="hidden" value="{{$dispatch->van->id}}" name="vanid">
-		<div class="col" style="margin-top:10px;">
-			<label class="mr-sm-2" style="font-size: 18px;" for="inlineFormCustomSelect">{{$dispatch->van->name}}</label>
-		  </div>
-<table width="350px" style="margin:10px;width:100%">
-	<tr>
-		<td style="background-color:grey;text-align:center;width:150px;color:white;font-size:20px;">Action</td>
-		<td style="background-color:grey;text-align:center;width:150px;color:white;font-size:20px;">Brand</td>
-		<th style="background-color:grey;text-align:center;width:150px;color:white;font-size:20px;">Product</th>
-		<th style="background-color:grey;text-align:center;width:150px;color:white;font-size:20px;">Batch</th>
-		<th style="background-color:grey;text-align:center;width:150px;color:white;font-size:20px;">Units</th>
-		<th style="background-color:grey;text-align:center;width:150px;color:white;font-size:20px;">Price</th>
-		<th style="background-color:grey;text-align:center;width:150px;color:white;font-size:20px;">Total</th>
-		</tr>
-</table>
-<table style="margin:10px;width:100%">
-
-  @foreach($dispatch->dispatchproducts as $item)
-    <TR>
-    <td style="text-align:center;width:150px;"></td>
-			<TD style="text-align:center;width:150px;">
-            {{$item->brandname}}
-			</TD>
-            <TD style="text-align:center;width:150px;">
-            {{$item->name}}
-			</TD>
-			<TD style="text-align:center;width:150px;">
-			<!-- Exp: {{$item->batchstock->expirydate ?? ''}}</br> -->
-			Stock: {{$item->batchstock->amount ?? ''}}</br>
-			Price: {{$item->batchstock->sellingprice ?? ''}}
-
-		</TD>
-            <TD style="text-align:center;width:150px;">{{$item->dispatchedquantity}}</TD>
-            <TD style="text-align:center;width:150px;">{{$item->price}}</TD>
-            <TD style="text-align:center;width:150px;">{{$item->price*$item->quantity}}</TD>
-
-
-		</TR>
-    @endforeach
-
-</table>
-
-	@csrf
-	<table id="dataTable"  style="margin-top:10px;width:100%">
-		<TR>
-        <TD><INPUT type="checkbox" name="chk" style="width:150px"/></TD>
-			<TD style="width:150px">
-				<SELECT name="brands[]" style="width:150px"  class="form-control brand">
-                <option>Select product brand</option>
-                @foreach($brands as $brand)
-					<OPTION value="{{$brand->id}}">{{$brand->name}}</OPTION>
-                @endforeach
-				</SELECT>
-			</TD>
-            <TD style="width:150px">
-				<SELECT name="products[]" id="productlist" class="form-control product">
-
-				</SELECT>
-			</TD>
-			<TD style="width:150px">
-				<SELECT name="batches[]" id="batchlist" class="form-control batch">
-
-				</SELECT>
-			</TD>
-            <TD style="width:150px"><INPUT type="text"  name="unit[]" class="form-control productunit"/></TD>
-            <TD style="width:150px"><INPUT type="text"  readonly name="price[]" class="form-control productprice"/></TD>
-            <TD style="width:150px"><INPUT type="text"  readonly name="total[]" class="form-control producttotal"/></TD>
-
-		</TR>
-</table>
-	<button class="btn btn-primary">Save</button>
-</form>
-
-
+        <div class="d-flex mb-3">
+            <button class="btn btn-success me-2" onclick="addRow('dataTable')">Add Row</button>
+            <button class="btn btn-danger" onclick="deleteRow('dataTable')">Delete Row</button>
         </div>
 
+        <form method="POST" action="{{ route('dealer.topup.store') }}">
+            @csrf
+            <input type="hidden" name="dispatch" value="{{ $dispatch->id }}">
+            <input type="hidden" name="vanid" value="{{ $dispatch->van->id }}">
 
-        </div>
+            <div class="mb-3">
+                <label class="form-label h5">{{ $dispatch->van->name }}</label>
+            </div>
+
+            <table class="table table-bordered text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Brand</th>
+                        <th>Product</th>
+                        <th>Batch</th>
+                        <th>Units</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($dispatch->dispatchproducts as $item)
+                        <tr>
+                            <td>{{ $item->brandname }}</td>
+                            <td>{{ $item->name }}</td>
+                            <td>
+                                Stock: {{ $item->batchstock->amount ?? 'N/A' }}<br>
+                                Price: {{ $item->batchstock->sellingprice ?? 'N/A' }}
+                            </td>
+                            <td>{{ $item->dispatchedquantity }}</td>
+                            <td>{{ $item->price }}</td>
+                            <td>{{ $item->price * $item->quantity }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            <table id="dataTable" class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Brand</th>
+                        <th>Product</th>
+                        <th>Batch</th>
+                        <th>Units</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox" name="chk[]" class="form-check-input"></td>
+                        <td>
+                            <select name="brands[]" class="form-select brand">
+                                <option>Select product brand</option>
+                                @foreach($brands as $brand)
+                                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td><select name="products[]" class="form-select product"></select></td>
+                        <td><select name="batches[]" class="form-select batch"></select></td>
+                        <td><input type="text" name="unit[]" class="form-control productunit"></td>
+                        <td><input type="text" name="price[]" class="form-control productprice" readonly></td>
+                        <td><input type="text" name="total[]" class="form-control producttotal" readonly></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button type="submit" class="btn btn-primary mt-3">Save</button>
+        </form>
     </div>
 </div>
-
-
-
 @endsection
+
 @section('scripts')
 @parent
-<script language="javascript">
-		function addRow(tableID) {
+<script>
+    function addRow(tableID) {
+        let table = document.getElementById(tableID);
+        let row = table.insertRow();
+        let cells = table.rows[0].cells.length;
 
-			var table = document.getElementById(tableID);
+        for (let i = 0; i < cells; i++) {
+            let newCell = row.insertCell(i);
+            newCell.innerHTML = table.rows[1].cells[i].innerHTML;
+            let input = newCell.querySelector("input, select");
+            if (input) input.value = '';
+        }
+    }
 
-			var rowCount = table.rows.length;
-			var row = table.insertRow(rowCount);
+    function deleteRow(tableID) {
+        let table = document.getElementById(tableID);
+        let rowCount = table.rows.length;
 
-			var colCount = table.rows[0].cells.length;
+        for (let i = rowCount - 1; i > 0; i--) {
+            let row = table.rows[i];
+            let chkbox = row.cells[0].querySelector("input[type='checkbox']");
+            if (chkbox && chkbox.checked) {
+                table.deleteRow(i);
+            }
+        }
+    }
 
-			for(var i=0; i<colCount; i++) {
+    $(document).on('change', '.brand', function() {
+        let brandId = $(this).val();
+        let row = $(this).closest('tr');
+        let productSelect = row.find('.product');
 
-				var newcell	= row.insertCell(i);
-
-				newcell.innerHTML = table.rows[0].cells[i].innerHTML;
-				//alert(newcell.childNodes);
-				switch(newcell.childNodes[0].type) {
-					case "text":
-							newcell.childNodes[0].value = "";
-							break;
-					case "checkbox":
-							newcell.childNodes[0].checked = false;
-							break;
-					case "select-one":
-							newcell.childNodes[0].selectedIndex = 0;
-							break;
-				}
-			}
-		}
-
-		function deleteRow(tableID) {
-			try {
-			var table = document.getElementById(tableID);
-			var rowCount = table.rows.length;
-
-			for(var i=0; i<rowCount; i++) {
-				var row = table.rows[i];
-				var chkbox = row.cells[0].childNodes[0];
-				if(null != chkbox && true == chkbox.checked) {
-					if(rowCount <= 1) {
-						alert("Cannot delete all the rows.");
-						break;
-					}
-					table.deleteRow(i);
-					rowCount--;
-					i--;
-				}
-
-
-			}
-			}catch(e) {
-				alert(e);
-			}
-		}
-
-	</script>
-
-	<script>
-		$('#dataTable').on('change', '.brand', function() {
-    var selectedValue = $(this).val();
-    var row = $(this).closest('tr'); // get the row
-    var stateSelect = row.find('.product'); // get the other select in the same row
-    $.ajax({
-		method:'GET',
-        url: "{{route('dealer.brand.products')}}",
-        data: { brand: selectedValue, "_token": "{{ csrf_token() }}" },
-        success: function(response) {
-			let data = response.products
-            stateSelect.empty();
-			stateSelect.append($('<option></option>').text("Select Product"));
-            $.each(data, function(item, index) {
-console.log(index.id)
-                stateSelect.append($('<option></option>').val(index.id).text(index.name));
-            })
-        },
-		error:function(error){
-			console.log(error)
-		}
+        $.get("{{ route('dealer.brand.products') }}", { brand: brandId }, function(response) {
+            productSelect.empty().append('<option>Select Product</option>');
+            response.products.forEach(product => {
+                productSelect.append(`<option value="${product.id}">${product.name}</option>`);
+            });
+        });
     });
-})
-		</script>
 
-<script>
-		$('#dataTable').on('change', '.batch', function() {
-    var selectedValue = $(this).val();
+    $(document).on('change', '.product', function() {
+        let productId = $(this).val();
+        let row = $(this).closest('tr');
+        let batchSelect = row.find('.batch');
 
-	var row = $(this).closest('tr'); // get the row
-			var productunit = row.find('.productunit');
-			var productprice = row.find('.productprice');
-			var producttotal = row.find('.producttotal');
-	$.ajax({
-				method:'GET',
-				url: "{{route('dealer.batch.price')}}",
-				data: { batch: selectedValue, "_token": "{{ csrf_token() }}" },
-				success: function(response) {
-				let data = response.batch
-				console.log("data")
-				console.log(data)
-				productunit.val("1")
-				productprice.val("")
-				producttotal.val("")
-				productprice.val(data.sellingprice)
-				producttotal.val(parseInt("1")*parseInt(data.sellingprice))
-				},
-				error:function(error){
-			console.log(error)
-		}
-		});
-console.log(selectedValue)
-})
-		</script>
-<script>
-		$('#dataTable').on('change', '.product', function() {
-    var selectedValue = $(this).val();
-	console.log("selectedValue")
-	console.log(selectedValue)
-    var row = $(this).closest('tr'); // get the row
-    var stateSelect = row.find('.batch'); // get the other select in the same row
-    $.ajax({
-		method:'GET',
-        url: "{{route('dealer.product.batch')}}",
-        data: { product: selectedValue, "_token": "{{ csrf_token() }}" },
-        success: function(response) {
-            console.log(selectedValue)
-			let data = response.batches
-            stateSelect.empty();
-			stateSelect.append($('<option></option>').text("Select Product Batch"));
-            $.each(data, function(item, index) {
-                stateSelect.append($('<option></option>').val(index.id).text(index.amount+' '+index.sellingprice+' '+index.expirydate));
-            })
-        },
-		error:function(error){
-			console.log(error)
-		}
+        $.get("{{ route('dealer.product.batch') }}", { product: productId }, function(response) {
+            batchSelect.empty().append('<option>Select Batch</option>');
+            response.batches.forEach(batch => {
+                batchSelect.append(`<option value="${batch.id}">${batch.amount} - ${batch.sellingprice} - ${batch.expirydate}</option>`);
+            });
+        });
     });
-})
-		</script>
-<!-- <script>
-	$('#dataTable').on('change', '.product', function() {
-			var selectedValue = $(this).val();
 
-			var row = $(this).closest('tr'); // get the row
-			var productunit = row.find('.productunit');
-			var productprice = row.find('.productprice');
-			var producttotal = row.find('.producttotal');
-			$.ajax({
-				method:'GET',
-				url: "{{route('dealer.product.details')}}",
-				data: { product: selectedValue, "_token": "{{ csrf_token() }}" },
-				success: function(response) {
-				let data = response.product
-				productunit.val("1")
-				productprice.val("")
-				producttotal.val("")
-				productprice.val(data.price)
-				producttotal.val(parseInt("1")*parseInt(data.price))
-				},
-				error:function(error){
-			console.log(error)
-		}
-		});
-	})
-	</script> -->
+    $(document).on('change', '.batch', function() {
+        let batchId = $(this).val();
+        let row = $(this).closest('tr');
+        let unitInput = row.find('.productunit');
+        let priceInput = row.find('.productprice');
+        let totalInput = row.find('.producttotal');
 
-<script>
-	$('#dataTable').on('change click keyup input paste', '.productunit', function() {
-			var selectedValue = $(this).val();
-			var row = $(this).closest('tr');
-			var productprice = row.find('.productprice');
-			var producttotal = row.find('.producttotal');
-			let total = parseInt(selectedValue)*parseInt(productprice.val())
-			producttotal.val(total)
+        $.get("{{ route('dealer.batch.price') }}", { batch: batchId }, function(response) {
+            let data = response.batch;
+            unitInput.val(1);
+            priceInput.val(data.sellingprice);
+            totalInput.val(data.sellingprice);
+        });
+    });
 
-	})
-	</script>
-
+    $(document).on('input', '.productunit', function() {
+        let row = $(this).closest('tr');
+        let unit = parseInt($(this).val()) || 0;
+        let price = parseFloat(row.find('.productprice').val()) || 0;
+        row.find('.producttotal').val(unit * price);
+    });
+</script>
 @endsection

@@ -150,6 +150,7 @@
 
         $('#dataTable').on('change', '.brand', function() {
             var selectedValue = $(this).val();
+
             var row = $(this).closest('tr'); // get the row
             var stateSelect = row.find('.product'); // get the other select in the same row
             $.ajax({
@@ -168,10 +169,7 @@
                                 .attr('data-sellingprice', index.dealerproduct.sellingprice ?? 0));
                        // stateSelect.append($('<option></option>').val(index.id).text(index.name));
                     });
-    //                 stateSelect.select2({
-    //     placeholder: "Select an option", // Placeholder text
-    //     allowClear: true // Allow clearing the selection
-    // });
+
                 },
                 error: function(error) {
                     console.log(error);
@@ -196,50 +194,9 @@
     availTotal.val(total);
     availUnit.val(1);
     console.log("Selected Stock:", stockValue); // Use the stock value as needed
-
-            // $.ajax({
-            //     method: 'GET',
-            //     url: "{{ route('dealer.product.batch') }}",
-            //     data: { product: selectedValue, "_token": "{{ csrf_token() }}" },
-            //     success: function(response) {
-            //         let data = response.batches;
-            //         stateSelect.empty();
-            //         stateSelect.append($('<option></option>').text("Select Product Batch"));
-            //         $.each(data, function(item, index) {
-            //             stateSelect.append($('<option></option>').val(index.id).text(index.amount + ' ' + index.expirydate));
-            //         });
-            //     },
-            //     error: function(error) {
-            //         console.log(error);
-            //     }
-            // });
         });
 
-        $('#dataTable').on('change', '.batch', function() {
-            var selectedValue = $(this).val();
-            var row = $(this).closest('tr'); // get the row
-            var productunit = row.find('.productunit');
-            var productprice = row.find('.productprice');
-            var producttotal = row.find('.producttotal');
 
-            $.ajax({
-                method: 'GET',
-                url: "{{ route('dealer.batch.price') }}",
-                data: { batch: selectedValue, "_token": "{{ csrf_token() }}" },
-                success: function(response) {
-                    let data = response.batch;
-                    row.find('#productunit').attr('max', data.amount);
-                    productunit.val("1");
-                    productprice.val("");
-                    producttotal.val("");
-                    productprice.val(data.sellingprice);
-                    producttotal.val(parseInt("1") * parseInt(data.sellingprice));
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
-        });
 
         $('#dataTable').on('change click keyup input paste', '.productunit', function() {
             var selectedValue = $(this).val();
