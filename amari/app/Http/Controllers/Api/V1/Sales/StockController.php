@@ -53,6 +53,11 @@ class StockController extends Controller
         return response()->json(['customers'=>$customers]);
     }
 
+    public function getAllCustomers(){
+        $customers = Customer::where('dealer_code',request()->dealer)->get();
+        return response()->json(['customers'=>$customers]);
+    }
+
 
     //get all products for requests
     public function getproducts(){

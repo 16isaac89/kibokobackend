@@ -46,7 +46,7 @@ class OrderController extends Controller
         if ($lock->get()) {
             $sale = Sale::create([
                 'dealer_user_id' => $salerid,
-                'route_id' => $route ? $route->route_id : $request->route,
+                'route_id' => $route->route_id ,
                 'van_id' => $van,
                 'dealer_id' => $dealer,
                 'total' => $total,
@@ -75,10 +75,14 @@ class OrderController extends Controller
                 // }
                 // $hsvat = (0.18 / 118) * $product->price;
                 $dispatchp = DispatchProducts::find($a['id']);
+
+                'sale_id' => $sale->id,
+
                 SaleProduct::create([
                     'sale_id' => $sale->id,
                     'product_id' => $a['product_id'],
                     // 'name' => $a['name'],
+                    'quantity' => $a['quantity'],
                     'qtybefore' => $a['quantity'],
                     'total' => intval($a['quantity']) * $a['sellingprice'] - $a['discount'],
                     'withoutdiscount' => intval($a['quantity']) * $a['sellingprice'],
