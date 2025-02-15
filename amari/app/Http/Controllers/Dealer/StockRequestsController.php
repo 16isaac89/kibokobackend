@@ -113,35 +113,19 @@ public function postapprove(){
     $stockreq = StockRequest::find(request()->dispatchid);
     $stockrequestproducts = request()->stockrequestproducts;
     $batches = request()->batches;
-    $gives = request()->gives;
+    $gives = request()->quantity;
     $discounts = request()->discounts;
     if($stockreq->requesttype === 1){
       foreach($stockrequestproducts as $a => $b){
-        $item = StockRequestProduct::with(['product'=>function($query){
+        $item = StockRequestProduct::with(['dealerproduct','product'=>function($query){
             $query->with('brand');
         }])->find($stockrequestproducts[$a]);
-        $batch = Stock::find($batches[$a]);
-        if(!$batches[$a] === '0'){
-
-        DispatchProducts::create([
-            'dispatch_id'=>$dispatch->id,
-            'product_id'=>$item->product->id,
-            'name'=>$item->product->name,
-            'dispatchedquantity'=>$gives[$a],
-            'price'=>$item->product->price,
-            'brand'=>$item->product->product_brand_id,
-            'stock'=>$gives[$a],
-            'sellingprice'=>$batch->sellingprice ?? 0,
-            'batch'=>$batches[$a],
-            'brandname'=>$item->product->brand->name,
-            'discount'=>$discounts,
-            'sale_type'=>2
-           // 'dealer_product_id'=>$dealerpid->id
-        ]);
+        // $batch = Stock::find($batches[$a]);
+        // if(!$batches[$a] === '0'){
         $item->appqty = $gives[$a];
         $item->save();
-        $batch->decrement('amount',$gives[$a]);
-    }
+        $item->dealerproduct->decrement('stock',$gives[$a]);
+    //}
 
       }
 

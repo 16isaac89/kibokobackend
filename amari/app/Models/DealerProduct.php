@@ -22,6 +22,7 @@ class DealerProduct extends Model
         'efris_product_code',
         'stock',
         'sellingprice',
+        'discount',
         'created_at',
         'updated_at',
         'deleted_at',

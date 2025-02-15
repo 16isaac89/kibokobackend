@@ -1,40 +1,46 @@
 @extends('layouts.dealer')
-@section('content')
 
-<div class="card">
-    <div class="card-header">
+@section('content')
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white fw-bold">
        Edit Products
     </div>
-
     <div class="card-body">
-        <form method="post" action="{{ route('bulk-edit-products.dealer.products') }}">
+        <form method="POST" action="{{ route('bulk-edit-products.dealer.products') }}">
             @csrf
             <div class="row">
                 @foreach($products as $product)
-                <div class="col-md-6"> <!-- Adjust the column width as needed -->
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <b>{{ $product->name }}</b>
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-light fw-bold">
+                            <span><b>Product:{{ $product->name }}</b></span><br>
+                            <span><b>Brand  :{{ $product->brand->name }}</b></span><br>
                         </div>
                         <div class="card-body">
-                            <p><b>{{ $product->dealerproduct ? 'Editing Existing Item' : 'Adding New Item' }}</b></p>
+                            <p class="text-muted">
+                                <strong>{{ $product->dealerproduct ? 'Editing Existing Item' : 'Adding New Item' }}</strong>
+                            </p>
                             <div class="row mb-3">
                                 <div class="col-6">
-                                    <label for="stock">Stock:</label>
-                                    <input type="number" required id="stock" name="stocks[]" value="{{ $product->dealerproduct ? $product->dealerproduct->stock : '' }}" class="form-control" >
+                                    <label for="stock_{{ $product->id }}" class="form-label">Stock</label>
+                                    <input type="number" required id="stock_{{ $product->id }}" name="stocks[]" value="{{ $product->dealerproduct ? $product->dealerproduct->stock : '' }}" class="form-control">
                                 </div>
                                 <div class="col-6">
-                                    <label for="sellingprice">Selling Price:</label>
-                                    <input required type="number" id="sellingprice" name="sellingprices[]" value="{{ $product->dealerproduct ? $product->dealerproduct->sellingprice : '' }}" class="form-control" >
+                                    <label for="sellingprice_{{ $product->id }}" class="form-label">Selling Price</label>
+                                    <input type="number" required id="sellingprice_{{ $product->id }}" name="sellingprices[]" value="{{ $product->dealerproduct ? $product->dealerproduct->sellingprice : '' }}" class="form-control">
                                 </div>
                             </div>
-                            <div class="row" style="margin:10px;">
+                            <div class="row mb-3">
                                 <div class="col-6">
-                                  <label>Efris Product Code:</label>
-                                  <input type="text" id="efris_product_code" name="efris_product_code" class="form-control" >
+                                    <label for="efris_code_{{ $product->id }}" class="form-label">Efris Product Code</label>
+                                    <input type="text" id="efris_code_{{ $product->id }}" name="efris_product_codes[]" class="form-control">
                                 </div>
-                              </div>
-                            <input type="hidden" name="productids[]" value="{{ $product->id }}" id="productid">
+                                <div class="col-6">
+                                    <label for="discount_{{ $product->id }}" class="form-label">Discount</label>
+                                    <input type="number" id="discount_{{ $product->id }}" name="discounts[]" class="form-control" required>
+                                </div>
+                            </div>
+                            <input type="hidden" name="productids[]" value="{{ $product->id }}">
                             <input type="hidden" name="status[]" value="{{ $product->dealerproduct ? '1' : '0' }}">
                             <input type="hidden" name="dealerproductids[]" value="{{ $product->dealerproduct ? $product->dealerproduct->id : '' }}">
                         </div>
@@ -42,12 +48,12 @@
                 </div>
                 @endforeach
             </div>
-
-            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary mt-3 px-4">Submit</button>
+            </div>
         </form>
     </div>
 </div>
-
 @endsection
 
 @section('scripts')

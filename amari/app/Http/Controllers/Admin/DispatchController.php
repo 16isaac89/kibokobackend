@@ -48,7 +48,7 @@ $characters = mt_rand(7,14);
   $units  = request()->unit;
   $prices =   request()->price;
   $totals  = request()->total;
-  $total =array_sum($totals);
+  //$total =array_sum($totals);
   $dealer = request()->dealer;
   $dealerefris = Dealer::find($dealer);
 
@@ -63,7 +63,7 @@ $characters = mt_rand(7,14);
 
 
   $dispatch = Dispatch::create([
-    'total'=>$total,
+    'total'=>$total ?? 0,
     'user_id'=>Auth::user()->id,
     'count'=>count($products),
     'type'=>'dealer',
@@ -71,11 +71,11 @@ $characters = mt_rand(7,14);
   ]);
   foreach($products as $a => $b){
     $product = Product::find($products[$a]);
-    $dproduct = DealerProduct::with('product')->where(['product_id'=>$products[$a],'dealer_id'=>$dealer])->first();
+    //$dproduct = DealerProduct::with('product')->where(['product_id'=>$products[$a],'dealer_id'=>$dealer])->first();
 
-    if($dproduct){
+    //if($dproduct){
     //update product stock efris
-    $dproduct->increment('stock',$units[$a]);
+    //$dproduct->increment('stock',$units[$a]);
     // if($dealerefris->efris === 1){
     // $item = $dproduct;
     // $dealerefris = Dealer::find($dealer);
@@ -83,35 +83,35 @@ $characters = mt_rand(7,14);
     // $keypwd = $dealerefris->keypwd;
     // $tin = $dealerefris->tin;
     // $deviceno = $dealerefris->deviceno;
-    // $quantity = $units[$a]; 
+    // $quantity = $units[$a];
     // $privatek = (new KeysController)->getPrivateKey($keypath,$keypwd);
     // $aeskey = (new KeysController)->getAesKey($tin,$deviceno,$privatek);
     // $efris = (new ProductController)->addproductStock($item,$aeskey,$privatek,$tin,$deviceno,$quantity);
     // }
-    }else{
+   // }else{
       //send product to subd for syncing
-    DealerProduct::create([
-        'product_id'=>$product->id,
-        'brand_id'=>$brands[$a],
-        'name'=>$product->name,
-        'dealer_id'=>$dealer,
-        'stock'=>$units[$a],
-        'cost'=>$product->price
-    ]);
+    // DealerProduct::create([
+    //     'product_id'=>$product->id,
+    //     'brand_id'=>$brands[$a],
+    //     'name'=>$product->name,
+    //     'dealer_id'=>$dealer,
+    //     'stock'=>$units[$a],
+    //     'cost'=>$product->price
+    // ]);
     DispatchProducts::create([
         'dispatch_id'=>$dispatch->id,
         'product_id'=>$product->id,
         'name'=>$product->name,
         'quantity'=>$units[$a],
-        'price'=>$totals[$a],
+        //'price'=>$totals[$a],
         'brand'=>$brands[$a],
     ]);
+  //}
+
   }
-  
-  }
-return back();
+return redirect()->back()->with('message', 'Items dispatched successfully to sub dealer '.$dealerefris->name);
       }
-       
+
     }
     public function getItems(){
       $items = DispatchProducts::where('dispatch_id',request()->id)->get();

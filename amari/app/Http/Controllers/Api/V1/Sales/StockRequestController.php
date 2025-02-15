@@ -34,17 +34,18 @@ $stockreq = StockRequest::create([
             $product = Product::with('tax')->find($a['id']);
             $sellingprice = $a['dealerproduct'] ? $a['dealerproduct']['sellingprice'] : $product->selling_price;
             $quantity = $a['quantity'];
-            $net = $quantity*$sellingprice;
+            $net = ($quantity*$sellingprice)-$a['discountamt'];
             $taxes = $product->tax_amount;
             $tax = $taxes && $taxes > 0 ? $taxes : 0;
             $taxamount = $taxes ? match ($taxes) {
                 "0.18" => floor(($tax*($net/1.18))*100)/100,
+                "18" => floor(($tax*($net/1.18))*100)/100,
                 "0" => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
                 "-" => floor((0*(($sellingprice*$quantity)/1.18))*100)/100,
             } : 0;
 
-            $discount = $a['discounttype'] == 'fixed_value' ? $a['discounttype'] : $a['discountamt']/100;
-            $discountamount =  $a['discounttype'] == 'fixed_value' ? $a['discountamt'] : $net*$discount;
+            $discount = 'fixed_value';
+            $discountamount =   $a['discountamt'];
             StockRequestProduct::create([
                 'stock_request_id'=>$stockreq->id,
                 'product_id'=>$a['id'],
@@ -74,6 +75,11 @@ $stockreq = StockRequest::create([
         }])->where('dealer_user_id',request()->id)->whereDate('created_at', request()->date)->get();
         $reportssum = $reports->sum('total');
         return response()->json(['reports'=>$reports,'sum'=>$reportssum]);
+    }
+    public function presalereports(){
+        $reports = StockRequest::with(['items'=>function(){$query->with('product');},'customer','customerroute'])->where('dealer_user_id',request()->id)
+        ->whereDate('created_at', request()->date)->get();
+        return response()->json(['reports'=>$reports]);
     }
     public function delivery(){
         $deliveries = StockRequest::with(['items'=>function($query){

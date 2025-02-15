@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-@include('admin.dealers.modals.add')
-@include('admin.dealers.modals.edit')
+
 
 <div class="card">
     <div class="card-header">
@@ -21,7 +20,7 @@
 			  @foreach ($dealers as $dealer)
 			  <option value="{{$dealer->id}}" {{$dealer->id == $dealer->id ? 'selected' : '' }}>{{$dealer->tradename}} {{$dealer->phonenumber}}</option>
 			  @endforeach
-			 
+
 			</select>
 		  </div>
 <table width="350px" style="margin:10px;width:850px;">
@@ -66,7 +65,7 @@
 </form>
 
 
-        </div>        
+        </div>
 
 
         </div>
@@ -149,7 +148,7 @@
             stateSelect.empty();
 			stateSelect.append($('<option></option>').text("Select Product"));
             $.each(data, function(item, index) {
-			
+
                 stateSelect.append($('<option></option>').val(index.id).text(index.name));
             })
         }
@@ -162,7 +161,7 @@
 			var selectedValue = $(this).val();
 
 			var row = $(this).closest('tr'); // get the row
-			var productunit = row.find('.productunit'); 
+			var productunit = row.find('.productunit');
 			var productprice = row.find('.productprice');
 			var producttotal = row.find('.producttotal');
 			$.ajax({
@@ -189,7 +188,7 @@
 			var producttotal = row.find('.producttotal');
 			let total = parseInt(selectedValue)*parseInt(productprice.val())
 			producttotal.val(total)
-			
+
 	})
 	</script>
 

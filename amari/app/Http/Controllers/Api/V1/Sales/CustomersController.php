@@ -15,7 +15,8 @@ use App\Models\Dealer;
 class CustomersController extends Controller
 {
     public function getRoutes(){
-        $routes = Route::with('customers')->where('dealer_id',request()->dealer)->get();
+        $dealer = Dealer::find(request()->dealer);
+        $routes = Route::with('customers')->where('dealer_code',$dealer->code)->get();
        //$routes = RepRoute::with('route')->where('dealer_user_id',request()->user)->get();
         return response()->json(['routes'=>$routes]);
     }

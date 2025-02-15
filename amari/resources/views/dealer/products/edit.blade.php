@@ -25,6 +25,10 @@
                     <label for="efris_product_code" class="form-label">Efris Product Code</label>
                     <input type="text" id="efris_product_code" name="efris_product_code" class="form-control">
                 </div>
+                <div class="col-md-6">
+                    <label for="stock" class="form-label">Discount</label>
+                    <input type="number" id="discount" name="discount" class="form-control" required>
+                </div>
             </div>
 
             <input type="hidden" name="productid" value="{{ $product->id }}">

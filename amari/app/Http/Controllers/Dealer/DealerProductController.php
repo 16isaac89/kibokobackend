@@ -3,28 +3,29 @@
 namespace App\Http\Controllers\Dealer;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Auth;
-use App\Models\ProductBrand;
-use App\Models\Product;
-use App\Models\Location;
-use App\Models\LocationProduct;
-use App\Models\Stock;
-use App\Models\ProductVariance;
-use App\Models\Supplier;
-use App\Models\StockDamage;
-use App\Models\StockCount;
-use App\Models\ProductCategory;
-use App\Models\ProductUnit;
-use App\Models\EfrisSetting;
-use Gate;
-use App\Http\Controllers\Helper\Efris\ProductController;
 use App\Http\Controllers\Helper\Efris\KeysController;
-use Symfony\Component\HttpFoundation\Response;
+use App\Http\Controllers\Helper\Efris\ProductController;
 use App\Models\Branch;
 use App\Models\Dealer;
-use App\Models\Tax;
 use App\Models\DealerProduct;
+use App\Models\DiscountHistory;
+use App\Models\EfrisSetting;
+use App\Models\Location;
+use App\Models\LocationProduct;
+use App\Models\Product;
+use App\Models\ProductBrand;
+use App\Models\ProductCategory;
+use App\Models\ProductUnit;
+use App\Models\ProductVariance;
+use App\Models\Stock;
+use App\Models\StockCount;
+use App\Models\StockDamage;
+use App\Models\Supplier;
+use App\Models\Tax;
+use Auth;
+use Gate;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DealerProductController extends Controller
 {
@@ -50,7 +51,14 @@ class DealerProductController extends Controller
       $product->update([
           'sellingprice'=>request()->sellingprice,
           'stock'=>request()->stock,
-          'efris_product_code'=>request()->efris_product_code
+          'efris_product_code'=>request()->efris_product_code,
+          'discount'=>request()->discount
+      ]);
+      DiscountHistory::create([
+        'product_id'=>$product->product_id,
+        'dealer_product_id'=>$product->id,
+        'discount'=>request()->discount,
+        'item_price'=>$product->sellingprice,
       ]);
         return redirect()->back()->with('message', 'Product has been updated successfully!');
     }else{
@@ -104,14 +112,21 @@ class DealerProductController extends Controller
 
     public function store(){
         if(\Auth::guard('dealer')->check()){
-        DealerProduct::create([
+        $product = DealerProduct::create([
             'product_id'=>request()->productid,
             'sellingprice'=>request()->sellingprice,
             'dealer_id'=>Auth::guard('dealer')->user()->dealer_id,
             // 'stock'=>request()->stock,
             'stock'=>0,
+            'discount'=>request()->discount,
             'efris_product_code'=>request()->efris_product_code
         ]);
+        DiscountHistory::create([
+            'product_id'=>$product->product_id,
+            'dealer_product_id'=>$product->id,
+            'discount'=>request()->discount,
+            'item_price'=>$product->sellingprice,
+          ]);
         return redirect()->route('products.index')->with('success', 'Product has been added successfully!');
     }else{
         return redirect()->route("dealer.login.view")->with('status','Opps! You have entered invalid credentials');
@@ -500,17 +515,31 @@ $ids = $request->query('ids');
         if($request->status[$key] == 1 || $request->status[$key] == '1'){
             $item = DealerProduct::find($request->dealerproductids[$key]);
             $item->sellingprice = $request->sellingprices[$key];
-            // $item->stock = $request->stocks[$key];
+            $item->stock = $request->stocks[$key];
             $item->stock = 0;
+            $item->efris_product_code = request()->efris_product_codes[$key];
+            $item->discount = request()->discounts[$key];
             $item->save();
+            DiscountHistory::create([
+                'product_id'=>$item->product_id,
+                'dealer_product_id'=>$item->id,
+                'discount'=>request()->discounts[$key],
+                'item_price'=>$product->sellingprices[$key],
+              ]);
         }else{
-            DealerProduct::create([
+            $product = DealerProduct::create([
                 'dealer_id'=>\Auth::guard('dealer')->user()->dealer_id,
                 'product_id'=>$request->productids[$key],
                 'stock'=>$request->stocks[$key],
                 'sellingprice'=>$request->sellingprices[$key],
                 'efris_product_code'=>request()->efris_product_code
             ]);
+            DiscountHistory::create([
+                'product_id'=>$product->product_id,
+                'dealer_product_id'=>$product->id,
+                'discount'=>request()->discount,
+                'item_price'=>$product->sellingprice,
+              ]);
         }
     }
     return redirect()->back()->with('message', 'Items have been created and updated successfully.');

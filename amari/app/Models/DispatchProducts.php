@@ -33,6 +33,7 @@ class DispatchProducts extends Model
         'sold',
         'count',
         'stock',
+        'received',
         'brandname',
         'van_id',
         'batch',
@@ -41,6 +42,9 @@ class DispatchProducts extends Model
     ];
     public function pbrand(){
         return $this->belongsTo(ProductBrand::class,'brand');
+    }
+    public function product(){
+        return $this->belongsTo(Product::class,'product_id','id');
     }
     public function batchstock(){
         return $this->belongsTo(Stock::class,'batch');

@@ -117,6 +117,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Sales'], 
     Route::post('/get/dealer','AccountController@getdealer');
     Route::post('/request/stock','StockRequestController@store');
     Route::post('saler/reports','StockRequestController@reports');
+    Route::post('saler/presale-reports','StockRequestController@presalereports');
     Route::post('/save/invoice','OrderController@saveinvoice');
     Route::post('get/receipt/details','OrderController@receiptdetails');
     Route::post('send/return','OrderController@savereturn');

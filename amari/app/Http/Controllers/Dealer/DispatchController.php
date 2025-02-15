@@ -347,4 +347,61 @@ public function getItems(){
     return response()->json(['items'=>$items]);
   }
 
+  public function dealerDispatch(){
+    $records = [];
+    return view('dealer.dispatch.dealerdispatch')->with(['records'=>$records]);
+  }
+  public function dealergetDispatch(Request $request){
+    $from_date = $request->from_date;
+    $to_date = $request->to_date;
+
+    $dealer = Auth::guard('dealer')->user()->dealer_id;
+    $records = Dispatch::where(['dealer_id'=>$dealer,'type'=>'dealer','status'=>$request->status])
+    ->whereBetween('created_at',[$from_date,$to_date])->get();
+    //dd($records);
+    return redirect()->route('dealer.dispatch.maindealer')->with([
+        'records' => $records,
+        'from_date' => $from_date,
+        'to_date' => $to_date,
+    ]);
+  }
+  public function dealerDispatched(Dispatch $dispatch){
+    $dispatch->load(['dispatchproducts'=>function($query){
+        $query->with(['product'=>function($query){
+            $query->with('brand');
+        }]);
+    }]);
+
+    return view('dealer.dispatch.dealerdispatchitems',compact('dispatch'));
+  }
+  public function updatedispatched(Request $request){
+//     "dispatchproductids" => array:4 [▼
+//     0 => "18"
+//     1 => "19"
+//     2 => "20"
+//     3 => "21"
+//   ]
+//   "receiveds" => array:4 [▼
+//     0 => "100"
+//     1 => "300"
+//     2 => "600"
+//     3 => "400"
+//   ]
+Dispatch::find($request->dispatchid)->update(['status'=>1]);
+    $dispatchproductids = request()->dispatchproductids;
+    $receiveds = request()->receiveds;
+    foreach($dispatchproductids as $a => $b){
+
+        $dispatchproduct = DispatchProducts::find($dispatchproductids[$a]);
+        //$dispatchproduct->increment('received',$receiveds[$a]);
+        //dd($dispatchproductids[$a],$dispatchproduct,$receiveds[$a]);
+        $dispatchproduct->	received = $receiveds[$a];
+        $dispatchproduct->save();
+
+       // dd($dispatchproduct);
+    }
+
+return redirect()->back()->with('message','Dispatch has been updated successfully.');
+  }
+
 }

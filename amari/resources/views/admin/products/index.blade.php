@@ -135,7 +135,7 @@
                                 {{ $product->brand->name ?? '' }}
                             </td>
                             <td>
-                                {{ $product->tax_amount ? $product->tax_amount*100 : '' }}
+                                {{-- {{ $product->tax_amount ? $product->tax_amount*100 : '' }} --}}
                             </td>
                             <td>
                                 {{ $product->selling_price ?? '' }}

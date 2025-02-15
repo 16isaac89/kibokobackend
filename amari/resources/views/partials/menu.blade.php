@@ -130,6 +130,13 @@
                             Division
                         </a>
                     </li>
+                    <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.dispatch.index") }}" class="c-sidebar-nav-link
+                        {{ request()->is("admin/dispatch") || request()->is("admin/dispatch/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-user-tie c-sidebar-nav-icon"></i>
+                            Dispatch Purchase
+                        </a>
+                    </li>
                 </ul>
             </li>
         @endcan

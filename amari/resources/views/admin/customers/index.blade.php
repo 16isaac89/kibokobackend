@@ -1,5 +1,6 @@
 @extends('layouts.admin')
 @section('content')
+@include('admin.customers.modals.latlong')
     @can('customer_create')
         <div style="margin-bottom: 10px;" class="row">
             <div class="col-lg-6">
@@ -8,6 +9,9 @@
                 </a>
                 <button class="btn btn-warning" data-toggle="modal" data-target="#csvImportModal">
                     {{ trans('global.app_csvImport') }}
+                </button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadLatLong">
+                    Update geotag
                 </button>
                 @include('csvImport.modal', [
                     'model' => 'Customer',

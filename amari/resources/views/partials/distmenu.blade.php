@@ -82,6 +82,7 @@
               <li class="nav-item"><a href="{{route('dispatches.index')}}" class="nav-link">New</a></li>
               <li class="nav-item"><a href="{{route('dealer.dispatch.records')}}" class="nav-link">Records</a></li>
                <li class="nav-item"><a href="{{route('dealer.getstock.requests')}}" class="nav-link">Presale Orders</a></li>
+               <li class="nav-item"><a href="{{route('dealer.dispatch.maindealer')}}" class="nav-link">Dealer Dispatch</a></li>
             </ul>
           </li><!-- nav-item -->
 @endif
