@@ -3,28 +3,29 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\ProductBrand;
-use App\Models\Product;
+use App\Http\Controllers\Helper\Efris\KeysController;
+use App\Http\Controllers\Helper\Efris\ProductController;
+use App\Http\Controllers\Traits\CsvImportTrait;
+use App\Models\EfrisSetting;
 use App\Models\Location;
 use App\Models\LocationProduct;
-use App\Models\Stock;
-use App\Models\ProductVariance;
-use App\Models\Supplier;
-use App\Models\StockDamage;
-use App\Models\StockCount;
+use App\Models\Product;
+use App\Models\ProductBrand;
 use App\Models\ProductCategory;
+use App\Models\ProductDivision;
 use App\Models\ProductUnit;
-use App\Models\EfrisSetting;
-use Gate;
-use App\Http\Controllers\Helper\Efris\ProductController;
-use App\Http\Controllers\Helper\Efris\KeysController;
-use Symfony\Component\HttpFoundation\Response;
-use App\Http\Controllers\Traits\CsvImportTrait;
-use Illuminate\Support\Facades\DB;
+use App\Models\ProductVariance;
+use App\Models\Stock;
+use App\Models\StockCount;
+use App\Models\StockDamage;
+use App\Models\Supplier;
 use App\Models\Tax;
+use Gate;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class ProductsController extends Controller
@@ -36,7 +37,8 @@ class ProductsController extends Controller
         $categories = ProductCategory::all();
         $products = Product::with(['category','brand','tax'])->get();
         $taxes = Tax::all();
-        return view('admin.products.index',compact('brands','products','categories','taxes'));
+        $divisions = ProductDivision::all();
+        return view('admin.products.index',compact('brands','products','categories','taxes','divisions'));
     }
 
     public function viewedit(){
@@ -45,7 +47,8 @@ class ProductsController extends Controller
         $categories = ProductCategory::all();
         $taxes = Tax::all();
         $units = ProductUnit::all();
-        return view('admin.products.edit',compact('brands','product','categories','units','taxes'));
+        $divisions = ProductDivision::all();
+        return view('admin.products.edit',compact('brands','product','categories','units','taxes','divisions'));
     }
     public function viewaddcount(){
         $brands = ProductBrand::all();
@@ -70,24 +73,12 @@ class ProductsController extends Controller
             'group'=>request()->group,
             'tax_id'=>request()->tax_id,
             "product_category"=>request()->categorycode,
+            'division'=>request()->division,
+            'tax_amount'=>request()->tax_amount,
+            'product_division_id'=>request()->division,
+            'selling_price'=>request()->price
         ]);
-        // foreach($locations as $key=> $a){
-        //     $location = intVal($locations[$key]);
-        //     $quantity = intVal($quantities[$key]);
-        //     LocationProduct::create([
-        //         'location_id'=>$location,
-        //         'product_id'=>$product->id,
-        //         'quantity'=>$quantity,
-        //     ]);
-        // }
-        // foreach($vnames as $key=> $a){
-        //     ProductVariance::create([
-        //         'name'=>$vnames[$key],
-        //         'price'=>$vprices[$key],
-        //         'quantity'=>$vquantities[$key],
-        //         'product_id'=>$product->id,
-        //     ]);
-        // }
+
         return redirect()->back()->with('message', 'Product has been saved successfully');
        // return back();
     }
@@ -107,6 +98,9 @@ class ProductsController extends Controller
             'group'=>request()->group,
             'tax_id'=>request()->tax_id,
             "product_category"=>request()->product_category,
+            'tax_amount'=>request()->tax_amount,
+            'product_division_id'=>request()->division,
+            'selling_price'=>request()->price
         ]);
 
 
