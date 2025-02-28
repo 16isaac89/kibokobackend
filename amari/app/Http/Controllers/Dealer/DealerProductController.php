@@ -47,6 +47,7 @@ class DealerProductController extends Controller
     }
 
     public function updateProduct(DealerProduct $product){
+
         if(\Auth::guard('dealer')->check()){
       $product->update([
           'sellingprice'=>request()->sellingprice,
@@ -510,6 +511,7 @@ $ids = $request->query('ids');
 }
    }
    public function bulkEditPost(Request $request){
+	 //  dd(request()->all());
     foreach($request->productids as $key=> $a){
 
         if($request->status[$key] == 1 || $request->status[$key] == '1'){
@@ -532,12 +534,13 @@ $ids = $request->query('ids');
                 'product_id'=>$request->productids[$key],
                 'stock'=>$request->stocks[$key],
                 'sellingprice'=>$request->sellingprices[$key],
-                'efris_product_code'=>request()->efris_product_code
+                'efris_product_code'=>request()->efris_product_code,
+				'discount'=>request()->discounts[$key],
             ]);
             DiscountHistory::create([
                 'product_id'=>$product->product_id,
                 'dealer_product_id'=>$product->id,
-                'discount'=>request()->discount,
+                'discount'=>request()->discounts[$key],
                 'item_price'=>$product->sellingprice,
               ]);
         }

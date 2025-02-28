@@ -159,7 +159,7 @@
           </li><!-- nav-item -->
 
 @endif
-@if(\Gate::forUser('dealer')->allows('pos_access'))
+{{-- @if(\Gate::forUser('dealer')->allows('pos_access'))
           <li class="nav-item">
             <a href="" class="nav-link with-sub">
               <i class="icon ion-ios-briefcase-outline"></i>
@@ -169,7 +169,7 @@
               <li class="nav-item"><a href="{{route('dealer.posscreen')}}" class="nav-link">POS</a></li>
             </ul>
           </li><!-- nav-item -->
-@endif
+@endif --}}
 
 
         </ul>

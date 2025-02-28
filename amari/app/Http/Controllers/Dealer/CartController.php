@@ -27,9 +27,9 @@ class CartController extends Controller
 {
     public function index(){
         if(\Auth::guard('dealer')->check()){
-          $dealer = \Auth::guard('dealer')->user()->dealer_id;
-        $brands = ProductBrand::where('dealer_id',$dealer)->get();
-        $routes = Route::where('dealer_id',$dealer)->get();
+          $dealer = \Auth::guard('dealer')->user()->dealer->code;
+        $brands = ProductBrand::all();
+        $routes = Route::where('dealer_code',$dealer)->get();
         $categories = CustomerCategory::all();
         return view('dealer.pos.index',compact('brands','routes','categories'));
     }else{
@@ -199,21 +199,21 @@ $total = 0;
             "exciseCurrency"=> "UGX",
             "exciseRateName"=> "123"
         ];
-        
-       
+
+
 
         $taxDetail = (Object)[
     "taxCategoryCode"=> $taxcategorycode,
             "taxCategory"=>"Standard",
             "taxRateName"=>"VAT-Standard",
             "netAmount"=>$tax > 0 ? floor((($units[$key]*$prices[$key])/1.18 + 0.18*(($prices[$key]*$units[$key])/1.18)
-            -floor((0.18*(($prices[$key]*$units[$key])/1.18))*100)/100)*100)/100 : 
+            -floor((0.18*(($prices[$key]*$units[$key])/1.18))*100)/100)*100)/100 :
             floor((($units[$key]*$prices[$key])/1.18 + 0.18*(($prices[$key]*$units[$key])/1.18))*100)/100,
 
 
             "taxRate"=>$taxrate,
             "taxAmount"=>$taxamount,
-           
+
             "grossAmount"=>  floor((($units[$key]*$prices[$key])/1.18 + 0.18*(($prices[$key]*$units[$key])/1.18))*100)/100,
             "exciseUnit"=> "101",
             "exciseCurrency" => "UGX",
@@ -256,13 +256,13 @@ $total = 0;
             "taxCategory"=>"Standard",
             "taxRateName"=>"VAT-Standard",
             "netAmount"=>$tax > 0 ? floor((($units[$key]*$prices[$key])/1.18 + 0.18*(($prices[$key]*$units[$key])/1.18)
-            -floor((0.18*(($prices[$key]*$units[$key])/1.18))*100)/100)*100)/100 : 
+            -floor((0.18*(($prices[$key]*$units[$key])/1.18))*100)/100)*100)/100 :
             floor((($units[$key]*$prices[$key])/1.18 + 0.18*(($prices[$key]*$units[$key])/1.18))*100)/100,
 
 
             "taxRate"=>$taxrate,
             "taxAmount"=>$taxamount,
-           
+
             "grossAmount"=>  floor((($units[$key]*$prices[$key])/1.18 + 0.18*(($prices[$key]*$units[$key])/1.18))*100)/100,
             "exciseUnit"=> "101",
             "exciseCurrency" => "UGX",
@@ -374,19 +374,19 @@ $total = 0;
                 $subtotal = $item->sellingprice;
                 $totalsale = $item->quantity * $item->sellingprice;
                 $total = $item->total-$item->discount;
-        
+
                 $taxamount = match ($taxes->value) {
                     '18' => floor(($itemtax*($totalsale/1.18))*100)/100,
                     '0' => 0,
                     '-' => 0,
                 };
-        
+
                 $netamount = $totalsale-$taxamount;
                 $net += $netamount;
                 $tax +=  $taxamount;
                 $gross += round( ($item->total)/1.18, 2) + round(0.18*(($item->total)/1.18), 2);
                 //array_push($calcs,$taxamount);
-        
+
             }
             //dd($calcs);
             $salecustomer = Customer::find($sale->customer_id);
