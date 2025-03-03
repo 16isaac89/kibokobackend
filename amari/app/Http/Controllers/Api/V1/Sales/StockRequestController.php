@@ -11,6 +11,8 @@ use App\Models\Performance;
 use App\Models\DealerUser;
 use App\Models\Customer;
 use App\Models\Product;
+use App\Models\CaptainPerfomance;
+use Carbon\Carbon;
 
 class StockRequestController extends Controller
 {
@@ -66,6 +68,18 @@ $stockreq = StockRequest::create([
             'points'=>1,
             'pointtype'=>'createcustomer',
           ]);
+          $cp = CaptainPerfomance::where(['dealer_id' => $user->dealer_id, 'user_id' => request()->salerid])
+          ->whereDate('created_at', Carbon::today()) // Compare with today's date
+          ->first();
+          if($cp){
+            $cp->increment('presale_orders',1);
+         }else{
+             CaptainPerfomance::create([
+                 'dealer_id'=>$dealer->id,
+                 'user_id'=>$id,
+                 'presale_orders'=>1
+             ]);
+         }
         return response()->json(['message'=>1]);
     }
 

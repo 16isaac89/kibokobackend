@@ -11,6 +11,8 @@ use App\Models\RepRoute;
 use App\Models\RoutePlanList;
 use App\Models\Performance;
 use App\Models\Dealer;
+use App\Models\CaptainPerfomance;
+use Carbon\Carbon;
 
 class CustomersController extends Controller
 {
@@ -34,6 +36,10 @@ class CustomersController extends Controller
 
         $route = Route::find(request()->route);
 			$client = Customer::find($customer);
+            $cp = CaptainPerfomance::where(['dealer_id' => $dealer->id, 'user_id' => $id])
+            ->whereDate('created_at', Carbon::today()) // Compare with today's date
+            ->first();
+
 		if($client){
 
 			$client->update([
@@ -76,6 +82,16 @@ class CustomersController extends Controller
                 "tin"=>request()->tin,
                 "buyerType"=>request()->buyerType
 			]);
+
+          if($cp){
+             $cp->increment('visited_customers',1);
+          }else{
+              CaptainPerfomance::create([
+                  'dealer_id'=>$dealer->id,
+                  'user_id'=>$id,
+                  'visited_customers'=>1
+              ]);
+          }
             // if (request()->subdimage) {
             //     $client->addMedia(request()->file('subdimage'))->toMediaCollection('location_image','public_uploads');
             // }
@@ -178,6 +194,15 @@ class CustomersController extends Controller
         //    'points'=>1,
          //   'pointtype'=>'createcustomer',
        //   ]);
+       if($cp){
+        $cp->increment('added_customers',1);
+     }else{
+         CaptainPerfomance::create([
+             'dealer_id'=>$dealer->id,
+             'user_id'=>$id,
+             'added_customers'=>1
+         ]);
+     }
  $routes = Route::with('customers')->where('dealer_code',$dealer->code)->get();
             return response()->json(['message'=>'Customer saved successfully','customers'=>[],'routes'=>$routes]);
 		}
