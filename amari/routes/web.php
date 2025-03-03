@@ -138,6 +138,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('/save/dealer/user', 'DealersController@savedealeradmin')->name('dealer.user');
     Route::get('/dealer/add/sub/{dealer}', 'DealersController@addsub')->name('dealer.addsub');
     Route::post('/dealer/subprice', 'DealersController@subprice')->name('dealer.subprice');
+    Route::get('captainperfomance', 'DealersController@captainperfomance')->name('captainperfomance.index');
     Route::resource('dealers', 'DealersController');
 
     //taxes

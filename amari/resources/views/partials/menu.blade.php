@@ -137,6 +137,13 @@
                             Dispatch Purchase
                         </a>
                     </li>
+                    <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.captainperfomance.index") }}" class="c-sidebar-nav-link
+                        {{ request()->is("admin/captainperfomance") || request()->is("admin/captainperfomance/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-user-tie c-sidebar-nav-icon"></i>
+                            Perfomance
+                        </a>
+                    </li>
                 </ul>
             </li>
         @endcan

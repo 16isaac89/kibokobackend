@@ -29,4 +29,10 @@ class CaptainPerfomance extends Model
         'deleted_at',
     ];
 
+    //belongs to dealer
+    public function dealer()
+    {
+        return $this->belongsTo(Dealer::class, 'dealer_id');
+    }
+
 }

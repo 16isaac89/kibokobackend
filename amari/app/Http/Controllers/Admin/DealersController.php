@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Helper\MediaClass;
 use App\Http\Controllers\Traits\CsvImportTrait;
 use App\Models\Branch;
+use App\Models\CaptainPerfomance;
 use App\Models\Dealer;
 use App\Models\DealerRole;
 use App\Models\DealerUser;
@@ -169,4 +170,26 @@ class DealersController extends Controller
         }
 
     }
+
+
+
+public function captainperfomance(Request $request)
+{
+    // Initialize date range variables
+    $startDate = $request->input('start_date');
+    $endDate = $request->input('end_date');
+
+    // Query for performance data with a date range filter
+    $performances = CaptainPerfomance::query()
+        ->when($startDate, function ($query, $startDate) {
+            return $query->whereDate('created_at', '>=', Carbon::parse($startDate)->startOfDay());
+        })
+        ->when($endDate, function ($query, $endDate) {
+            return $query->whereDate('created_at', '<=', Carbon::parse($endDate)->endOfDay());
+        })
+        ->with('dealer')->get();
+
+    return view('admin.dealers.perfomance', compact('performances'));
+}
+
 }

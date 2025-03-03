@@ -95,5 +95,9 @@ public function productDivisions()
     {
         return $this->belongsToMany(ProductDivision::class);
     }
+    //has many captain performance
+    public function captains(){
+        return $this->hasMany(CaptainPerformance::class,'dealer_id','id');
+    }
 
 }
