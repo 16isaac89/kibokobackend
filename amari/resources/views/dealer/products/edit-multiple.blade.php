@@ -33,11 +33,15 @@
                             <div class="row mb-3">
                                 <div class="col-6">
                                     <label for="efris_code_{{ $product->id }}" class="form-label">Efris Product Code</label>
-                                    <input type="text" id="efris_code_{{ $product->id }}" name="efris_product_codes[]" class="form-control">
+                                    <input type="text" id="efris_code_{{ $product->id }}" name="efris_product_codes[]" class="form-control"
+                                     value="{{ $product->dealerproduct->efris_product_code ? $product->dealerproduct->efris_product_code : $product->code }}"
+                                    >
                                 </div>
                                 <div class="col-6">
                                     <label for="discount_{{ $product->id }}" class="form-label">Discount</label>
-                                    <input type="number" id="discount_{{ $product->id }}" name="discounts[]" class="form-control" required>
+                                    <input type="number" id="discount_{{ $product->id }}" name="discounts[]" class="form-control" required
+                                    value="{{ $product->dealerproduct->discount ? $product->dealerproduct->discount : '' }}"
+                                    >
                                 </div>
                             </div>
                             <input type="hidden" name="productids[]" value="{{ $product->id }}">

@@ -84,11 +84,13 @@ class DealerProductController extends Controller
     }
 
     public function viewedit(Product $product){
+
+		//dd($product);
         if(\Auth::guard('dealer')->check()){
             $product->load(['dealerproduct'=>function($query){
-                return $query->where('dealer_id',Auth::guard('dealer')->user()->dealer_id);
+                return $query->with('discounts')->where('dealer_id',Auth::guard('dealer')->user()->dealer_id);
             }]);
-
+// dd($product);
             if($product->dealerproduct !== null){
                 $item = $product->dealerproduct;
                 return view('dealer.products.edit',compact('item','product'));
@@ -112,13 +114,14 @@ class DealerProductController extends Controller
     }
 
     public function store(){
+		//dd(request()->all());
         if(\Auth::guard('dealer')->check()){
         $product = DealerProduct::create([
             'product_id'=>request()->productid,
             'sellingprice'=>request()->sellingprice,
             'dealer_id'=>Auth::guard('dealer')->user()->dealer_id,
             // 'stock'=>request()->stock,
-            'stock'=>0,
+            'stock'=>request()->stock,
             'discount'=>request()->discount,
             'efris_product_code'=>request()->efris_product_code
         ]);
@@ -135,7 +138,7 @@ class DealerProductController extends Controller
        // return back();
     }
     public function editProduct(){
-      // dd(request()->all());
+
       if(\Auth::guard('dealer')->check()){
       $vnames = request()->vname;
       $vquantities = request()->vquantities;
@@ -522,11 +525,12 @@ $ids = $request->query('ids');
             $item->efris_product_code = request()->efris_product_codes[$key];
             $item->discount = request()->discounts[$key];
             $item->save();
+           // dd($item);
             DiscountHistory::create([
                 'product_id'=>$item->product_id,
                 'dealer_product_id'=>$item->id,
                 'discount'=>request()->discounts[$key],
-                'item_price'=>$product->sellingprices[$key],
+                'item_price'=>$item->sellingprice,
               ]);
         }else{
             $product = DealerProduct::create([
