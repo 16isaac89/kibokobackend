@@ -60,7 +60,7 @@
                                         <span class="badge badge-pill badge-danger">Rejected</span>
                                     @endif
                                 </td>
-                                <td>{{ $record->saler->username }}</td>
+                                <td>{{ $record->saler?->username }}</td>
                                 <td>
                                     @if ($record->requesttype === 1)
                                         <span class="badge badge-pill badge-success">NEW</span>
@@ -70,8 +70,8 @@
                                         <span class="badge badge-pill badge-info">CUSTOMER</span>
                                     @endif
                                 </td>
-                                <td><b>{{ $record->customer->name }}</b></td>
-                                <td><b>{{ $record->customer->route->name }}</b></td>
+                                <td><b>{{ $record->customer?->name }}</b></td>
+                                <td><b>{{ $record->customer?->route->name }}</b></td>
                                 <td>
                                     <a href="{{ route('dealer.approve.requests', ['stockrequest' => $record->id]) }}">
                                         <i class="fa fa-clone fa-2x" aria-hidden="true"></i>
