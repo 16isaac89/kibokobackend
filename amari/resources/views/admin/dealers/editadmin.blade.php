@@ -29,7 +29,7 @@
 
           <option required value="">Active</option>
             <option value="1" {{ $user->status == 1 || $user->status == "1" ? 'selected' : '' }}>Yes</option>
-           <option value="0" {{ $user->status == 1 || $user->status == "1" ? 'selected' : '' }}>No</option>
+           <option value="0" {{ $user->status == 0 || $user->status == "0" ? 'selected' : '' }}>No</option>
           </select>
         </div>
         <div class="col-6">

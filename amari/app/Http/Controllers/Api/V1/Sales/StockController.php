@@ -16,6 +16,7 @@ use App\Models\Van;
 use App\Models\VanProduct;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\DealerUser;
 
 
 class StockController extends Controller
