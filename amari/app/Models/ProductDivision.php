@@ -39,4 +39,8 @@ class ProductDivision extends Model
     {
         return $this->hasMany(Product::class, 'product_division_id', 'id');
     }
+    public function dealerUsers()
+{
+    return $this->belongsToMany(DealerUser::class);
+}
 }

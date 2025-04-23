@@ -61,8 +61,11 @@ class StockController extends Controller
 
     //get all products for requests
     public function getproducts(){
+        $user = DealerUser::find(request()->id);
+        $user->load('productDivisions');
+        $divisions = $user->productDivisions->pluck('id')->toArray();
         $dealer = Dealer::with('productDivisions')->find(request()->dealer);
-        $divisions = $dealer->productDivisions->pluck('id')->toArray();
+        //$divisions = $dealer->productDivisions->pluck('id')->toArray();
         $products = Product::with(['brand','dealerproduct'=>function($q){
             $q->where('dealer_id',request()->dealer)->get();
         }])->where('selling_price','>',0)->whereIn('product_division_id',$divisions)->get();

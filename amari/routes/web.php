@@ -136,6 +136,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('efris/get/taxpayer', 'DealersController@getDealer')->name('efris.dealer');
     Route::get('/dealer/edit/{dealer}', 'DealersController@edit')->name('dealer.edit');
     Route::post('/save/dealer/user', 'DealersController@savedealeradmin')->name('dealer.user');
+    Route::get('/update-screen/dealer/user/{user}', 'DealersController@upatedealeradminview')->name('dealer.updateuserview');
+    Route::put('/update/dealer/{user}', 'DealersController@updatedealeradmin')->name('dealer.updateuser');
     Route::get('/dealer/add/sub/{dealer}', 'DealersController@addsub')->name('dealer.addsub');
     Route::post('/dealer/subprice', 'DealersController@subprice')->name('dealer.subprice');
     Route::get('captainperfomance', 'DealersController@captainperfomance')->name('captainperfomance.index');

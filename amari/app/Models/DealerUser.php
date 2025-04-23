@@ -74,4 +74,8 @@ class DealerUser extends Authenticatable
     {
         return $this->belongsToMany(DealerRole::class);
     }
+    public function productDivisions()
+{
+    return $this->belongsToMany(ProductDivision::class);
+}
 }

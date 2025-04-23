@@ -26,7 +26,7 @@
                     <select class="form-control" name="division" id="division" required>
                         <option disabled selected>Select a division</option>
                         @foreach($divisions as $division)
-                            <option value="{{ $division->id }}" {{ $product->division == $division->id ? 'selected' : '' }}>{{ $division->name }}</option>
+                            <option value="{{ $division->id }}" {{ $product->product_division == $division->id ? 'selected' : '' }}>{{ $division->name }}</option>
                         @endforeach
                     </select>
                 </div>

@@ -24,13 +24,22 @@
       <input type="text" name="password" id="password" class="form-control" placeholder="Password">
     </div>
     <div class="col-6">
-      <select class="form-control form-control-lg" required id="userstatus" name="userstatus">
         <Label>Set active/inactive</label>
-      <option value="">Active</option>
+      <select class="form-control form-control-lg" required id="userstatus" name="userstatus">
+
+      <option required value="">Active</option>
         <option value="1">Yes</option>
        <option value="0">No</option>
       </select>
     </div>
+    <div class="col-6">
+        <label>Division</label>
+        <select required class="form-control select2" id="product_divisions[]" multiple name="product_divisions[]">
+        @foreach($divisions as $division)
+          <option value="{{ $division->id }}">{{ $division->name }}</option>
+        @endforeach
+        </select>
+      </div>
   </div>
   <input type="hidden" id="iddealer" name="iddealer">
 

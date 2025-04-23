@@ -105,6 +105,7 @@ class DealersController extends Controller
     }
 
     public function savedealeradmin(){
+
         $roles = DealerRole::where('title','admin')->pluck('id');
         $branch = Branch::where('dealer_id',request()->iddealer)->first();
         $user = DealerUser::create([
@@ -116,7 +117,25 @@ class DealersController extends Controller
             'status'=>request()->userstatus,
             ]);
             $user->dealerroles()->sync($roles);
-            return back();
+            $user->productDivisions()->attach(request()->product_divisions);
+            return redirect()->back()->with('message', 'User has been created successfully!');
+    }
+    public function updatedealeradmin(DealerUser $user){
+        $user->update([
+            'username'=>request()->username,
+            'phone'=>request()->phone,
+            'status'=>request()->userstatus,
+            ]);
+
+            $user->productDivisions()->sync(request()->product_divisions);
+            return redirect()->back()->with('message', 'User has been updated successfully!');
+    }
+    public function upatedealeradminview(DealerUser $user){
+       // dd($user);
+        $divisions = ProductDivision::all();
+        $user->load('productDivisions');
+        $assigned_divisions = $user->productDivisions->pluck('id')->toArray();
+        return view('admin.dealers.editadmin',compact('user','divisions','assigned_divisions'));
     }
 
     public function dealerTarget(){
