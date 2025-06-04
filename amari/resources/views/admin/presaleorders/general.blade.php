@@ -85,6 +85,7 @@
         }
 
         function generateDataTable(preorders) {
+            console.log("preorders");
             console.log(preorders);
             const table = document.createElement('table');
             table.id = 'bootstrap-datatable';
@@ -107,7 +108,7 @@
                         <th>Calls</th>
                         <th>Invoice Total</th>
                         <th>Sales Target</th>
-                        <th>Target Achieved</th>
+                         <th>Target Achieved</th>
                 </tr>
             `;
             table.appendChild(thead);
@@ -116,7 +117,8 @@
             const tbody = document.createElement('tbody');
             preorders.forEach(preorder => {
                 let routes = preorder.dealer.routes;
-                let requests = preorder.van.stockrequests
+                console.log(preorder.dealer)
+                let requests = preorder.dealer.stockrequests
                 let requeststotal = 0;
                 requests.forEach(request => {
                     requeststotal += request.total;
@@ -143,7 +145,7 @@
                     <td>${preorder.customerroute.new_customers.length}</td>
                     <td>${preorder.items.length}</td>
                     <td>${preorder.total}</td>
-                    <td>${preorder.van.target?.money ?? ''}</td>
+                    <td>${preorder.van?.target?.money ?? 'Not Set'}</td>
                     <td>${requeststotal}</td>
                 `;
                 tbody.appendChild(row);

@@ -12,6 +12,7 @@ use App\Models\StockRequest;
 use App\Models\StockRequestProduct;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\Dealer;
 
 class StockRequestController extends Controller
 {
@@ -77,7 +78,7 @@ class StockRequestController extends Controller
         } else {
             CaptainPerfomance::create([
                 'dealer_id'      => $dealer->id,
-                'user_id'        => $user - id,
+                'user_id'        => $user -> id,
                 'presale_orders' => 1,
             ]);
         }
