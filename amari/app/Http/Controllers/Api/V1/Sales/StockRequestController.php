@@ -95,7 +95,7 @@ class StockRequestController extends Controller
     }
     public function presalereports()
     {
-        $reports = StockRequest::with(['items' => function () {$query->with('product');}, 'customer', 'customerroute'])->where('dealer_user_id', request()->id)
+        $reports = StockRequest::with(['items' => function ($query) {$query->with('product');}, 'customer', 'customerroute'])->where('dealer_user_id', request()->id)
             ->whereDate('created_at', request()->date)->get();
         return response()->json(['reports' => $reports]);
     }
