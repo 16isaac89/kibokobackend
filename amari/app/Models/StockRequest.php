@@ -30,7 +30,7 @@ class StockRequest extends Model
         'checkin',
         'checkout',
         'delivered',
-
+        'customer_identification',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -50,6 +50,9 @@ class StockRequest extends Model
     }
     public function customer(){
         return $this->belongsTo(Customer::class,'customer_id','id');
+    }
+    public function requestcustomer(){
+        return $this->belongsTo(Customer::class,'customer_identification','identification');
     }
     public function dealer(){
         return $this->belongsTo(Dealer::class,'dealer_id','id');

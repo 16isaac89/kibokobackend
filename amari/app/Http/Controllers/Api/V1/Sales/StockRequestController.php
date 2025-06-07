@@ -33,6 +33,7 @@ class StockRequestController extends Controller
             'checkin'        => request()->checkin,
             'checkout'       => request()->checkout,
             'route'          => $customer->route->code,
+            'customer_identification'=>request()->selectedcustomeridentification
         ]);
         foreach ($cart as $key => $a) {
             $product      = Product::with('tax')->find($a['id']);
