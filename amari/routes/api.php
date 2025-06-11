@@ -127,6 +127,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Sales'], 
     Route::post('get/deliveries','StockRequestController@delivery');
     Route::post('get/efris/status','AccountController@efrisstatus');
 
+Route::post('get/todayreports','StockController@todaydetails');
     Route::post('get/customerstats','StockRequestController@customerstats');
 
 
