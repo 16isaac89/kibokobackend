@@ -175,7 +175,7 @@ class DealersController extends Controller
             $query->with('customers');
         }, 'users']);
 //dd($dealer->dealerclients[0]);
-        $salesToday = StockRequest::with('items','requestcustomer','customerroute')->where('dealer_id', $dealer->id)
+        $salesToday = StockRequest::with('items.product','requestcustomer','customerroute')->where('dealer_id', $dealer->id)
             ->whereDate('created_at', Carbon::today())->get();
         $customersToday = $dealer->dealerclients()
     ->whereDate('updated_at', Carbon::today())

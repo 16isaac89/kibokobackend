@@ -364,9 +364,9 @@ button.addEventListener('click', function (e) {
 <script>
 $(document).ready(function() {
     // Sales Today Table with expandable rows
-    var salesTable = $('#salesTodayTable').DataTable({
-        "order": [[1, 'asc']]
-    });
+    // var salesTable = $('#salesTodayTable').DataTable({
+    //     "order": [[1, 'asc']]
+    // });
 
     // Add event listener for opening and closing details
     $('#salesTodayTable tbody').on('click', 'td.details-control', function() {
@@ -379,43 +379,43 @@ $(document).ready(function() {
             tr.removeClass('shown');
         } else {
             // Open this row
-            row.child(formatSaleItems(row.data())).show();
+            var items = JSON.parse(tr.attr('data-items'));
+            row.child(formatSaleItems(items)).show();
             tr.addClass('shown');
         }
     });
 
-    // Function to format the child row data
-    function formatSaleItems(d) {
-        // In a real application, you would fetch this data via AJAX or pass it with the row data
-        // This is just a placeholder example
-        return `
+    // Function to format the child row data with actual items
+    function formatSaleItems(items) {
+        let itemsHtml = `
             <div class="p-3">
                 <table class="table table-sm">
                     <thead>
                         <tr>
-                            <th>Item Name</th>
+                            <th>Product Name</th>
                             <th>Quantity</th>
                             <th>Price</th>
                             <th>Total</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody>`;
+
+        items.forEach(item => {
+            itemsHtml += `
                         <tr>
-                            <td>Sample Product 1</td>
-                            <td>2</td>
-                            <td>$10.00</td>
-                            <td>$20.00</td>
-                        </tr>
-                        <tr>
-                            <td>Sample Product 2</td>
-                            <td>1</td>
-                            <td>$15.00</td>
-                            <td>$15.00</td>
-                        </tr>
+                            <td>${item.product ? item.product.name : 'N/A'}</td>
+                            <td>${item.reqqty}</td>
+                            <td>${item.price ? '₦' + item.price.toFixed(2) : 'N/A'}</td>
+                            <td>${item.price ? '₦' + (item.price * item.reqqty).toFixed(2) : 'N/A'}</td>
+                        </tr>`;
+        });
+
+        itemsHtml += `
                     </tbody>
                 </table>
-            </div>
-        `;
+            </div>`;
+
+        return itemsHtml;
     }
 
     // Customers Today Table

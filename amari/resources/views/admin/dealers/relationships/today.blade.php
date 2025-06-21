@@ -21,8 +21,8 @@
                     @foreach($salesToday as $sale)
                     <tr>
                         <td class="details-control"></td>
-                        <td>{{ $sale->requestcustomer->name }}</td>
-                        <td>{{ $sale->route->name }}</td>
+                        <td>{{ $sale->requestcustomer?->name }}</td>
+                        <td>{{ $sale->customerroute->name }}</td>
                         <td>{{ $sale->saler->username }}</td>
                         <td>{{ $sale->id }}</td>
                         <td>{{ $sale->checkin }}</td>
@@ -64,8 +64,4 @@
     </div>
 </div>
 
-@push('scripts')
 
-
-
-@endpush
