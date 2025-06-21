@@ -93,6 +93,7 @@
 <div class="content">
     <div class="container-fluid mt-4">
         <!-- Dashboard Header Row -->
+		@if(auth()->user()->designation == 1 || auth()->user()->designation == "1" )
         <div class="row mb-4">
             <div class="col-md-3">
                 <a href="{{ route('admin.customers.index') }}" class="card stats-card card-bg-primary">
@@ -229,6 +230,7 @@
                 </div>
             </div>
         </div> --}}
+		@endif
     </div>
 </div>
 

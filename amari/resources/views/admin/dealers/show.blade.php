@@ -8,6 +8,13 @@
      #map1, #map2 {
          height: 400px;
      }
+       #salesTodayTable td.details-control {
+        background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+    #salesTodayTable tr.shown td.details-control {
+        background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
+    }
  </style>
 @endsection
 @section('content')
@@ -70,6 +77,12 @@
                         <i class="fas fa-user"></i> Users
                     </a>
                 </li>
+                 <li class="nav-item">
+                    <a class="nav-link" id="today-tab" data-toggle="tab" href="#today" role="tab" aria-controls="today"
+                    aria-selected="false">
+                        <i class="fas fa-calendar"></i> Today
+                    </a>
+                </li>
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="routes" role="tabpanel" aria-labelledby="routes-tab">
@@ -101,6 +114,10 @@
                 <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
                     <h4 class="mt-3">Users</h4>
                    @include('admin.dealers.relationships.users')
+                </div>
+                <div class="tab-pane fade" id="today" role="tabpanel" aria-labelledby="today-tab">
+                    <h4 class="mt-3">Today</h4>
+                   @include('admin.dealers.relationships.today')
                 </div>
             </div>
 
@@ -342,6 +359,69 @@ button.addEventListener('click', function (e) {
     // Redirect to the correct export route with query parameters
     window.location.href = `/admin/presaleorders/export/?from_date=${fromDate}&to_date=${toDate}&type=${type}`;
 });
+});
+</script>
+<script>
+$(document).ready(function() {
+    // Sales Today Table with expandable rows
+    var salesTable = $('#salesTodayTable').DataTable({
+        "order": [[1, 'asc']]
+    });
+
+    // Add event listener for opening and closing details
+    $('#salesTodayTable tbody').on('click', 'td.details-control', function() {
+        var tr = $(this).closest('tr');
+        var row = salesTable.row(tr);
+
+        if (row.child.isShown()) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        } else {
+            // Open this row
+            row.child(formatSaleItems(row.data())).show();
+            tr.addClass('shown');
+        }
+    });
+
+    // Function to format the child row data
+    function formatSaleItems(d) {
+        // In a real application, you would fetch this data via AJAX or pass it with the row data
+        // This is just a placeholder example
+        return `
+            <div class="p-3">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Sample Product 1</td>
+                            <td>2</td>
+                            <td>$10.00</td>
+                            <td>$20.00</td>
+                        </tr>
+                        <tr>
+                            <td>Sample Product 2</td>
+                            <td>1</td>
+                            <td>$15.00</td>
+                            <td>$15.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+
+    // Customers Today Table
+    $('#customersTodayTable').DataTable({
+        "order": [[1, 'asc']]
+    });
 });
 </script>
 @endsection

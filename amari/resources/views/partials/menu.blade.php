@@ -18,7 +18,7 @@
                 {{ trans('global.dashboard') }}
             </a>
         </li>
-
+@if(auth()->user()->designation == 1 || auth()->user()->designation == "1" )
         @can('user_management_access')
             <li class="c-sidebar-nav-dropdown {{ request()->is("admin/permissions*") ? "c-show" : "" }} {{ request()->is("admin/roles*") ? "c-show" : "" }} {{ request()->is("admin/users*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
@@ -104,6 +104,7 @@
                 </ul>
             </li>
         @endcan
+		@endif
 
         @can('dealer_access')
             <li class="c-sidebar-nav-dropdown {{ request()->is("admin/dealers*") || request()->is("admin/routes*") ? "c-show" : "" }}">
@@ -118,6 +119,7 @@
                             Dealers
                         </a>
                     </li>
+					@if(auth()->user()->designation == 1 || auth()->user()->designation == "1" )
                     <li class="c-sidebar-nav-item">
                         <a href="{{ route("admin.routes.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/routes") || request()->is("admin/routes/*") ? "c-active" : "" }}">
                             <i class="fa-fw fas fa-route c-sidebar-nav-icon"></i>
@@ -144,12 +146,13 @@
                             Perfomance
                         </a>
                     </li>
+					@endif
                 </ul>
             </li>
         @endcan
 
 
-
+@if(auth()->user()->designation == 1 || auth()->user()->designation == "1" )
          @can('product_access')
             <li class="c-sidebar-nav-dropdown {{ request()->is("admin/products*") ? "c-show" : "" }} {{ request()->is("admin/maps*") ? "c-show" : "" }} {{ request()->is("admin/push-notifications*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
@@ -215,6 +218,7 @@
                 </ul>
             </li>
         @endcan
+		@endif
 
         <li class="c-sidebar-nav-item">
             <a href="#" class="c-sidebar-nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
