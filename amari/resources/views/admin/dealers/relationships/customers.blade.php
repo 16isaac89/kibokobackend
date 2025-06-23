@@ -4,6 +4,7 @@
             <tr>
                 <th width="10"></th>
                 <th>Route</th>
+                <th>Customer</th>
                 <th>Telephone No</th>
                 <th>{{ trans('cruds.customer.fields.phone') }}</th>
                 <th>{{ trans('cruds.customer.fields.email') }}</th>
@@ -24,6 +25,7 @@
                 <tr data-entry-id="{{ $customer->id }}">
                     <td></td>
                     <td>{{ $customer->route->name ?? '' }}</td>
+                    <td>{{ $customer->name ?? '' }}</td>
                     <td class="text-truncate" style="max-width: 150px;">{{ $customer->telephoneno ?? '' }}</td>
                     <td class="text-truncate" style="max-width: 150px;">{{ $customer->phone ?? '' }}</td>
                     <td class="text-truncate" style="max-width: 150px;">{{ $customer->email ?? '' }}</td>
