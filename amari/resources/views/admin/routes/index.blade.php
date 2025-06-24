@@ -38,9 +38,9 @@
                         <th>
                            Sub Dealer
                         </th>
-                        <th>
+                        {{-- <th>
                             Code
-                         </th>
+                         </th> --}}
                         <th>
                             Action
                         </th>
@@ -60,9 +60,9 @@
                              <td>
                                 {{ $route->dealer->tradename ?? '' }}
                             </td>
-                            <td>
+                            {{-- <td>
                                 {{ $route->code ?? '' }}
-                            </td>
+                            </td> --}}
 
 
                             <td>
