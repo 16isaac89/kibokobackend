@@ -276,7 +276,7 @@
                                 <td>#{{ $preorder->stockreqs->id }}</td>
                                 <td>{{ $preorder->stockreqs->customer->name }}</td>
                                 <td>{{ number_format($preorder->reqqty) }}</td>
-                                <td>KSh {{ number_format($preorder->total, 2) }}</td>
+                                <td>USh {{ number_format($preorder->total, 2) }}</td>
                             </tr>
                             @endforeach
                         </tbody>
