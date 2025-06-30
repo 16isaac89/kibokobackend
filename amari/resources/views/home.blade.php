@@ -1,279 +1,361 @@
 @extends('layouts.admin')
+
 @section('styles')
 <style>
-    /* General Styles */
+    /* Brand Color Variables */
     :root {
-        --primary-color: #4e73df;
-        --secondary-color: #858796;
-        --success-color: #1cc88a;
-        --info-color: #36b9cc;
-        --warning-color: #f6c23e;
-        --danger-color: #e74a3b;
+        --kiboko-blue: #2c5cc5;
+        --kiboko-light-blue: #4e73df;
+        --kiboko-green: #1cc88a;
+        --kiboko-dark: #2d3748;
+        --kiboko-light: #f8f9fc;
     }
 
     body {
-        background-color: #f8f9fc;
+        background-color: var(--kiboko-light);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     /* Card Styles */
     .card {
         border: none;
-        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
         border-radius: 0.5rem;
+        box-shadow: 0 0.15rem 1.5rem 0 rgba(45, 55, 72, 0.1);
+        transition: all 0.3s ease;
         margin-bottom: 1.5rem;
-        transition: transform 0.2s;
+        overflow: hidden;
     }
 
     .card:hover {
-        transform: translateY(-3px);
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 2rem 0 rgba(45, 55, 72, 0.15);
     }
 
     .card-header {
-        border-bottom: 1px solid #e3e6f0;
-        padding: 1.25rem;
-        font-weight: 900;
-        color: var(--primary-color);
+        background-color: white;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 1.25rem 1.5rem;
+        font-weight: 700;
+        color: var(--kiboko-dark);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.85rem;
     }
 
-    /* Stats Cards with Color Backgrounds */
-    .card-bg-primary { background-color: var(--primary-color); color: white; }
-    .card-bg-success { background-color: var(--success-color); color: white; }
-    .card-bg-info { background-color: var(--info-color); color: white; }
-    .card-bg-warning { background-color: var(--warning-color); color: white; }
-
-    /* Adjust text and icon colors in stats cards */
-    .stats-card h6, .stats-card h3, .stats-card i { color: rgb(15, 15, 15); }
-
+    /* Stats Cards */
     .stats-card {
         padding: 1.5rem;
         position: relative;
+        color: white;
+        border-left: 4px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .card-bg-primary {
+        background-color: var(--kiboko-blue);
+        background: linear-gradient(135deg, var(--kiboko-blue) 0%, var(--kiboko-light-blue) 100%);
+    }
+
+    .card-bg-success {
+        background-color: var(--kiboko-green);
+        background: linear-gradient(135deg, var(--kiboko-green) 0%, #28d494 100%);
+    }
+
+    .card-bg-info {
+        background: linear-gradient(135deg, #36b9cc 0%, #2cc5dc 100%);
+    }
+
+    .card-bg-warning {
+        background: linear-gradient(135deg, #f6c23e 0%, #f8d56b 100%);
+    }
+
+    .stats-card h6 {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        opacity: 0.9;
+        margin-bottom: 0.5rem;
+    }
+
+    .stats-card h3 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0;
     }
 
     .stats-card i {
         position: absolute;
-        right: 1rem;
-        bottom: 1rem;
-        opacity: 0.4;
-        font-size: 2.5rem;
+        right: 1.5rem;
+        bottom: 1.5rem;
+        opacity: 0.2;
+        font-size: 3.5rem;
     }
 
     /* Table Styles */
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: var(--kiboko-dark);
+    }
+
     .table th {
-        background-color: #f8f9fc;
+        background-color: #f8fafc;
         font-weight: 600;
         text-transform: uppercase;
-        font-size: 0.85rem;
-        color: var(--secondary-color);
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        color: var(--kiboko-blue);
+        padding: 1rem;
+        border-top: none;
     }
 
     .table td {
         vertical-align: middle;
         padding: 1rem;
+        border-top: 1px solid #f1f5f9;
     }
 
-    /* Spinner Modal */
-    .spinnermodal .modal-content {
-        background: transparent;
+    .table tr:hover td {
+        background-color: #f8fafc;
+    }
+
+    /* Chart Container */
+    .chart-container {
+        position: relative;
+        height: 300px;
+        padding: 1rem;
+    }
+
+    /* Button Styles */
+    .btn-kiboko {
+        background-color: var(--kiboko-blue);
+        color: white;
         border: none;
+        border-radius: 0.375rem;
+        padding: 0.5rem 1.25rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-kiboko:hover {
+        background-color: #1d4ed8;
+        color: white;
+        transform: translateY(-1px);
     }
 
     /* Responsive adjustments */
     @media (max-width: 768px) {
-        .card {
-            margin-bottom: 1rem;
+        .stats-card h3 {
+            font-size: 1.5rem;
         }
 
-        .stats-card h3 {
-            font-size: 1.6rem;
+        .stats-card i {
+            font-size: 2.5rem;
+        }
+
+        .card-header {
+            padding: 1rem;
         }
     }
 </style>
 @endsection
+
 @section('content')
 <div class="content">
     <div class="container-fluid mt-4">
-        <!-- Dashboard Header Row -->
-		@if(auth()->user()->designation == 1 || auth()->user()->designation == "1" )
+        @if(auth()->user()->designation == 1 || auth()->user()->designation == "1")
+        <!-- Dashboard Stats Row -->
         <div class="row mb-4">
-            <div class="col-md-3">
-                <a href="{{ route('admin.customers.index') }}" class="card stats-card card-bg-primary">
-                    <h6 class="card-header">Customers</h6>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <a href="{{ route('admin.customers.index') }}" class="card stats-card card-bg-primary h-100">
                     <div class="card-body">
-                        <h3 class="card-text">All:{{ $customers }}</h3>
-                        <h3 class="card-text">Geotagged: {{ $geotagged }}</h3>
-                        <i class="fas fa-users"></i>
+                        <h6>Customers</h6>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col">
+                                <h3 class="mb-0">{{ $customers }}</h3>
+                                <span class="text-white-50 small">Geotagged: {{ $geotagged }}</span>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
                     </div>
                 </a>
             </div>
-            <div class="col-md-3">
-                <div class="card stats-card card-bg-success">
-                    <h6 class="card-header">Routes</h6>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card stats-card card-bg-success h-100">
                     <div class="card-body">
-                        <h3 class="card-text">{{ $routes }}</h3>
-                        <i class="fas fa-route"></i>
+                        <h6>Routes</h6>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col">
+                                <h3 class="mb-0">{{ $routes }}</h3>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-route"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card stats-card card-bg-info">
-                    <h6 class="card-header">Dealers</h6>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card stats-card card-bg-info h-100">
                     <div class="card-body">
-                        <h3 class="card-text">{{ $dealers }}</h3>
-                        <i class="fas fa-store"></i>
+                        <h6>Dealers</h6>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col">
+                                <h3 class="mb-0">{{ $dealers }}</h3>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-store"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card stats-card card-bg-warning">
-                    <h6 class="card-header">Vans</h6>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card stats-card card-bg-warning h-100">
                     <div class="card-body">
-                        <h3 class="card-text">{{ $vans }}</h3>
-                        <i class="fas fa-truck"></i>
+                        <h6>Vans</h6>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col">
+                                <h3 class="mb-0">{{ $vans }}</h3>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Sales and Revenue Charts Row -->
+        <!-- Sales Chart -->
         <div class="row mb-4">
-            <div class="col-md-12">
+            <div class="col-lg-12">
                 <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="m-0 font-weight-bold">Presale By Month</h6>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">Presale By Month</h5>
-
-                        <canvas id="presalesmonthChart" width="400" height="200"></canvas>
+                        <div class="chart-container">
+                            <canvas id="presalesmonthChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
-            {{-- <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Sales & Revenue</h5>
-                        <a href="#" class="float-right">Show All</a>
-                        <canvas id="salesRevenueChart" width="400" height="200"></canvas>
-                    </div>
-                </div>
-            </div> --}}
         </div>
 
-        <!-- Recent Sales Table -->
+        <!-- Recent Orders Table -->
         <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold">Recent Presale Orders</h6>
+                <a href="#" class="btn btn-sm btn-kiboko">View All</a>
+            </div>
             <div class="card-body">
-                <h5 class="card-title">Recent Presale Orders</h5>
-                <a href="#" class="float-right">Show All</a>
-                <table class="table table-striped" id="recentSalesTable">
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox"></th>
-                            <th>Dealer</th>
-                            <th>Date</th>
-                            <th>Invoice</th>
-                            <th>Customer</th>
-                            <th>Quantity</th>
-                            <th>Amount</th>
-
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($preorders as $preorder)
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>{{ $preorder->stockreqs->dealer->tradename }}</td>
-                            <td>{{ $preorder->created_at }}</td>
-                            <td>{{ $preorder->stockreqs->id }}</td>
-                            <td>{{ $preorder->stockreqs->customer->name }}</td>
-                            <td>{{ $preorder->reqqty }}</td>
-                            <td>{{ $preorder->total }}</td>
-                        </tr>
-                        @endforeach
-
-                        <!-- Repeat rows as needed -->
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-hover" id="recentSalesTable">
+                        <thead>
+                            <tr>
+                                <th width="40"><input type="checkbox"></th>
+                                <th>Dealer</th>
+                                <th>Date</th>
+                                <th>Invoice</th>
+                                <th>Customer</th>
+                                <th>Quantity</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($preorders as $preorder)
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                <td>{{ $preorder->stockreqs->dealer->tradename }}</td>
+                                <td>{{ $preorder->created_at->format('M d, Y') }}</td>
+                                <td>#{{ $preorder->stockreqs->id }}</td>
+                                <td>{{ $preorder->stockreqs->customer->name }}</td>
+                                <td>{{ number_format($preorder->reqqty) }}</td>
+                                <td>KSh {{ number_format($preorder->total, 2) }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-
-        <!-- Other Components (Messages, Calendar, To-Do List) -->
-        {{-- <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Messages</h5>
-                        <ul class="list-unstyled">
-                            <li class="media mb-3">
-                                <img src="https://via.placeholder.com/50" class="mr-3 rounded-circle" alt="User">
-                                <div class="media-body">
-                                    <h6 class="mt-0 mb-1">John Doe</h6>
-                                    <p>Short message here...</p>
-                                    <small class="text-muted">15 minutes ago</small>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Calendar</h5>
-                        <!-- Calendar Structure -->
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">To Do List</h5>
-                        <!-- To Do List Structure -->
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-		@endif
+        @endif
     </div>
 </div>
 
+<!-- Loading Modal -->
 <div class="modal fade spinnermodal" data-backdrop="static" data-keyboard="false" tabindex="-1">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content" style="width: 48px">
-            <span class="fa fa-spinner fa-spin fa-3x" style="color: var(--primary-color);"></span>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 bg-transparent">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 @endsection
+
 @section('scripts')
 @parent
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Get monthly data from the backend
-    const monthlyUpdatesCount = @json(array_values($preordersmonth)); // [0, 0, 0, ..., 11, 0, 0]
-
-    // Labels for each month
+    // Monthly Presales Chart
+    const monthlyData = @json(array_values($preordersmonth));
     const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    // Render the chart
     const ctx = document.getElementById('presalesmonthChart').getContext('2d');
-    const monthlyUpdatesChart = new Chart(ctx, {
-        type: 'bar', // or 'line' for a line chart
+    const chart = new Chart(ctx, {
+        type: 'bar',
         data: {
             labels: monthLabels,
             datasets: [{
-                label: 'Monthly Updates Count',
-                data: monthlyUpdatesCount,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
+                label: 'Monthly Presales',
+                data: monthlyData,
+                backgroundColor: 'rgba(44, 92, 197, 0.7)',
+                borderColor: 'rgba(44, 92, 197, 1)',
+                borderWidth: 1,
+                borderRadius: 4,
+                hoverBackgroundColor: 'rgba(28, 200, 138, 0.8)'
             }]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Number Orders'
+                    grid: {
+                        drawBorder: false,
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        stepSize: Math.max(...monthlyData) > 10 ? Math.ceil(Math.max(...monthlyData)/5) : 1
                     }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(45, 55, 72, 0.9)',
+                    titleFont: {
+                        weight: 'bold'
+                    },
+                    padding: 12,
+                    cornerRadius: 4
                 }
             }
         }
