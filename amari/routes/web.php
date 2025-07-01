@@ -323,10 +323,10 @@ Route::group(['namespace' => 'Auth', 'middleware' => ['auth', '2fa']], function 
 });
 
 Route::group(['prefix' => 'dealer', 'as' => 'dealer.', 'namespace' => 'Dealer'], function () {
-    //Route::get('/subd/home/page', 'HomeController@index')->name('dashboard.home');
+    Route::get('/subd/home/page', 'HomeController@index')->name('dashboard.home');
 });
 
-Route::group(['namespace' => 'Dealer', 'middleware' => 'authdealerss'], function () {
+Route::group(['namespace' => 'Dealer', 'middleware' => 'authdealer'], function () {
     Route::get('/dealer/home/page', 'HomeController@index')->name('dashboard.home');
     Route::get('/dealer/customers', 'CustomerController@index')->name('customer.index');
 
