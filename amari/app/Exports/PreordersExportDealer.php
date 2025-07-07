@@ -34,8 +34,8 @@ class PreordersExportDealer implements FromCollection, WithHeadings
                 $query->with('saler', 'dealer', 'van', 'customer', 'customerroute');
             }
         ])->whereBetween('created_at', [$this->fromDate, $this->toDate])
-          ->whereHas('stockreqs', function($query) use ($dealer_id) {
-              $query->where('dealer_id', $dealer_id);
+          ->whereHas('stockreqs', function($query) {
+              $query->where('dealer_id', $this->dealer_id);
           })->get()
         ->map(function ($preorder) {
             return [
