@@ -9,6 +9,7 @@ use App\Models\StockRequest;
 use App\Models\StockRequestProduct;
 use App\Exports\PreordersExport;
 use App\Exports\PreordersExportGeneral;
+use App\Exports\PreordersExportDealer;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PresaleOrdersController extends Controller
