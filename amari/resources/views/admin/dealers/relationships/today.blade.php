@@ -2,7 +2,7 @@
     <!-- Sales Updated Today Table -->
     <div class="card mb-4">
         <div class="card-header">
-            <h5 class="card-title">Pre-Sales Today ({{ count($salesToday) }})</h5>
+            <h5 class="card-title">Pre-Sales Today ({{ count($salesToday) }}) sales ({{ $salesToday->sum('total') }})UGX</h5>
         </div>
         <div class="card-body">
             <table id="salesTodayTable" class="table table-bordered table-striped" style="width:100%">

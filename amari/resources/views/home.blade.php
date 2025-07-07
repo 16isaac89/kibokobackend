@@ -246,11 +246,12 @@
                 </div>
             </div>
         </div>
+        @endif
 
         <!-- Recent Orders Table -->
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold">Recent Presale Orders</h6>
+                <h6 class="m-0 font-weight-bold">Recent Presale Orders ({{ $totalpresalestoday }})Sales ({{ $totalamountpresalestoday }})UGX</h6>
                 <a href="#" class="btn btn-sm btn-kiboko">View All</a>
             </div>
             <div class="card-body">
@@ -284,7 +285,7 @@
                 </div>
             </div>
         </div>
-        @endif
+
     </div>
 </div>
 

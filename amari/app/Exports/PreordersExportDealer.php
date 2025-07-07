@@ -60,12 +60,13 @@ class PreordersExportDealer implements FromCollection, WithHeadings
     }
     public function headings(): array
     {
-        return [
+         return [
             'Invoice No',
             'Invoice Date',
-            'Customer Name',
-            'Dealer',
+            'Outlet Name',
             'Executive Name',
+            'Dealer',
+
             'Product Code',
             'Quantity',
             'Item Description',
@@ -76,5 +77,6 @@ class PreordersExportDealer implements FromCollection, WithHeadings
             'In Time',
             'Out Time'
         ];
+
     }
 }

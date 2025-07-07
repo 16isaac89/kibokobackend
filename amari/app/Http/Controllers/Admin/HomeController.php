@@ -26,8 +26,47 @@ class HomeController
         ->where('longitude', '!=', '')
         ->count();
 
-
-        $preorders = StockRequestProduct::with([
+//dd(auth()->user()->dealers->pluck('id')->toArray());
+$preorders = [];
+$totalamountpresalestoday = 0;
+$totalpresalestoday = 0;
+if(auth()->user()->designation == 2){
+    $dealerids = auth()->user()->dealers->pluck('id')->toArray();
+    $preorders = StockRequestProduct::with([
+        'dealerproduct',
+        'product' => function($query) {
+            $query->with('brand', 'tax');
+        },
+        'stockreqs' => function($query) {
+            $query->with('saler', 'dealer', 'van', 'customer', 'customerroute');
+        }
+    ])
+    ->whereHas('stockreqs', function($query) use ($dealerids) {
+        $query->whereIn('dealer_id', $dealerids);
+    })
+    ->whereBetween('created_at', [
+        Carbon::today()->startOfDay(),
+        Carbon::today()->endOfDay()
+    ])
+    ->get();
+  $totalamountpresalestoday = StockRequestProduct::whereHas('stockreqs', function($query) use ($dealerids) {
+        $query->whereIn('dealer_id', $dealerids);
+    })
+    ->whereBetween('created_at', [
+        Carbon::today()->startOfDay(),
+        Carbon::today()->endOfDay()
+    ])
+    ->sum('total');
+    $totalpresalestoday = StockRequestProduct::whereHas('stockreqs', function($query) use ($dealerids) {
+        $query->whereIn('dealer_id', $dealerids);
+    })
+        ->whereBetween('created_at', [
+            Carbon::today()->startOfDay(),
+            Carbon::today()->endOfDay()
+        ])
+        ->count();
+}else{
+ $preorders = StockRequestProduct::with([
             'dealerproduct',
             'product' => function($query) {
                 $query->with('brand', 'tax');
@@ -41,6 +80,18 @@ class HomeController
             Carbon::today()->endOfDay()
         ])
         ->get();
+    $totalamountpresalestoday = StockRequestProduct::whereBetween('created_at', [
+            Carbon::today()->startOfDay(),
+            Carbon::today()->endOfDay()
+        ])
+        ->sum('total');
+    $totalpresalestoday = StockRequestProduct::whereBetween('created_at', [
+            Carbon::today()->startOfDay(),
+            Carbon::today()->endOfDay()
+        ])
+        ->count();
+}
+
 
 $presales = StockRequestProduct::select('id', 'created_at')
 ->get()
@@ -66,6 +117,6 @@ $preordersmonth = $ordersArr;
 
 
 
-        return view('home', compact('preordersmonth','preorders','customers','vans','routes','dealers','geotagged'));
+        return view('home', compact('preordersmonth','preorders','customers','vans','routes','dealers','geotagged','totalamountpresalestoday','totalpresalestoday',));
     }
 }

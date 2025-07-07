@@ -78,6 +78,7 @@ class PresaleOrdersController extends Controller
 
         return response()->json(['preorders' => $preorders]);
     }
+
     public function exportPresale(Request $request)
     {
         //dd($request->all());
