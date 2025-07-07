@@ -228,7 +228,7 @@
     function getDetails() {
         let fromDate = document.getElementById('from_date').value;
         let toDate = document.getElementById('to_date').value;
-        let subdealer = document.getElementById('{{ $dealer->id }}').value;
+        let subdealer = '{{ $dealer->id }}';
 
         if (fromDate == '' || toDate == '' || fromDate == null || toDate == null || fromDate == undefined || toDate == undefined) {
             alert('Please select a date range');
@@ -359,7 +359,7 @@ button.addEventListener('click', function (e) {
     }
 
     // Redirect to the correct export route with query parameters
-    window.location.href = `/admin/presaleorders/export/dealer/?from_date=${fromDate}&to_date=${toDate}&type=${type}&dealer_id=${$dealerid}`;
+    window.location.href = `/admin/presaleorders/export/dealer/?from_date=${fromDate}&to_date=${toDate}&type=${type}&dealer_id=${dealerid}`;
 });
 });
 </script>
