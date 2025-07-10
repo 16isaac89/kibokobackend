@@ -557,7 +557,7 @@ Route::get('get/aes/key/efris', function () {
     //   dd($decrypted_aeskey);
 //dd($privatek);
     $aeskey = (new KeysController)->getAesKey($tin, $deviceno, $privatek);
-    dd($aeskey);
+    //dd($aeskey);
     $dealer->aeskey = $aeskey;
     $dealer->save();
     //  }

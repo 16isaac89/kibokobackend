@@ -76,7 +76,12 @@
 
             <div class="form-group mg-b-20"><a href="">Reset password</a></div>
 
-            <button type="submit" class="btn btn-block">Sign In</button>
+           <button type="submit" id="loginButton" class="btn btn-block btn-primary">
+  <span id="loginButtonText">Sign In</span>
+  <span id="loginButtonSpinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
+</button>
+
+
 </form>
           </div><!-- col-7 -->
         </div><!-- row -->
@@ -85,10 +90,19 @@
     </div><!-- am-signin-wrapper -->
 
     <script src="{{asset('subd/lib/jquery/jquery.js')}}"></script>
-    <script src="{{asset('subd/lib/popper.js/popper.js')}}"></script>
     <script src="{{asset('subd/lib/bootstrap/bootstrap.js')}}"></script>
-    <script src="{{asset('subd/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.js')}}"></script>
 
-    <script src="{{asset('subd/js/amanda.js')}}"></script>
+
+
+    <script>
+  $(document).ready(function () {
+    $('form').on('submit', function () {
+      $('#loginButton').attr('disabled', true);
+      $('#loginButtonText').addClass('d-none');
+      $('#loginButtonSpinner').removeClass('d-none');
+    });
+  });
+</script>
+
   </body>
 </html>

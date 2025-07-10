@@ -65,6 +65,14 @@
                     </button>
                 </div>
             @endif
+             @if(session('error'))
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <strong>Warning!</strong> {{ session('error') }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
 
             <form method="POST" action="{{ route('login') }}">
                 @csrf
@@ -129,9 +137,12 @@
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary btn-block py-2 mb-3" style="font-weight: 500;">
-                    SIGN IN <i class="fas fa-arrow-right ml-2"></i>
-                </button>
+               <button type="submit" id="loginButton" class="btn btn-primary btn-block py-2 mb-3" style="font-weight: 500;">
+    <span id="loginButtonText">SIGN IN <i class="fas fa-arrow-right ml-2"></i></span>
+    <span id="loginButtonSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+</button>
+
+
 
                 <!-- Additional Links -->
                 <p class="text-center text-muted small mt-4 mb-0">
@@ -143,6 +154,8 @@
 </div>
 @endsection
 @section('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script>
     // Toggle password visibility
     $(document).ready(function() {
@@ -159,4 +172,28 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function() {
+        // Toggle password visibility
+        $('.toggle-password').click(function() {
+            const input = $(this).closest('.input-group').find('input');
+            const icon = $(this).find('i');
+            if (input.attr('type') === 'password') {
+                input.attr('type', 'text');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                input.attr('type', 'password');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
+
+        // Show spinner on form submit
+        $('form').on('submit', function() {
+            $('#loginButton').attr('disabled', true);
+            $('#loginButtonText').addClass('d-none');
+            $('#loginButtonSpinner').removeClass('d-none');
+        });
+    });
+</script>
+
 @endsection
