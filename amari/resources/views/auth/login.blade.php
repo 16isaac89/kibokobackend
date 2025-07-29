@@ -50,7 +50,7 @@
     <div class="card login-card shadow-lg" style="width: 100%; max-width: 450px; border: none; border-radius: 12px; overflow: hidden;">
         <!-- Card Header with Logo -->
         <div class="card-header bg-primary text-white text-center py-4" style="border-bottom: none;">
-            <img src="{{ asset('/images/logo/amari.jpg') }}" alt="Kiboko Enterprises" class="img-fluid mb-3" style="max-height: 80px;">
+            <img src="{{ asset('/images/logo/kiboko.jpg') }}" alt="Kiboko Enterprises" class="img-fluid mb-3" style="max-height: 80px;">
             <h3 class="mb-0">Welcome Back</h3>
             <p class="mb-0 text-white-50">Sign in to your account</p>
         </div>

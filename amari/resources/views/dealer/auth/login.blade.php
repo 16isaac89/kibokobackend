@@ -47,7 +47,11 @@
         <div class="row no-gutters">
           <div class="col-lg-5">
             <div>
-              <h2>EFDS</h2>
+               <div class="card-header bg-primary text-white text-center py-4" style="border-bottom: none;">
+            <img src="{{ asset('/images/logo/kiboko.jpg') }}" alt="Kiboko Enterprises" class="img-fluid mb-3" style="max-height: 80px;">
+            <h3 class="mb-0">Welcome Back</h3>
+            <p class="mb-0 text-white-50">Sign in to your account</p>
+        </div>
               {{-- <p>The Responsive Bootstrap 4 Admin Template</p>
               <p>Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate.</p>
 
