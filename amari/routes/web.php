@@ -80,6 +80,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('customers/process-csv-import', 'CustomerController@processCsvImport')->name('customers.processCsvImport');
     Route::post('/customer/routes/get', 'CustomerController@getRoutes')->name('customer.routesget');
     Route::get('admin/customers/export/excel', 'CustomerController@exportExcel')->name('customers.export.excel');
+    Route::get('admin/customers/export/geotaggedexcel', 'CustomerController@exportGeoExcel')->name('customers.exporttagged.excel');
+    Route::get('admin/customers/export/geotaggedcsv', 'CustomerController@exportGeoCSV')->name('customers.exporttagged.csv');
     Route::get('admin/customers/export/csv', 'CustomerController@exportCsv')->name('customers.export.csv');
     Route::resource('customers', 'CustomerController');
 

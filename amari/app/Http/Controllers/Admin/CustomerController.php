@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\CustomersExport;
+use App\Exports\ExportGeotaggedCustomers;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\CsvImportTrait;
 use App\Http\Controllers\Traits\MediaUploadingTrait;
@@ -12,12 +14,11 @@ use App\Models\Customer;
 use App\Models\Dealer;
 use App\Models\Route;
 use Gate;
+use Hash;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
-use Hash;
-use App\Exports\CustomersExport;
-use Maatwebsite\Excel\Facades\Excel;
 
 class CustomerController extends Controller
 {
@@ -171,6 +172,19 @@ public function exportExcel()
     {
 
         return Excel::download(new CustomersExport, 'customers.csv'); // For CSV
+    }
+
+
+    public function exportGeoExcel()
+    {
+
+        return Excel::download(new ExportGeotaggedCustomers, 'customers.xlsx'); // For Excel
+    }
+
+    public function exportGeoCSV()
+    {
+
+        return Excel::download(new ExportGeotaggedCustomers, 'customers.csv'); // For CSV
     }
 
 

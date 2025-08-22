@@ -22,6 +22,10 @@
                 <a href="{{ route('admin.customers.export.excel') }}" class="btn btn-primary">Export Excel</a>
                 <a href="{{ route('admin.customers.export.csv') }}" class="btn btn-secondary">Export CSV</a>
             </div>
+             <div class="col-lg-6">
+                <a href="{{ route('admin.customers.exporttagged.excel') }}" class="btn btn-primary">Export Geotagged Excel</a>
+                <a href="{{ route('admin.customers.exporttagged.csv') }}" class="btn btn-secondary">Export Geotagged CSV</a>
+            </div>
         </div>
     @endcan
     <div class="card">
