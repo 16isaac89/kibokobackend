@@ -66,6 +66,9 @@ class StockRequestController extends Controller
                 'discounttype'      => $a['discounttype'],
             ]);
         }
+        $customer->latitude = request()->latitude;
+        $customer->longitude = request()->longitude;
+        $customer->save();
         Performance::create([
             'user'      => request()->salerid,
             'points'    => 1,
