@@ -65,6 +65,7 @@ class ExportGeotaggedCustomers implements FromCollection, WithHeadings, WithMapp
             $customer->subdimagelat,
             $customer->subdimagelong,
             $url, // Image URL
+            $customer->updated_at
         ];
     }
 
@@ -77,7 +78,7 @@ class ExportGeotaggedCustomers implements FromCollection, WithHeadings, WithMapp
             'Dealer', 'Route', 'Name', 'CheckIN', 'Checkout', 'Telephone No', 'Phone', 'Email',
             'Area', 'City', 'Country', 'Classification', 'Cash Registers', 'Daily Footfall',
             'Product Range', 'Contact Person', 'Customer Category', 'B\'ss Value', 'Location',
-            'Lat', 'Long', 'IMGlat', 'IMGlong', 'Image URL'
+            'Lat', 'Long', 'IMGlat', 'IMGlong', 'Image URL','Time Stamp'
         ];
     }
 }
