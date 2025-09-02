@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Route;
-use App\Models\Dealer;
 use App\Http\Controllers\Traits\CsvImportTrait;
+use App\Models\Customer;
+use App\Models\Dealer;
+use App\Models\Route;
+use Illuminate\Http\Request;
 
 class RoutesController extends Controller
 {
@@ -36,14 +37,22 @@ class RoutesController extends Controller
         return view('admin.routes.edit',compact('route','dealers'));
     }
     public function update(Request $request, Route $route){
-
+        // dd($request->all(),$route);
         $dealer = Dealer::find($request->dealer);
+        $customers = Customer::where('route_code',$route->code)->get();
+
+       // dd($customers);
         $route->update([
             'name'=>$request->name,
             'dealer_id'=>$request->dealer,
             'dealer_code'=>$dealer->code,
-            'code'=>$request->code
         ]);
+        foreach($customers as $customer){
+            $customer->update([
+                'dealer_code'=>$dealer->code,
+            ]);
+
+        }
         return redirect()->route('admin.routes.index')
             ->with('message','Route updated successfully');
     }
