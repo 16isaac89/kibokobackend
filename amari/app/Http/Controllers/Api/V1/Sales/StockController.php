@@ -109,4 +109,34 @@ class StockController extends Controller
             'customers' => $customers,
         ]);
     }
+
+
+       public function monthlyreports()
+    {
+
+        $saler  = request()->id;
+        // Get all stock requests for the current month
+$sales = StockRequest::with(['items.product','customer', 'customerroute'])->where('dealer_user_id', $saler)->whereMonth('created_at', Carbon::now()->month)
+    ->whereYear('created_at', Carbon::now()->year)
+    ->get();
+
+        return response()->json([
+            'sales'     => $sales,
+        ]);
+    }
+     public function monthlyreportdates()
+    {
+
+        $saler  = request()->id;
+        $from = Carbon::parse(request()->from)->startOfDay();
+        $to = Carbon::parse(request()->to)->endOfDay();
+        // Get all stock requests for the current month
+$sales = StockRequest::with(['items.product','customer', 'customerroute'])->where('dealer_user_id', $saler)
+->whereBetween('created_at', [$from, $to])
+    ->get();
+
+        return response()->json([
+            'sales'     => $sales,
+        ]);
+    }
 }

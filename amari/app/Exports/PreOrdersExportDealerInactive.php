@@ -6,7 +6,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use App\Models\StockRequestProduct;
 
-class PreordersExportDealer implements FromCollection, WithHeadings
+class PreordersExportDealerInactive implements FromCollection, WithHeadings
 {
 
     protected $fromDate;
@@ -38,7 +38,7 @@ class PreordersExportDealer implements FromCollection, WithHeadings
               $query->where('dealer_id', $this->dealer_id);
           })
           ->whereHas('dealer', function($query) {
-        $query->where('status', 1);
+        $query->where('status', 0);
     })
           ->get()
         ->map(function ($preorder) {

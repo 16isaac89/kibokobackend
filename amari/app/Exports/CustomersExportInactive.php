@@ -9,15 +9,15 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CustomersExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, ShouldQueue
+class CustomersExportInactive implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, ShouldQueue
 {
     private $customers;
 
     public function __construct()
     {
-        $this->customers = Customer::with(['dealer', 'route'])->
+        $this->customers = Customer::with(['dealer', 'route'])
         ->whereHas('dealer', function($query) {
-        $query->where('status', 1);
+        $query->where('status', 0);
     })->get();
     }
 

@@ -9,24 +9,23 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CustomersExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, ShouldQueue
+class ExportGeotaggedCustomersInactive implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, ShouldQueue
 {
-    private $customers;
-
-    public function __construct()
-    {
-        $this->customers = Customer::with(['dealer', 'route'])->
-        ->whereHas('dealer', function($query) {
-        $query->where('status', 1);
-    })->get();
-    }
-
     /**
-     * Collection of customers.
+     * Fetch only customers with latitude & longitude.
      */
     public function collection()
     {
-        return $this->customers;
+        return Customer::with(['dealer', 'route'])
+            ->whereNotNull('latitude')
+            ->where('latitude', '!=', '')
+            ->where('latitude', '!=', 0)
+            ->whereNotNull('longitude')
+            ->where('longitude', '!=', '')
+            ->where('longitude', '!=', 0)
+            ->whereHas('dealer', function($query) {
+        $query->where('status', 0);
+    })->get();
     }
 
     /**
@@ -34,7 +33,7 @@ class CustomersExport implements FromCollection, WithHeadings, WithMapping, Shou
      */
     public function map($customer): array
     {
-        // Get the image URL, and modify it if needed
+        // Handle location image URL
         $url = $customer->location_image ? $customer->location_image->getUrl() : '';
         $needle = 'uploads/';
         $insert = 'amari/public';
@@ -47,7 +46,6 @@ class CustomersExport implements FromCollection, WithHeadings, WithMapping, Shou
             $customer->dealer->tradename ?? '',
             $customer->route->name ?? '',
             $customer->name ?? '',
-
             $customer->customercheckin ?? '',
             $customer->customercheckout ?? '',
             $customer->telephoneno ?? '',
@@ -68,7 +66,8 @@ class CustomersExport implements FromCollection, WithHeadings, WithMapping, Shou
             $customer->longitude,
             $customer->subdimagelat,
             $customer->subdimagelong,
-            $url // Include image URL instead of image
+            $url, // Image URL
+            $customer->updated_at
         ];
     }
 
@@ -78,11 +77,10 @@ class CustomersExport implements FromCollection, WithHeadings, WithMapping, Shou
     public function headings(): array
     {
         return [
-            'Dealer', 'Route','Name','CheckIN', 'Checkout', 'Telephone No', 'Phone', 'Email',
+            'Dealer', 'Route', 'Name', 'CheckIN', 'Checkout', 'Telephone No', 'Phone', 'Email',
             'Area', 'City', 'Country', 'Classification', 'Cash Registers', 'Daily Footfall',
             'Product Range', 'Contact Person', 'Customer Category', 'B\'ss Value', 'Location',
-            'Lat', 'Long', 'IMGlat', 'IMGlong', 'Image URL' // Updated heading to "Image URL"
+            'Lat', 'Long', 'IMGlat', 'IMGlong', 'Image URL','Time Stamp'
         ];
     }
 }
-

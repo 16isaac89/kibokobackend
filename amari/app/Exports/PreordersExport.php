@@ -27,7 +27,11 @@ class PreordersExport  implements FromCollection, WithHeadings
             $query->with('brand','tax');
         },'stockreqs'=>function($query){
             $query->with('dealer','van','customer','customerroute','saler');
-        }])->whereBetween('created_at', [$this->fromDate, $this->toDate])->get()
+        }])->whereBetween('created_at', [$this->fromDate, $this->toDate])
+        ->whereHas('dealer', function($query) {
+        $query->where('status', 1);
+    })
+        ->get()
         ->map(function ($preorder) {
             return [
                 $preorder->stockreqs->id ?? '', // Invoice No

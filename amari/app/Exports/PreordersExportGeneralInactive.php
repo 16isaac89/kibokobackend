@@ -44,7 +44,7 @@ class PreordersExportGeneral  implements FromCollection, WithHeadings
         ->whereMonth('created_at', $month)
         ->whereYear('created_at', $year)
         ->whereHas('dealer', function($query) {
-        $query->where('status', 1);
+        $query->where('status', 0);
     })
         ->get()
 

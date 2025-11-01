@@ -27,6 +27,7 @@
                         <!-- Export Buttons -->
                         <a href="#" class="btn btn-info export-btn" data-type="csv">Export CSV</a>
                         <a href="#" class="btn btn-success export-btn" data-type="excel">Export Excel</a>
+                        <a href="#" class="btn btn-warning export-btn" data-type="excelinactive">Export Excel</a>
                         {{-- <a href="#" class="btn btn-danger export-btn" data-type="pdf">Export PDF</a> --}}
                     </div>
                 </div>

@@ -128,6 +128,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Sales'], 
     Route::post('get/efris/status','AccountController@efrisstatus');
 
 Route::post('get/todayreports','StockController@todaydetails');
+Route::post('get/monthlyreports','StockController@monthlyreports');
+	Route::post('get/monthlydatereports','StockController@monthlyreportdates');
     Route::post('get/customerstats','StockRequestController@customerstats');
 
 

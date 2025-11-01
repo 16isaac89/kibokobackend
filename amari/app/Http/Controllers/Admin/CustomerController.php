@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\CustomersExport;
+use App\Exports\CustomersExportInactive;
 use App\Exports\ExportGeotaggedCustomers;
+use App\Exports\ExportGeotaggedCustomersInactive;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\CsvImportTrait;
 use App\Http\Controllers\Traits\MediaUploadingTrait;
@@ -167,6 +169,11 @@ public function exportExcel()
 
         return Excel::download(new CustomersExport, 'customers.xlsx'); // For Excel
     }
+    public function exportExcelInactive()
+    {
+
+        return Excel::download(new CustomersExportInactive, 'customersinactive.xlsx'); // For Excel
+    }
 
     public function exportCsv()
     {
@@ -179,6 +186,11 @@ public function exportExcel()
     {
 
         return Excel::download(new ExportGeotaggedCustomers, 'customers.xlsx'); // For Excel
+    }
+    public function exportGeoExcelInactive()
+    {
+
+        return Excel::download(new ExportGeotaggedCustomersInactive, 'customersgeotaggedinnactive.xlsx'); // For Excel
     }
 
     public function exportGeoCSV()

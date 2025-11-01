@@ -8,8 +8,11 @@ use App\Models\Dealer;
 use App\Models\StockRequest;
 use App\Models\StockRequestProduct;
 use App\Exports\PreordersExport;
+use App\Exports\PreordersExportInactive;
 use App\Exports\PreordersExportGeneral;
+use App\Exports\PreordersExportGeneralInactive;
 use App\Exports\PreordersExportDealer;
+use App\Exports\PreordersExportDealerInactive;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PresaleOrdersController extends Controller
@@ -25,6 +28,7 @@ class PresaleOrdersController extends Controller
         }
 
         $preorders = $query->get();
+        //dd('d');
         return view('admin.presaleorders.index', compact('preorders'));
     }
     public function search(Request $request){
@@ -91,6 +95,8 @@ class PresaleOrdersController extends Controller
                 return Excel::download(new PreordersExport($fromDate, $toDate), 'preorders.csv');
             case 'excel':
                 return Excel::download(new PreordersExport($fromDate, $toDate), 'preorders.xlsx');
+            case 'excelinactive':
+                return Excel::download(new PreordersExportInactive($fromDate, $toDate), 'preordersinactive.xlsx');
         }
     }
     public function exportPresaleDealer(Request $request)
@@ -106,6 +112,8 @@ class PresaleOrdersController extends Controller
                 return Excel::download(new PreordersExportDealer($fromDate, $toDate, $dealer_id), 'preorders.csv');
             case 'excel':
                 return Excel::download(new PreordersExportDealer($fromDate, $toDate, $dealer_id), 'preorders.xlsx');
+            case 'excelinactive':
+                return Excel::download(new PreordersExportDealerInactive($fromDate, $toDate, $dealer_id), 'preordersinactive.xlsx');
         }
     }
 
@@ -155,6 +163,8 @@ class PresaleOrdersController extends Controller
                 return Excel::download(new PreordersExportGeneral($month, $year), 'preorders.csv');
             case 'excel':
                 return Excel::download(new PreordersExportGeneral($month, $year), 'preorders.xlsx');
+            case 'excelinactive':
+                return Excel::download(new PreordersExportGeneralInactive($month, $year), 'preordersinactive.xlsx');
         }
     }
 

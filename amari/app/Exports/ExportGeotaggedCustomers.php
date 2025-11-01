@@ -23,7 +23,9 @@ class ExportGeotaggedCustomers implements FromCollection, WithHeadings, WithMapp
             ->whereNotNull('longitude')
             ->where('longitude', '!=', '')
             ->where('longitude', '!=', 0)
-            ->get();
+            ->whereHas('dealer', function($query) {
+        $query->where('status', 1);
+    })->get();
     }
 
     /**
