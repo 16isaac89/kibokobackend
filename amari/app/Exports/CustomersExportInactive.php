@@ -15,8 +15,8 @@ class CustomersExportInactive implements FromCollection, WithHeadings, WithMappi
 
     public function __construct()
     {
-        $this->customers = Customer::with(['dealer', 'route'])
-        ->whereHas('dealer.headsupervisor', function($query) {
+        $this->customers = Customer::with(['dealer.headsupervisor', 'route'])
+        ->whereHas('dealer', function($query) {
         $query->where('status', 0);
     })->get();
     }
