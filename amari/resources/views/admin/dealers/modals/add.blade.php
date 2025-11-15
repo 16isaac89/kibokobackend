@@ -127,6 +127,18 @@
                     </select>
                 </div>
             </div>
+             <div class="form-row mb-4">
+
+                <div class="col-md-6">
+                    <label>Dealer Head</label>
+                    <select class="form-control" id="head_supervisor" name="head_supervisor" required>
+                        <option value="">Dealer head</option>
+                        @foreach($users as $user)
+                            <option  value="{{ $user->id }}">{{ $user->username }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
 
             <!-- Submit Button -->
             <div class="form-group text-right">
