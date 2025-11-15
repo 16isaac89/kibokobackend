@@ -96,7 +96,7 @@ class PresaleOrdersController extends Controller
             case 'excel':
                 return Excel::download(new PreordersExport($fromDate, $toDate), 'preorders.xlsx');
             case 'excelinactive':
-                return Excel::download(new PreordersExportInactive($fromDate, $toDate), 'preordersinactive.xlsx');
+                return Excel::download(new PreOrdersExportInactive($fromDate, $toDate), 'preordersinactive.xlsx');
         }
     }
     public function exportPresaleDealer(Request $request)
