@@ -34,7 +34,8 @@ class Dealer extends Model
         "aeskey",
         "code",
         'type_of_business',
-        'supervisor_id'
+        'supervisor_id',
+        'head_supervisor_id',
     ];
 public function branches(){
 
@@ -89,6 +90,11 @@ public function stockrequests(){
 public function supervisor(){
 
     return $this->belongsTo(User::class,'supervisor_id','id');
+
+}
+public function headsupervisor(){
+
+    return $this->belongsTo(User::class,'head_supervisor_id','id');
 
 }
 public function productDivisions()

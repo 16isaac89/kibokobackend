@@ -31,13 +31,13 @@ class PreordersExportDealer implements FromCollection, WithHeadings
                 $query->with('brand', 'tax');
             },
             'stockreqs' => function($query) {
-                $query->with('saler', 'dealer', 'van', 'customer', 'customerroute');
+                $query->with('saler', 'dealer.headsupervisor', 'van', 'customer', 'customerroute');
             }
         ])->whereBetween('created_at', [$this->fromDate, $this->toDate])
           ->whereHas('stockreqs', function($query) {
               $query->where('dealer_id', $this->dealer_id);
           })
-          ->whereHas('dealer', function($query) {
+          ->whereHas('stockreqs.dealer', function($query) {
         $query->where('status', 1);
     })
           ->get()
@@ -45,6 +45,7 @@ class PreordersExportDealer implements FromCollection, WithHeadings
             return [
                 $preorder->stockreqs->id ?? '', // Invoice No
                 $preorder->stockreqs->created_at->format('Y-m-d'), // Invoice Date
+                $preorder->stockreqs->dealer?->headsupervisor?->username ?? '',
                 $preorder->stockreqs->saler?->username ?? '',
                 $preorder->stockreqs->customer->name ?? '', // Customer Name
                 $preorder->stockreqs->dealer->tradename, // Executive Name
@@ -67,6 +68,7 @@ class PreordersExportDealer implements FromCollection, WithHeadings
          return [
             'Invoice No',
             'Invoice Date',
+            'Dealer Head',
             'Outlet Name',
             'Executive Name',
             'Dealer',

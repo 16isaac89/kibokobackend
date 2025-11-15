@@ -16,16 +16,17 @@ class ExportGeotaggedCustomers implements FromCollection, WithHeadings, WithMapp
      */
     public function collection()
     {
-        return Customer::with(['dealer', 'route'])
+        return Customer::with(['dealer.headsupervisor', 'route'])
             ->whereNotNull('latitude')
             ->where('latitude', '!=', '')
             ->where('latitude', '!=', 0)
             ->whereNotNull('longitude')
             ->where('longitude', '!=', '')
             ->where('longitude', '!=', 0)
-            ->whereHas('dealer', function($query) {
-        $query->where('status', 1);
-    })->get();
+         //   ->whereHas('dealer', function($query) {
+      //  $query->where('status', 1);
+    //})
+	->get();
     }
 
     /**
@@ -46,6 +47,7 @@ class ExportGeotaggedCustomers implements FromCollection, WithHeadings, WithMapp
             $customer->dealer->tradename ?? '',
             $customer->route->name ?? '',
             $customer->name ?? '',
+            $customer->dealer?->headsupervisor?->username ?? '',
             $customer->customercheckin ?? '',
             $customer->customercheckout ?? '',
             $customer->telephoneno ?? '',
@@ -77,7 +79,7 @@ class ExportGeotaggedCustomers implements FromCollection, WithHeadings, WithMapp
     public function headings(): array
     {
         return [
-            'Dealer', 'Route', 'Name', 'CheckIN', 'Checkout', 'Telephone No', 'Phone', 'Email',
+            'Dealer', 'Route', 'Name', 'Dealer Head', 'CheckIN', 'Checkout', 'Telephone No', 'Phone', 'Email',
             'Area', 'City', 'Country', 'Classification', 'Cash Registers', 'Daily Footfall',
             'Product Range', 'Contact Person', 'Customer Category', 'B\'ss Value', 'Location',
             'Lat', 'Long', 'IMGlat', 'IMGlong', 'Image URL','Time Stamp'

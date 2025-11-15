@@ -63,6 +63,20 @@
                         </div>
                     </div>
 
+                    <div class="form-row mb-4">
+
+                        <div class="col-md-6">
+                             <label>Dealer Head </label>
+                            <select class="form-control" id="head_supervisor" name="head_supervisor" required>
+                                <option value="">Head Supervisor</option>
+                                @foreach($users as $user)
+                                    <option {{ $user->id == $dealer->supervisor_id ? 'selected' : '' }}
+                                        value="{{ $user->id }}">{{ $user->username }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="form-group mb-4">
                         <label for="product_divisions">Select Product Divisions</label>
                         <select id="product_divisions" name="product_divisions[]" class="form-control select2" multiple>

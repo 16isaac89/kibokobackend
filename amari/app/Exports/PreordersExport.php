@@ -26,9 +26,9 @@ class PreordersExport  implements FromCollection, WithHeadings
         return StockRequestProduct::with(['dealerproduct','product'=>function($query){
             $query->with('brand','tax');
         },'stockreqs'=>function($query){
-            $query->with('dealer','van','customer','customerroute','saler');
+            $query->with('dealer.headsupervisor','van','customer','customerroute','saler');
         }])->whereBetween('created_at', [$this->fromDate, $this->toDate])
-        ->whereHas('dealer', function($query) {
+        ->whereHas('stockreqs.dealer', function($query) {
         $query->where('status', 1);
     })
         ->get()
@@ -36,6 +36,7 @@ class PreordersExport  implements FromCollection, WithHeadings
             return [
                 $preorder->stockreqs->id ?? '', // Invoice No
                 $preorder->stockreqs->created_at->format('Y-m-d'), // Invoice Date
+                $preorder->stockreqs->dealer?->headsupervisor?->username ?? '',
                 $preorder->stockreqs->customer->name ?? '', // Customer Name
                 $preorder->stockreqs->saler?->username ?? '',
                 $preorder->stockreqs->dealer->tradename, // Executive Name
@@ -45,7 +46,7 @@ class PreordersExport  implements FromCollection, WithHeadings
                 $preorder->sellingprice, // Basic Value
                 $preorder->product->tax_amount, // VAT Value
                 $preorder->total, // Total Sales
-                $preorder->stockreqs->customerroute->name, // Route
+                $preorder->stockreqs?->customerroute?->name, // Route
                 $preorder->stockreqs->checkin, // In Time
                 $preorder->stockreqs->checkout // Out Time
             ];
@@ -58,6 +59,7 @@ class PreordersExport  implements FromCollection, WithHeadings
         return [
             'Invoice No',
             'Invoice Date',
+            'Dealer Head',
             'Outlet Name',
             'Executive Name',
             'Dealer',

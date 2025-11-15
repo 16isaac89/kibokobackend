@@ -545,7 +545,7 @@ Route::get('get/private/key', 'Helper\Efris\KeysController@getPrivateKey');
 
 Route::get('get/aes/key/efris', function () {
 
-    $dealer = Dealer::find(17);
+    $dealer = Dealer::find(12);
     // dd($dealer);
 
     // foreach($dealers as $dealer){

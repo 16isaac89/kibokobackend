@@ -62,6 +62,7 @@ class DealersController extends Controller
             'email'         => request()->email,
             'code'          => request()->code,
             'supervisor_id' => request()->supervisor,
+            'head_supervisor_id' => request()->head_supervisor,
         ]);
         $dealer->productDivisions()->sync(request()->product_divisions);
 // Branch::create([
@@ -84,6 +85,7 @@ class DealersController extends Controller
             'status'        => request()->dealerstatus,
             'efris'         => request()->dealerefris,
             'supervisor_id' => request()->supervisor,
+            'head_supervisor_id' => request()->head_supervisor,
             //'type_of_business'=>request()->business_type,
         ]);
         $dealer->productDivisions()->sync(request()->product_divisions);
@@ -91,6 +93,7 @@ class DealersController extends Controller
     }
     public function edit(Dealer $dealer)
     {
+
         $dealer->load('productDivisions');
         $designation = \Auth::user()->designation;
         $dealers     = [];
@@ -104,6 +107,7 @@ class DealersController extends Controller
         }
         $divisions = ProductDivision::all();
         $users     = User::where('designation', 2)->get();
+       // dd($users);
 
         return view('admin.dealers.edit', compact('dealer', 'users', 'divisions'));
     }

@@ -16,7 +16,7 @@ class ExportGeotaggedCustomersInactive implements FromCollection, WithHeadings, 
      */
     public function collection()
     {
-        return Customer::with(['dealer', 'route'])
+        return Customer::with(['dealer.headsupervisor', 'route'])
             ->whereNotNull('latitude')
             ->where('latitude', '!=', '')
             ->where('latitude', '!=', 0)
@@ -46,6 +46,7 @@ class ExportGeotaggedCustomersInactive implements FromCollection, WithHeadings, 
             $customer->dealer->tradename ?? '',
             $customer->route->name ?? '',
             $customer->name ?? '',
+            $customer->dealer?->headsupervisor?->username ?? '',
             $customer->customercheckin ?? '',
             $customer->customercheckout ?? '',
             $customer->telephoneno ?? '',
@@ -77,7 +78,7 @@ class ExportGeotaggedCustomersInactive implements FromCollection, WithHeadings, 
     public function headings(): array
     {
         return [
-            'Dealer', 'Route', 'Name', 'CheckIN', 'Checkout', 'Telephone No', 'Phone', 'Email',
+            'Dealer', 'Route', 'Name','Dealer Head','CheckIN', 'Checkout', 'Telephone No', 'Phone', 'Email',
             'Area', 'City', 'Country', 'Classification', 'Cash Registers', 'Daily Footfall',
             'Product Range', 'Contact Person', 'Customer Category', 'B\'ss Value', 'Location',
             'Lat', 'Long', 'IMGlat', 'IMGlong', 'Image URL','Time Stamp'

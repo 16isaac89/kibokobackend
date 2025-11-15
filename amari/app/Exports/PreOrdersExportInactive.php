@@ -27,17 +27,16 @@ class PreordersExportInactive  implements FromCollection, WithHeadings
         'dealerproduct',
         'product.brand',
         'product.tax',
-        'stockreqs.dealer',
+        'stockreqs.dealer.headsupervisor',
         'stockreqs.van',
         'stockreqs.customer',
         'stockreqs.customerroute',
         'stockreqs.saler',
     ])
     ->whereBetween('created_at', [$this->fromDate, $this->toDate])
-    ->whereHas('stockreqs', function ($query) {
-        $query->whereHas('dealer', function ($q) {
-            $q->where('status', 0); // Only active dealers
-        });
+    ->whereHas('stockreqs.dealer', function ($query) {
+            $query->where('status', 0); // Only active dealers
+
     })
     ->get()
     ->map(function ($preorder) {
@@ -46,6 +45,7 @@ class PreordersExportInactive  implements FromCollection, WithHeadings
         return [
             $req->id ?? '', // Invoice No
             optional($req->created_at)->format('Y-m-d'), // Invoice Date
+            $req->dealer->headsupervisor->username ?? '',
             $req->customer->name ?? '', // Customer Name
             $req->saler->username ?? '',
             $req->dealer->tradename ?? '', // Executive Name
@@ -67,6 +67,7 @@ class PreordersExportInactive  implements FromCollection, WithHeadings
         return [
             'Invoice No',
             'Invoice Date',
+            'Dealer Head',
             'Outlet Name',
             'Executive Name',
             'Dealer',

@@ -16,7 +16,7 @@ class CustomersExportInactive implements FromCollection, WithHeadings, WithMappi
     public function __construct()
     {
         $this->customers = Customer::with(['dealer', 'route'])
-        ->whereHas('dealer', function($query) {
+        ->whereHas('dealer.headsupervisor', function($query) {
         $query->where('status', 0);
     })->get();
     }
@@ -47,6 +47,7 @@ class CustomersExportInactive implements FromCollection, WithHeadings, WithMappi
             $customer->dealer->tradename ?? '',
             $customer->route->name ?? '',
             $customer->name ?? '',
+            $customer->dealer?->headsupervisor?->username ?? '',
 
             $customer->customercheckin ?? '',
             $customer->customercheckout ?? '',
@@ -78,7 +79,7 @@ class CustomersExportInactive implements FromCollection, WithHeadings, WithMappi
     public function headings(): array
     {
         return [
-            'Dealer', 'Route','Name','CheckIN', 'Checkout', 'Telephone No', 'Phone', 'Email',
+            'Dealer', 'Route','Name','Dealer Head','CheckIN', 'Checkout', 'Telephone No', 'Phone', 'Email',
             'Area', 'City', 'Country', 'Classification', 'Cash Registers', 'Daily Footfall',
             'Product Range', 'Contact Person', 'Customer Category', 'B\'ss Value', 'Location',
             'Lat', 'Long', 'IMGlat', 'IMGlong', 'Image URL' // Updated heading to "Image URL"

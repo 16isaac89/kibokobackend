@@ -157,6 +157,11 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(Dealer::class,'supervisor_id','id');
     }
+
+    public function headsupervisorsubdealers()
+    {
+        return $this->hasMany(Dealer::class,'head_supervisor_id','id');
+    }
     public function dealers()
     {
         return $this->belongsToMany(Dealer::class);
