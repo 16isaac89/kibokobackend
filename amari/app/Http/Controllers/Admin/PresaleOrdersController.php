@@ -8,7 +8,7 @@ use App\Models\Dealer;
 use App\Models\StockRequest;
 use App\Models\StockRequestProduct;
 use App\Exports\PreordersExport;
-use App\Exports\PreordersExportInactive;
+use App\Exports\PreOrdersExportInactive;
 use App\Exports\PreordersExportGeneral;
 use App\Exports\PreordersExportGeneralInactive;
 use App\Exports\PreordersExportDealer;
