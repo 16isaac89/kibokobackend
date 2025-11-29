@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\Helper\Efris\InvoiceController;
 use App\Http\Controllers\Helper\Efris\KeysController;
+use App\Http\Controllers\Helper\Efris\TaxPayerController;
 use App\Models\Customer;
 use App\Models\Dealer;
 use App\Models\Product;
@@ -541,11 +542,29 @@ Route::group(['namespace' => 'Dealer', 'middleware' => 'authdealer'], function (
     Route::post('/edit/password', 'Auth\ProfileController@changepassword')->name('user.edit.changepassword');
 });
 
-Route::get('get/private/key', 'Helper\Efris\KeysController@getPrivateKey');
+Route::get('get/tinfinfo',function(){
+	 $dealer = Dealer::find(12);
+    // dd($dealer);
+
+    // foreach($dealers as $dealer){
+    $keypath  = $dealer->privatekey;
+    $keypwd   = $dealer->keypwd;
+    $tin      = $dealer->tin;
+    $deviceno = $dealer->deviceno;
+    // $token =
+    //dd($keypath);
+    $privatek = (new KeysController)->getPrivateKey($keypath, $keypwd);
+	$aeskey = $dealer->aeskey;
+	//$tin2 = '1013572476';
+
+	//$taxpayer = (new TaxPayerController)->getTaxPayer($deviceno,$tin,$privatek,$aeskey,$tin2);
+	//dd($taxpayer);
+
+});
 
 Route::get('get/aes/key/efris', function () {
 
-    $dealer = Dealer::find(12);
+    $dealer = Dealer::find(17);
     // dd($dealer);
 
     // foreach($dealers as $dealer){

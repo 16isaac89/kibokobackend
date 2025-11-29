@@ -66,6 +66,7 @@
                     },
                     dataType: 'json',
                     success: function(data) {
+					console.log(data)
                         let preorders = data.preorders;
                         generateDataTable(preorders);
 
@@ -129,16 +130,16 @@
     second: '2-digit'
 })}</td>
 <td>${preorder.stockreqs.saler?.username ?? ''}</td>
-                    <td>${preorder.stockreqs.customer.name ?? ''}</td>
-                    <td>${preorder.stockreqs.dealer.tradename ?? ''}</td>
-                    <td>${preorder.stockreqs.saler.username}</td>
-                    <td>${preorder.product.code}</td>
+                    <td>${preorder.stockreqs.customer?.name ?? ''}</td>
+                    <td>${preorder.stockreqs.dealer?.tradename ?? ''}</td>
+                    <td>${preorder.stockreqs.saler?.username ?? preorder.stockreqs.saler.id}</td>
+                    <td>${preorder.product?.code}</td>
                     <td>${preorder.reqqty}</td>
                     <td>${preorder.product.description ?? ''}</td>
                     <td>${preorder.sellingprice}</td>
                     <td>${preorder.product.tax_amount ?? 0}</td>
                     <td>${preorder.total}</td>
-                    <td>${preorder.stockreqs.customerroute.name}</td>
+                    <td>${preorder.stockreqs.customerroute?.name ?? ''}</td>
                     <td>${preorder.stockreqs.checkin}</td>
                     <td>${preorder.stockreqs.checkout}</td>
                 `;

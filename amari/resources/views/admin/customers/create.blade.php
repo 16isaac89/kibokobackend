@@ -16,9 +16,6 @@
                     @foreach($dealers as $dealer)
                     <option value="{{ $dealer->id }}">{{ $dealer->tradename }}</option>
                     @endforeach
-
-
-
                 </select>
             </div>
             <div class="row">
@@ -97,7 +94,7 @@
             </div>
             <div class="form-group col-md-6">
                 <label for="routeSelect">Route</label>
-                <select class="form-control" id="routeSelect" aria-label="Select Route">
+                <select class="form-control" id="routeSelect" name="route" aria-label="Select Route">
 
 
                 </select>
@@ -188,10 +185,14 @@ const dealerRoutes = {
 // Event listener for dealer selection change
 document.getElementById('dealerSelect').addEventListener('change', function() {
     const dealerId = this.value;
-    const routeSelect = document.getElementById('routeSelect');
+    //const routeSelect = document.getElementById('routeSelect');
+    const routeSelect = $('#routeSelect');
+
 
     // Clear existing options
-    routeSelect.innerHTML = '<option selected value="">Select Route</option>';
+   // routeSelect.innerHTML = '<option selected value="">Select Route</option>';
+    routeSelect.html('<option selected value="">Select Route</option>');
+
 
     if (dealerId) {
             $.ajax({
@@ -202,6 +203,7 @@ document.getElementById('dealerSelect').addEventListener('change', function() {
                     _token: '{{ csrf_token() }}' // CSRF protection
                 },
                 success: function(routes) {
+                console.log(routes)
                     routes.forEach(function(route) {
                         const option = $('<option></option>').val(route.id).text(route.name);
                         routeSelect.append(option);
@@ -216,4 +218,5 @@ document.getElementById('dealerSelect').addEventListener('change', function() {
 
 });
 </script>
+
 @endsection

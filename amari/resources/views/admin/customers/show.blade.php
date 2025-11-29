@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.customer.fields.fullname') }}
+                            {{ trans('cruds.customer.fields.name') }}
                         </th>
                         <td>
                             {{ $customer->fullname }}
@@ -57,10 +57,10 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.customer.fields.username') }}
+                            Business value
                         </th>
                         <td>
-                            {{ $customer->username }}
+                            {{ $customer->businessvalue }}
                         </td>
                     </tr>
                     <tr>
@@ -85,47 +85,4 @@
         </div>
     </div>
 </div>
-
-<div class="card">
-    <div class="card-header">
-        {{ trans('global.relatedData') }}
-    </div>
-    <ul class="nav nav-tabs" role="tablist" id="relationship-tabs">
-        <li class="nav-item">
-            <a class="nav-link" href="#customer_bookings" role="tab" data-toggle="tab">
-                {{ trans('cruds.booking.title') }}
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#customer_customer_payments" role="tab" data-toggle="tab">
-                {{ trans('cruds.customerPayment.title') }}
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#customer_customer_wallets" role="tab" data-toggle="tab">
-                {{ trans('cruds.customerWallet.title') }}
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#customer_invoices" role="tab" data-toggle="tab">
-                {{ trans('cruds.invoice.title') }}
-            </a>
-        </li>
-    </ul>
-    <div class="tab-content">
-        <div class="tab-pane" role="tabpanel" id="customer_bookings">
-            @includeIf('admin.customers.relationships.customerBookings', ['bookings' => $customer->customerBookings])
-        </div>
-        <div class="tab-pane" role="tabpanel" id="customer_customer_payments">
-            @includeIf('admin.customers.relationships.customerCustomerPayments', ['customerPayments' => $customer->customerCustomerPayments])
-        </div>
-        <div class="tab-pane" role="tabpanel" id="customer_customer_wallets">
-            @includeIf('admin.customers.relationships.customerCustomerWallets', ['customerWallets' => $customer->customerCustomerWallets])
-        </div>
-        <div class="tab-pane" role="tabpanel" id="customer_invoices">
-            @includeIf('admin.customers.relationships.customerInvoices', ['invoices' => $customer->customerInvoices])
-        </div>
-    </div>
-</div>
-
 @endsection

@@ -60,9 +60,11 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-
+$dealer = Dealer::find($request->dealer);
+$route = Route::find($request->route);
 //dd($request->all());
         $customer = Customer::create([
+            "name" => $request->fullname,
             "phone" => $request->phone,
              "email" => $request->email,
              "address" => $request->address,
@@ -77,6 +79,8 @@ class CustomerController extends Controller
         'product_range'=>$request->productrange,
 		'custcategory'=>$request->custcategory,
         'dealer_id'=>$request->dealer,
+        'dealer_code'=>$dealer->code,
+        'route_code' => $route->code,
         ]);
         return redirect()->back()->with('message', 'Customer created successfully.');
     }
@@ -92,6 +96,7 @@ class CustomerController extends Controller
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
         $customer ->update([
+		"name" => $request->fullname,
             "phone" => $request->phone,
              "email" => $request->email,
              "address" => $request->address,
@@ -116,7 +121,7 @@ class CustomerController extends Controller
     {
         abort_if(Gate::denies('customer_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $customer->load('customerBookings', 'customerCustomerPayments', 'customerCustomerWallets', 'customerInvoices');
+        //$customer->load('customerInvoices');
 
         return view('admin.customers.show', compact('customer'));
     }
