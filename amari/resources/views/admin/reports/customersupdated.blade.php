@@ -7,6 +7,7 @@
     </div>
 
     <div class="card-body">
+
         {{-- Date Filter --}}
         <form method="GET" class="mb-3 d-flex align-items-center gap-2 flex-wrap">
             <label for="date" class="mb-0">Select Date:</label>
@@ -20,31 +21,43 @@
                 <thead class="table-light">
                     <tr>
                         <th></th>
-                        <th>ID</th>
+                        <th>#</th>
+                        <th>Dealer</th>
+                        <th>Route</th>
+                        <th>Rep</th>
                         <th>Name</th>
                         <th>Phone</th>
-                        <th>Email</th>
+                       
                         <th>Updated At</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     @forelse($customers as $customer)
                     <tr>
                         <td></td>
                         <td>{{ $customer->id }}</td>
+                        <td>{{ $customer->dealer->tradename }}</td>
+                        <td>{{ $customer->route->name }}</td>
+                        <td>{{ $customer->saler?->username ?? 'N/A' }}</td>
                         <td>{{ $customer->name }}</td>
                         <td>{{ $customer->phone }}</td>
-                        <td>{{ $customer->email }}</td>
+                     
                         <td>{{ $customer->updated_at->format('Y-m-d H:i') }}</td>
                     </tr>
+
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center text-muted">No records found for {{ $date }}</td>
+                        <td colspan="8" class="text-center text-muted">
+                            No records found for {{ $date }}
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
+
             </table>
         </div>
+
     </div>
 </div>
 
@@ -52,13 +65,14 @@
 
 @section('scripts')
 <script>
-    $(document).ready(function() {
-        $('#customers-updated-table').DataTable({
-            "order": [[0, "desc"]],
-            "pageLength": 25,
-            "lengthMenu": [10, 25, 50, 100],
-            responsive: true
-        });
+$(document).ready(function() {
+    $('#customers-updated-table').DataTable({
+        "order": [[0, "desc"]],
+        "pageLength": 25,
+        "lengthMenu": [10, 25, 50, 100],
+        responsive: true,
+        autoWidth: false
     });
+});
 </script>
 @endsection

@@ -109,4 +109,8 @@ protected $appends = [
     public function requests(){
         return $this->hasMany(StockRequest::class,'customer_id','identification');
     }
+    //dealeruser userid
+    public function saler(){
+        return $this->belongsTo(DealerUser::class,'userid','id');
+    }
 }

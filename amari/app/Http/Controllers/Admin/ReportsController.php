@@ -95,7 +95,7 @@ class ReportsController extends Controller
     {
         $date = $request->input('date', Carbon::today()->toDateString());
 
-        $customers = Customer::whereDate('updated_at', $date)->get();
+        $customers = Customer::with('route','dealer','saler')->whereDate('updated_at', $date)->get();
 
         return view('admin.reports.customersupdated', compact('customers', 'date'));
     }

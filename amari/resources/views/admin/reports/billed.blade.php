@@ -96,17 +96,12 @@
 </div>
 
 @endsection
-
 @section('scripts')
 <script>
-    $(document).ready(function() {
-        $('#customers-billed-table').DataTable({
-            "order": [[0, "desc"]],
-            "pageLength": 25,
-            "lengthMenu": [10, 25, 50, 100],
-
-
-        });
-    });
+$(document).ready(function() {
+    $('#customers-billed-table').DataTable();
+});
 </script>
+
 @endsection
+
