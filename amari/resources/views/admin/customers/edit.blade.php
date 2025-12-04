@@ -17,7 +17,7 @@
                 <select class="form-control" name="dealer_id" id="dealerSelect">
                     <option value="">Select distributor</option>
                     @foreach($dealers as $dealer)
-                        <option value="{{ $dealer->id }}" {{ $customer->dealer_id == $dealer->id ? 'selected' : '' }}>
+                        <option  value="{{ $dealer->id }}" {{ $customer->dealer_code == $dealer->code ? 'selected' : '' }}>
                             {{ $dealer->tradename }}
                         </option>
                     @endforeach
@@ -28,7 +28,7 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label>Full Name</label>
-                    <input class="form-control" type="text" name="fullname" value="{{ $customer->fullname }}">
+                    <input class="form-control" type="text" name="fullname" value="{{ $customer->name }}">
                 </div>
 
                 <div class="form-group col-md-6">

@@ -101,6 +101,20 @@
                             Presale Order Subdealer
                         </a>
                     </li>
+                     <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.updatedByDate.report") }}" class="c-sidebar-nav-link
+                        {{ request()->is("admin/customers-updated/daily") || request()->is("admin/customers-updated/daily/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-bus c-sidebar-nav-icon"></i>
+                            Customers Updated Daily
+                        </a>
+                    </li>
+                     <li class="c-sidebar-nav-item">
+                        <a href="{{ route("admin.billedByDate.report") }}" class="c-sidebar-nav-link
+                        {{ request()->is("admin/customers-billed/daily") || request()->is("admin/customers-billed/daily/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-bus c-sidebar-nav-icon"></i>
+                            Customers Billed Daily
+                        </a>
+                    </li>
                 </ul>
             </li>
         @endcan

@@ -167,6 +167,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('admin/contact/handle/{message}', 'ContactUsController@handle')->name('contactus.handle');
 
     //reports
+    Route::get('customers-updated/daily', 'ReportsController@updatedByDate')->name('updatedByDate.report');
+    Route::get('customers-billed/daily', 'ReportsController@billedByDate')->name('billedByDate.report');
+
     Route::get('sale/reports', 'ReportsController@index')->name('sales.report');
     Route::get('exec/reports', 'ReportsController@exec')->name('exec.reports');
     Route::get('subd/report', 'ReportsController@subd')->name('subd.reports');
@@ -562,6 +565,8 @@ Route::get('get/tinfinfo',function(){
 
 });
 
+
+Route::get('/get/tin/info', 'TaxPayerController@taxpayer')->name('tax.payee');
 Route::get('get/aes/key/efris', function () {
 
     $dealer = Dealer::find(17);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\v1\sales;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Helper\Efris\KeysController;
 use App\Http\Controllers\Helper\Efris\TaxPayerController as TaxPayer;
 use App\Models\Dealer;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class TaxPayerController extends Controller
     $deviceno = $dealer->deviceno;
     // $token =
     //dd($keypath);
-    //$privatek = (new KeysController)->getPrivateKey($keypath, $keypwd);
+    $privatek = (new KeysController)->getPrivateKey($keypath, $keypwd);
 	$aeskey = $dealer->aeskey;
     $tin2 = $request->tin;
 
