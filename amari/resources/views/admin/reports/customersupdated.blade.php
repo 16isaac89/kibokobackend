@@ -19,6 +19,7 @@
             <table class="table table-hover table-striped table-bordered" id="customers-updated-table">
                 <thead class="table-light">
                     <tr>
+                        <th></th>
                         <th>ID</th>
                         <th>Name</th>
                         <th>Phone</th>
@@ -29,6 +30,7 @@
                 <tbody>
                     @forelse($customers as $customer)
                     <tr>
+                        <td></td>
                         <td>{{ $customer->id }}</td>
                         <td>{{ $customer->name }}</td>
                         <td>{{ $customer->phone }}</td>

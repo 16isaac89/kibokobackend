@@ -105,7 +105,7 @@ class ReportsController extends Controller
     {
         $date = $request->input('date', Carbon::today()->toDateString());
 
-        $invoices = StockRequest::with('items', 'customer')
+        $invoices = StockRequest::with('items', 'customer','customerroute','saler','dealer')
             ->whereDate('created_at', $date)
             ->get();
 

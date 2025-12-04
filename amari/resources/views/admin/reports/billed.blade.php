@@ -19,7 +19,11 @@
             <table class="table table-hover table-striped table-bordered" id="customers-billed-table">
                 <thead class="table-light">
                     <tr>
+                        <th></th>
                         <th>Invoice No</th>
+                         <th>Dealer</th>
+                          <th>Route</th>
+                           <th>Sales Rep</th>
                         <th>Customer</th>
                         <th>Total</th>
                         <th>Route</th>
@@ -29,14 +33,18 @@
                 </thead>
                 <tbody>
                     @forelse($invoices as $invoice)
-                    <tr data-bs-toggle="collapse" data-bs-target="#invoice-{{ $invoice->id }}" class="accordion-toggle">
-                        <td>{{ $invoice->invoice_no }}</td>
+                    <tr data-toggle="collapse" data-target="#invoice-{{ $invoice->id }}" class="accordion-toggle">
+                        <td></td>
+                        <td>{{ $invoice->id }}</td>
+                          <td>{{ $invoice->dealer->tradename ?? 'N/A' }}</td>
+                         <td>{{ $invoice->customerroute->name ?? 'N/A' }}</td>
+                        <td>{{ $invoice->saler->username ?? 'N/A' }}</td>
                         <td>{{ $invoice->customer->name ?? 'N/A' }}</td>
                         <td>{{ number_format($invoice->total, 2) }}</td>
                         <td>{{ $invoice->route }}</td>
                         <td>{{ $invoice->created_at->format('Y-m-d') }}</td>
                         <td>
-                            <button class="btn btn-info btn-sm" data-bs-toggle="collapse" data-bs-target="#invoice-{{ $invoice->id }}">
+                            <button class="btn btn-info btn-sm" data-toggle="collapse" data-target="#invoice-{{ $invoice->id }}">
                                 View Items
                             </button>
                         </td>
@@ -50,6 +58,7 @@
                                     <table class="table table-sm table-bordered table-hover mb-0">
                                         <thead class="table-secondary">
                                             <tr>
+                                                <th></th>
                                                 <th>Product</th>
                                                 <th>Quantity</th>
                                                 <th>Price</th>
@@ -60,6 +69,7 @@
                                         <tbody>
                                             @foreach($invoice->items as $item)
                                             <tr>
+                                                <td></td>
                                                 <td>{{ $item->product->name ?? 'N/A' }}</td>
                                                 <td>{{ $item->appqty }}</td>
                                                 <td>{{ number_format($item->sellingprice, 2) }}</td>
@@ -94,7 +104,8 @@
             "order": [[0, "desc"]],
             "pageLength": 25,
             "lengthMenu": [10, 25, 50, 100],
-            responsive: true
+
+
         });
     });
 </script>
